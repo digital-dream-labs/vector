@@ -1,0 +1,44 @@
+Digital Dream Labs Software Asset License
+Version 1.0, Revised 5/25/2021
+
+1.  Definitions
+• “You” or “Your” are hereby defined as the individual or end user that is exercising permissions granted by this License (also known as the Licensee).
+• “License” is hereby defined as the terms and conditions determining acceptable use of the Assets, as defined by the contents of this document and also subject to Digital Dream Labs’ Terms of Service document, posted at https://www.digitaldreamlabs.com/policies/terms-of-service.
+• “Licensor” is hereby defined as the owner of existing copyrights, patents, trademark, trade dress and other legal protections and intellectual property rights of, within, and related to the Assets contained herein; for practical purposes, this Licensor is Digital Dream Labs, LLC (“DDL”).
+• “Assets” is hereby defined as Source code, Object code, or executable code, audio clips, video clips, pictures, scripts, and/or other files contained within this repository and subject to this License.
+• “Source” is hereby defined as code that is in a medium that is preferred for development or modifications; this may include audio, video, animation & other artwork files, configuration files, documentation files, and other software Source code.
+• “Object” is hereby defined as software Source code that has been translated or transformed into a compiled Object form or that is no longer in a format preferred for development, modification, or reconfiguration.
+• “Derivative Works” are hereby defined as works based upon (or derived from) the Assets subject to this License, such as software packages, Source code, Object code, photos, sound clips, videos, or other software that have been modified in any way from the Assets as provided in this repository, and which represent an original work of authorship.
+• “Contribution” shall be defined as an original work of authorship that is intentionally and willfully submitted to the Licensor for consideration of inclusion within the Assets subject to this License.
+• “Contributor” shall be defined as the author of a Derivative Work based upon these Assets, or as the author of a work that has been submitted to the Licensor and is in consideration to, or has been accepted to, become an Asset and therefore subject to this License.
+
+ 2.  Terms of Use
+All rights, title and interests of and in the Source code, Object code, sound objects, artwork, scripts and other Assets contained within this repository for the Vector Robot, together with all associated intellectual property rights, including without limitation copyright, are held by DDL, and all rights are reserved by DDL. Under the terms of this License, any person who is in legal possession of, or holds interest in, a Vector Robot (or other product sold, maintained, deprecated, or otherwise subject to the applicable copyrights, patents, trademarks, trade dress or other legal protections and intellectual property rights of the Licensor) (the “Covered Products”), is granted, subject to the terms of this License, a non-exclusive, personal License to use the provided Assets or Derivative Works thereof, including, without limitation, Source code, Object code, artwork, sound Objects, and other Assets, for that person’s own educational or entertainment purposes, and also for commercial purposes provided that the Assets and Derivative Works are used with the Covered Products and with no other products or other purpose.  Permitted use of the Assets under this License includes public display of the Assets in commercial or educational settings provided that such display is associated with the Covered Products.
+Permitted use of the Assets under this License does not include commercial activity involving the sale of unaltered Assets, or the use of Assets or Derivative Works with products that are not Covered Products, and any sale or use is prohibited. This License is revoked immediately upon violation by You of any of the terms and restrictions outlined in this License.
+
+3.  Derivative Works
+Derivative Works, in whole or in part, and in Source or Object form, may be redistributed and commercially sold, provided that such Derivative Works are designed for use with, or to accompany, the Covered Products and otherwise are subject to the terms and restrictions on Licensed use of the Assets.
+
+4.  Contributions
+Any Derivative Work, modification, or improvement to the Assets that is knowingly submitted by You to the Licensor for inclusion in the Assets will be considered to then be an Asset and will be subject to the terms of this License. 
+
+5.  Limitation of Liability
+The Vector Robot Source materials (“Assets”) are provided "as is" without warranty of any kind, either express or implied, including without limitation any implied warranties of condition, uninterrupted use, fitness for a particular purpose, title, non-infringement, or being free from error.
+
+6.  Additional Liabilities
+As a result of distribution or commercial sales of Derivative Works of these Assets, You may offer (and charge monetary compensation for) support, warranties, and/or benefits of the purchase and use of Your Derivative Works. However, by doing so, You acknowledge that You may provide such warranty on Your own behalf only. No other Contributor to these Assets, including DDL, shall be held liable or otherwise have claims asserted against such Contributor for damages or as a result of the enforcement of the warranty on and for Your Derivative Works. You agree to indemnify, hold harmless and defend DDL and its directors, officers, employees, agents, and owners from and against all claims, demands, actions, suits, damages, liabilities, losses, settlements, judgments, costs, and expenses (including but not limited to reasonable attorney’s fees and costs), which arise out of or relate to any warranty claim by a third party.
+
+7.  Jurisdiction/Choice of Law
+This Agreement shall be governed and construed in all respects in accordance with the substantive laws of the Commonwealth of Pennsylvania, USA without regard to conflict of law provisions in that or any other jurisdiction.  Any dispute arising out of or in connection with this Agreement, including any question regarding its existence, validity or termination, shall be adjudicated exclusively in the U.S. District Court for the Western District of Pennsylvania or, if such Court does not have jurisdiction, in any court of general jurisdiction in Allegheny County, Pennsylvania and each party consents to the exclusive jurisdiction of any such courts and waives any Objection which such party may have to the laying of venue in any such courts.
+
+8.  Severability
+In the event that any provision of this Agreement is held invalid or unenforceable for any reason by a Court of competent jurisdiction, such provision or part thereof shall be considered separate from the remaining provisions of this Agreement, which shall remain in full force and effect.
+
+9.  Disclaimer of Agency
+This Agreement shall not be deemed to create any relationship of agency, joint-venture or partnership between Licensor or Licensee.
+
+10. Waiver of Consequential Damages and Limitation of Liability
+LICENSOR SHALL NOT BE LIABLE TO LICENSEE FOR ANY CONSEQUENTIAL, INCIDENTAL, SPECIAL, OR ANY OTHER INDIRECT DAMAGES OF ANY KIND ARISING OUT OF OR IN CONNECTION WITH THIS AGREEMENT, WHETHER ARISING IN CONTRACT, TORT, OR OTHER LEGAL THEORY, AND WHETHER OR NOT LICENSEE HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.  
+
+11. Amendment
+Licensor reserves all rights to amend the terms of this License at any time.
