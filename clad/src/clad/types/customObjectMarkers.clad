@@ -1,0 +1,37 @@
+// Custom object markers definitions file. These map to MarkerTypes inside the engine, all of which we
+// don't necessarily want to expose through the message API.
+//
+// Author: Andrew Stein
+// Copyright: Anki Inc (c) 2017
+
+namespace Anki {
+namespace Vector {
+
+  enum int_16 CustomObjectMarker
+  {
+    Circles2,
+    Circles3,
+    Circles4,
+    Circles5,
+
+    Diamonds2,
+    Diamonds3,
+    Diamonds4,
+    Diamonds5,
+
+    Hexagons2,
+    Hexagons3,
+    Hexagons4,
+    Hexagons5,
+
+    Triangles2,
+    Triangles3,
+    Triangles4,
+    Triangles5,
+
+    // Should remain last:
+    Count
+  } // enum class CustomObjectMarker
+  
+} // namespace Vector
+} // namespace Anki

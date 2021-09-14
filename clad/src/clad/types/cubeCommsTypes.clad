@@ -1,0 +1,35 @@
+// File: cubeCommsTypes
+// Author: Matt Michini
+// Created: 6/6/18
+// Copyright: Anki, inc. 2018
+
+
+namespace Anki {
+namespace Vector {
+
+enum int_32 CubeConnectionState
+{
+  Invalid,
+
+  // We are not connected to a cube, and not in the process
+  // of scanning/connecting/disconnecting.
+  UnconnectedIdle,
+
+  // We are currently scanning for available cubes and not
+  // connected to any cube.
+  ScanningForCubes,
+
+  // We have requested a connection over BLE and are awaiting
+  // connection result
+  PendingConnect,
+
+  // We are fully connected to the cube over BLE
+  Connected,
+  
+  // We have requested a disconnection from the cube and are
+  // awaiting disconnection result
+  PendingDisconnect
+}
+
+} // end namespace Vector
+} // end namespace Anki

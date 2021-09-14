@@ -1,0 +1,338 @@
+// Vizualization manager messages
+//  for the C-Like Abstract Data language
+// Author: Daniel Casner
+// Copyright: Anki Inc (c) 2015
+
+#include "clad/robotInterface/messageFromAnimProcess.clad"
+#include "clad/types/robotStatusAndActions.clad"
+#include "clad/types/cameraParams.clad"
+#include "clad/types/imageTypes.clad"
+#include "clad/types/objectTypes.clad"
+#include "clad/types/offTreadsStates.clad"
+#include "clad/types/vizTypes.clad"
+#include "clad/types/globalVizOrigin.clad"
+#include "clad/types/activeObjectAccel.clad"
+#include "clad/types/memoryMap.clad"
+#include "clad/types/visionModes.clad"
+
+namespace Anki {
+namespace Vector {
+namespace VizInterface {
+
+message RobotStateMessage
+{
+  RobotState     state,
+  float_32       imuTemperature_degC,
+  uint_16        cliffThresholds[4],
+  uint_16        videoFramePeriodMs,
+  uint_16        imageProcPeriodMs,
+  uint_8         lockedAnimTracks,
+  uint_8         animTracksInUse,
+  float_32       batteryVolts,
+  OffTreadsState offTreadsState,
+  OffTreadsState awaitingConfirmationTreadState,
+}
+
+message CurrentAnimation
+{
+  uint_8 tag,
+  string animName
+}
+
+// VizObject
+message Object
+{
+  uint_32    objectID,
+  VizObjectType objectTypeID,
+  uint_32    color,
+  float_32   x_size_m,
+  float_32   y_size_m,
+  float_32   z_size_m,
+  float_32   x_trans_m,
+  float_32   y_trans_m,
+  float_32   z_trans_m,
+  float_32   rot_deg,
+  float_32   rot_axis_x,
+  float_32   rot_axis_y,
+  float_32   rot_axis_z,
+  float_32   objParameters[4],  // for object-specific parameters
+  string     text               // note: only applies to VIZ_OBJECT_TEXT. Is the text drawn in visualizer.                 
+}
+
+// LineSegment
+message LineSegment
+{
+  string identifier,
+  uint_32 color,
+  float_32 origin[3],
+  float_32 dest[3],
+  bool clearPrevious  // if set to true, previous segments with same ID will be erased, otherwise drawn together
+}
+
+// VizQuad
+message Quad
+{
+  VizQuadType quadType,
+  uint_32 quadID,
+  uint_32 color,
+  float_32 xUpperLeft,
+  float_32 yUpperLeft,
+  float_32 zUpperLeft,
+  float_32 xLowerLeft,
+  float_32 yLowerLeft,
+  float_32 zLowerLeft,
+  float_32 xUpperRight,
+  float_32 yUpperRight,
+  float_32 zUpperRight,
+  float_32 xLowerRight,
+  float_32 yLowerRight,
+  float_32 zLowerRight,
+}
+
+// Memory map data scheme for internal use (webots viz, and app debug viz)
+message MemoryMapMessageVizBegin
+{
+  uint_32  originId,
+  ExternalInterface::MemoryMapInfo info
+}
+
+message MemoryMapMessageViz
+{
+  uint_32  originId,
+  ExternalInterface::MemoryMapQuadInfoFull quadInfos[uint_16]
+}
+
+message MemoryMapMessageVizEnd
+{
+  uint_32  originId,
+}
+
+message EnabledVisionModes
+{
+  VisionMode modes[uint_16]
+}
+
+// VizCameraQuad
+message CameraQuad
+{
+  uint_32 color,
+  uint_32 topColor, // Color to draw line between UpperLeft and UpperRight corners
+  float_32 xUpperLeft,
+  float_32 yUpperLeft,
+  float_32 xLowerLeft,
+  float_32 yLowerLeft,
+  float_32 xUpperRight,
+  float_32 yUpperRight,
+  float_32 xLowerRight,
+  float_32 yLowerRight,
+}
+
+// VizCameraRect
+message CameraRect
+{
+  uint_32 color,
+  float_32 x,   // Upper left
+  float_32 y,   // Upper left
+  float_32 width,
+  float_32 height,
+  bool filled
+}
+
+// VizCameraLine
+message CameraLine
+{
+  uint_32 color,
+  float_32 xStart,
+  float_32 yStart,
+  float_32 xEnd,
+  float_32 yEnd,
+}
+
+// VizCameraPoint
+message CameraOval
+{
+  uint_32 color,
+  float_32 xCen,
+  float_32 yCen,
+  float_32 xRad,
+  float_32 yRad,
+}
+
+// VizCameraText
+message CameraText
+{
+  uint_32 color,
+  int_32  x,
+  int_32  y,
+  string  text
+}
+
+// EraseObject
+message EraseObject
+{
+  uint_32 objectID,
+  uint_32 lower_bound_id,
+  uint_32 upper_bound_id,
+}
+
+// EraseLineSegments
+message EraseLineSegments
+{
+  string identifier,
+}
+
+// EraseQuad
+message EraseQuad
+{
+  uint_32 quadType,
+  uint_32 quadID,
+}
+
+// VizSetRobot
+message SetRobot
+{
+  float_32 x_trans_m,
+  float_32 y_trans_m,
+  float_32 z_trans_m,
+  float_32 rot_rad,
+  float_32 rot_axis_x,
+  float_32 rot_axis_y,
+  float_32 rot_axis_z,
+  float_32 head_angle,
+  float_32 lift_angle,
+}
+
+
+// VizAppendPathSegmentLine
+message AppendPathSegmentLine
+{
+  uint_32 pathID,
+  float_32 x_start_m,
+  float_32 y_start_m,
+  float_32 z_start_m,
+  float_32 x_end_m,
+  float_32 y_end_m,
+  float_32 z_end_m,
+}
+
+// VizAppendPathSegmentArc
+message AppendPathSegmentArc
+{
+  uint_32 pathID,
+  float_32 x_center_m,
+  float_32 y_center_m,
+  float_32 radius_m,
+  float_32 start_rad,
+  float_32 sweep_rad,
+}
+
+// VizSetPathColor
+message SetPathColor
+{
+  uint_32 pathID,
+  uint_32 colorID,
+}
+
+
+// ErasePath
+message ErasePath
+{
+  uint_32 pathID,
+}
+
+
+// VizSetLabel
+message SetLabel
+{
+  uint_32 labelID,
+  uint_32 colorID,
+  string text
+}
+
+
+// VizDockingErrorSignal
+message DockingErrorSignal
+{
+  float_32 x_dist,
+  float_32 y_dist,
+  float_32 z_dist,
+  float_32 angle,
+}
+
+// VizCameraParams
+message CameraParams
+{
+  Anki::Vision::CameraParams cameraParams
+}
+
+// VizVisionMarker
+message VisionMarker
+{
+  int_16 topLeft_x,
+  int_16 topLeft_y,
+  int_16 topRight_x,
+  int_16 topRight_y,
+  int_16 bottomRight_x,
+  int_16 bottomRight_y,
+  int_16 bottomLeft_x,
+  int_16 bottomLeft_y,
+  int_8  verified,
+}
+
+// VizShowObjects
+message ShowObjects
+{
+  int_8  show,
+}
+
+// VizTrackerQuad
+message TrackerQuad
+{
+  int_16 topLeft_x,
+  int_16 topLeft_y,
+  int_16 topRight_x,
+  int_16 topRight_y,
+  int_16 bottomRight_x,
+  int_16 bottomRight_y,
+  int_16 bottomLeft_x,
+  int_16 bottomLeft_y,
+}
+
+message FaceDetection
+{
+  uint_16 x_upperLeft,
+  uint_16 y_upperLeft,
+  uint_16 width,
+  uint_16 height,
+  bool    visualize
+}
+
+message BehaviorStackDebug
+{
+  string debugStrings[uint_8]
+}
+
+message VisionModeDebug
+{
+  string debugStrings[uint_8]
+}
+
+message SaveImages
+{
+  ImageSendMode mode,
+  string path
+}
+
+message SaveState
+{
+  bool   enabled,
+  string path
+}
+
+// an explicit auto-union that includes all messages in this file
+// if you do not want to include messages in this union, use the keyword "structure" instead of "message"
+autounion MessageViz { }
+
+} // namespace Viz
+} // namespace Vector
+} // namespace Anki

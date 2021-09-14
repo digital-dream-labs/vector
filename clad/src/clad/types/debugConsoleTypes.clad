@@ -1,0 +1,19 @@
+// File: debugConsoleType
+// Author: Molly
+// Created: 10/14/15
+// Copyright: Anki, inc. 2015
+
+namespace Anki {
+namespace Vector {
+
+union ConsoleVarUnion {
+  float_64 varDouble,
+  uint_64  varUint,
+  int_64   varInt,
+  uint_8   varBool,
+  string   varFunction,
+}
+
+
+} // namespace Vector
+} // namespace Anki

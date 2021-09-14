@@ -1,0 +1,46 @@
+// File: robotPublicState.clad
+// Author: Kevin M. Karol
+// Created: 4/5/2017
+// Copyright: Anki, inc. 2017
+
+#include "clad/types/behaviorComponent/behaviorStages.clad"
+
+namespace Anki {
+namespace Vector {
+
+
+
+enum uint_8 BehaviorStageTag{
+  Feeding,
+  GuardDog,
+  PyramidConstruction,
+  Count
+}
+
+// Specify a behavior stage - value set specified by RelevantBehaviorStageField
+// above
+structure BehaviorStageStruct{
+  BehaviorStageTag behaviorStageTag,
+  FeedingStage currentFeedingStage,
+  GuardDogStage currentGuardDogStage,
+  PyramidConstructionStage currentPyramidConstructionStage
+}
+
+structure NeedsLevels{
+  float_32 energy,
+  float_32 repair,
+  float_32 play
+}
+
+// Structure which enumerates all relevant PublicStateBroadcaster information
+// to provide full state updates to interested systems
+no_default_constructor structure RobotPublicState{
+  bool isCubeInLift,
+  bool isRequestingGame,
+  uint_8 tallestStackHeight,
+  NeedsLevels needsLevels,
+  BehaviorStageStruct userFacingBehaviorStageStruct
+}
+
+} // namespace Vector
+} // namespace Anki

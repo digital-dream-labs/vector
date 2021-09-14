@@ -1,0 +1,58 @@
+namespace Anki {
+namespace Vector {
+
+enum uint_8 TokenError {
+	NoError,
+	NullToken,
+	InvalidToken,
+	Connection,
+	WrongAccount
+}
+
+structure AuthRequest {
+	string sessionToken,
+	string clientName,
+	string appId
+}
+
+structure AuthResponse {
+	string[uint_16] appToken,
+	string[uint_16] jwtToken,
+	TokenError error
+}
+
+structure ReassociateRequest {
+	string sessionToken,
+	string clientName,
+	string appId,
+}
+
+structure SecondaryAuthRequest {
+	string sessionToken,
+	string clientName,
+	string appId
+}
+
+structure JwtRequest {
+	bool forceRefresh
+}
+
+structure JwtResponse {
+	string[uint_16] jwtToken,
+	TokenError error
+}
+
+union TokenRequest {
+	AuthRequest auth,
+	SecondaryAuthRequest secondary,
+	ReassociateRequest reassociate,
+	JwtRequest jwt,
+}
+
+union TokenResponse {
+	AuthResponse auth, // used for primary, secondary, reassociate auth responses
+	JwtResponse jwt
+}
+
+}
+}

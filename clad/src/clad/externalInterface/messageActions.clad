@@ -1,0 +1,522 @@
+// Messages related to commanding Cozmo Actions.
+//  for the C-Like Abstract Data language
+// Author: Andrew Stein
+// Copyright: Anki Inc (c) 2016
+
+#include "clad/audio/audioSwitchTypes.clad"
+#include "clad/types/actionTypes.clad"
+#include "clad/types/visionModes.clad"
+#include "clad/types/pathMotionProfile.clad"
+#include "clad/types/proceduralFaceTypes.clad"
+#include "clad/types/animationTrigger.clad"
+#include "clad/types/petTypes.clad"
+
+namespace Anki {
+namespace Vector {
+namespace ExternalInterface {
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+// Actions
+
+// =============================================
+// NOTE: Please add new messages alphabetically!
+// =============================================
+
+// AlignWithObject
+// "Docks" to object so that it is aligned with it at the specified AligmentType or distance
+// If alignmentType is CUSTOM, distanceFromMarker_mm is used, otherwise distanceFromMarker_mm is ignored
+message AlignWithObject {
+    int_32 objectID,
+    PathMotionProfile motionProf,
+    float_32 distanceFromMarker_mm,
+    float_32 approachAngle_rad,
+    bool useApproachAngle,
+    bool usePreDockPose,
+    AlignmentType alignmentType
+}
+
+// CalibrateMotors
+message CalibrateMotors {
+    bool calibrateHead,
+    bool calibrateLift
+}
+
+// CliffAlignToWhite
+message CliffAlignToWhite {
+}
+
+// DriveStraight
+//  Drives a straight line forward or backward without using the planner.
+message DriveStraight {
+   float_32 speed_mmps,  // Speed should be positive
+   float_32 dist_mm,     // Use +ve for forward, -ve for backward
+   bool shouldPlayAnimation = 1
+}
+
+// FlipBlock
+message FlipBlock {
+  int_32 objectID,
+  PathMotionProfile motionProf
+}
+
+// GotoObject
+message GotoObject {
+  int_32 objectID,
+  PathMotionProfile motionProf,
+  float_32 distanceFromObjectOrigin_mm,
+  bool usePreDockPose = 0
+}
+
+// GotoPose
+message GotoPose {
+  float_32 x_mm,
+  float_32 y_mm,
+  float_32 rad,
+  PathMotionProfile motionProf,
+  uint_8 level,
+}
+
+// MountCharger
+message MountCharger {
+  int_32 objectID,
+  PathMotionProfile motionProf,
+  bool useCliffSensorCorrection,
+}
+
+// PanAndTilt
+message PanAndTilt {
+  float_32 bodyPan,
+  float_32 headTilt,
+  bool isPanAbsolute,
+  bool isTiltAbsolute
+}
+
+// PickupObject
+// @param useApproachAngle  - If true, then only the preAction pose that results in a robot
+//                            approach angle closest to approachAngle_rad is considered.
+// @param approachAngle_rad - The desired docking approach angle of the robot in world coordinates.
+message PickupObject {
+    int_32             objectID, // negative value means "currently selected object"
+    PathMotionProfile  motionProf,
+    float_32           approachAngle_rad,
+    bool               useApproachAngle,
+    bool               usePreDockPose
+}
+
+// PlaceObjectOnGround
+message PlaceObjectOnGround {
+    float_32 x_mm,
+    float_32 y_mm,
+    float_32 qw,             // Specify rotation via quaternion
+    float_32 qx,
+    float_32 qy,
+    float_32 qz,
+    PathMotionProfile motionProf,
+    uint_8 level,
+    bool useExactRotation,    // If true, then tries to place object at the exact rotation specified by the quaternion
+                             // otherwise it chooses the closest preActionPose such the object is aligned with the quaternion rotation.
+    bool checkDestinationFree, // if true the action will check whether the destination is still free of obstacles along the way
+}
+
+// PlaceObjectOnGroundHere
+message PlaceObjectOnGroundHere {
+
+}
+
+// PlaceOnObject
+// Places the carried object on top of objectID.
+// @param useExactRotation - If true, then only the preAction pose that results in the carried object
+//                           being placed in alignment with objectID that is closest to the specified
+//                           quaternion rotation is considered.
+//                           If the up-axis of the current rotation is not the same as that of the
+//                           currently carried object, the action fails.
+message PlaceOnObject {
+    int_32 objectID, // negative value means "currently selected object"
+    PathMotionProfile motionProf,
+    float_32 approachAngle_rad,
+    bool   useApproachAngle,
+    bool usePreDockPose
+}
+
+// PlaceRelObject
+// @param placementOffsetX_mm - The desired distance between the center of the docking marker
+//                              and the center of the object that is being placed, along the
+//                              direction of the docking marker's normal.
+// @param useApproachAngle  - If true, then only the preAction pose that results in a robot
+//                            approach angle closest to approachAngle_rad is considered.
+// @param approachAngle_rad - The desired docking approach angle of the robot in world coordinates.
+message PlaceRelObject {
+    int_32 objectID, // negative value means "currently selected object"
+    PathMotionProfile motionProf,
+    float_32 placementOffsetX_mm,  // X-axis offset for object placement (where +x extends out the marker face)
+    float_32 approachAngle_rad,
+    bool   useApproachAngle,
+    bool usePreDockPose,
+}
+
+// PlayAnimation
+message PlayAnimation {
+    uint_32 numLoops,
+    string animationName,
+    bool    ignoreBodyTrack=0,
+    bool    ignoreHeadTrack=0,
+    bool    ignoreLiftTrack=0
+}
+
+// ListAnimations
+message ListAnimations {
+    
+}
+
+// PlayAnimationGroup
+message PlayAnimationGroup {
+    uint_32 numLoops,
+    string animationGroupName,
+    bool    ignoreBodyTrack=0,
+    bool    ignoreHeadTrack=0,
+    bool    ignoreLiftTrack=0
+}
+
+// PlayAnimationTrigger
+message PlayAnimationTrigger {
+  uint_32 numLoops,
+  AnimationTrigger trigger,
+  bool    useLiftSafe,
+  bool    ignoreBodyTrack,
+  bool    ignoreHeadTrack,
+  bool    ignoreLiftTrack
+}
+
+// PopAWheelie
+message PopAWheelie {
+  int_32 objectID, // negative value means "currently selected object"
+  PathMotionProfile motionProf,
+  float_32 approachAngle_rad,
+  bool useApproachAngle,
+  bool usePreDockPose
+}
+
+// FacePlant
+message FacePlant {
+  int_32 objectID, // negative value means "currently selected object"
+  PathMotionProfile motionProf,
+  float_32 approachAngle_rad,
+  bool useApproachAngle,
+  bool usePreDockPose
+}
+
+// RealignWithObject
+// Realign with object when accidently moved by a small amount.
+message RealignWithObject {
+  int_32 objectID,
+  float_32 dist_mm    // the distance at which you want to stop after realignment
+}
+
+// RollObject
+message RollObject {
+  int_32 objectID, // negative value means "currently selected object"
+  PathMotionProfile motionProf,
+  float_32 approachAngle_rad,
+  bool doDeepRoll,
+  bool useApproachAngle,
+  bool usePreDockPose,
+  bool rollWithoutDocking = 0
+}
+
+// SayText
+message SayText {
+  string              text,
+  AnimationTrigger    playEvent,      // Set AnimationTrigger::Count to only play the Tts without an animation
+  AudioMetaData::SwitchState::Robot_Vic_External_Processing  voiceStyle,
+  float_32            durationScalar = 1.0
+}
+
+enum int_32 SearchForNearbyObjectDefaults {
+    BackupDistance_mm = -20,
+    BackupSpeed_mms = 100,
+    HeadAngle_deg = -5
+}
+
+// SearchForNearbyObject
+message SearchForNearbyObject {
+    int_32        desiredObjectID = -1,
+    float_32      backupDistance_mm = 0.0,
+    float_32      backupSpeed_mms = 0.0,
+    float_32      headAngle_rad = 0.0
+}
+
+// SetHeadAngle
+message SetHeadAngle {
+    float_32 angle_rad,
+    float_32 max_speed_rad_per_sec,
+    float_32 accel_rad_per_sec2,
+    float_32 duration_sec
+}
+
+// SetLiftAngle
+message SetLiftAngle {
+    float_32 angle_rad,
+    float_32 max_speed_rad_per_sec,
+    float_32 accel_rad_per_sec2,
+    float_32 duration_sec
+}
+
+// SetLiftHeight
+message SetLiftHeight {
+    float_32 height_mm,
+    float_32 max_speed_rad_per_sec,
+    float_32 accel_rad_per_sec2,
+    float_32 duration_sec
+}
+
+// TrackToFace
+//   Robot will automatically adjust head and body angle to look at this face ID, if it
+//   is observed. Sending SetHeadAngle message (above) will disable this behavior.
+//   Set headOnly to true to only use the head and not turn the body.
+//   Use objectID = u32_MAX to disable tracking.
+message TrackToFace {
+    uint_32 faceID,
+    bool    headOnly,
+    bool    moveEyes,
+}
+
+// TrackToObject
+//   Robot will automatically adjust head and body angle to look at this object ID, if it
+//   is observed. Sending SetHeadAngle message (above) will disable this behavior.
+//   Set headOnly to true to only use the head and not turn the body.
+//   Use objectID = u32_MAX to disable tracking.
+message TrackToObject {
+    uint_32 objectID,
+    bool    headOnly,
+    bool    moveEyes,
+}
+
+// TrackToLaserPoint
+message TrackToLaserPoint {
+
+}
+
+// TrackToPet
+message TrackToPet {
+    float_32         timeout_sec, // Give up after not seeing a pet for this long (0 to never give up)
+    uint_32          petID,       // Set to UnknownFaceID (-1) to use first of specified PetType
+    Vision::PetType  petType      // Set to Unknown to use any pet type (ignored if ID set)
+}
+
+// TurnInPlace
+// If isAbsolute == 0, turns the specified number of radians, *relative to the robot's current heading*
+// If isAbsolute != 0, turns to the specified absolute orientation.
+message TurnInPlace {
+    float_32 angle_rad, // relative mode: postive turns left negative turns right
+    float_32 speed_rad_per_sec = 0.0,
+    float_32 accel_rad_per_sec2 = 0.0,
+    float_32 tol_rad = 0.0, // This should be no smaller than POINT_TURN_ANGLE_TOL from cozmoEngineConfig.h.
+                            // Smaller values are ignored except 0 which is interpreted to mean
+                            // default tolerance of POINT_TURN_ANGLE_TOL.
+    uint_8 isAbsolute       // 0: angle_rad is relative to current orientation, 1: angle_rad is absolute angle to turn to
+}
+
+// TurnInPlaceAtSpeed
+message TurnInPlaceAtSpeed {
+    float_32 speed_rad_per_sec,
+    float_32 accel_rad_per_sec2
+}
+
+// TurnTowardsFace
+message TurnTowardsFace {
+    int_32   faceID,
+    float_32 maxTurnAngle_rad,
+
+    // A value of 0 means 'Don't care' (i.e. use engine's default value)
+    float_32 maxPanSpeed_radPerSec = 0.0,
+    float_32 panAccel_radPerSec2 = 0.0,
+    float_32 panTolerance_rad = 0.0,
+    float_32 maxTiltSpeed_radPerSec = 0.0,
+    float_32 tiltAccel_radPerSec2 = 0.0,
+    float_32 tiltTolerance_rad = 0.0,
+
+    // If sayName is true:
+    // - If we face the given face ID see after turnin is named, say that name.
+    // - Use specified animation namedTrigger (or none if AnimationTrigger::Count)
+    // - If face is unnammed, play unnamedTrigger (unless it is AnimationTrigger::Count)
+    // If sayName is false, both triggers are unused/ignored.
+    bool             sayName = 0,
+    AnimationTrigger namedTrigger,
+    AnimationTrigger unnamedTrigger
+}
+
+// TurnTowardsImagePoint
+message TurnTowardsImagePoint {
+    uint_32  timestamp, // Of image
+    float_32 x,         // In pixels
+    float_32 y,         // In pixels
+
+    // A value of 0 means 'Don't care' (i.e. use engine's default value)
+    float_32 maxPanSpeed_radPerSec = 0.0,
+    float_32 panAccel_radPerSec2 = 0.0,
+    float_32 panTolerance_rad = 0.0,
+    float_32 maxTiltSpeed_radPerSec = 0.0,
+    float_32 tiltAccel_radPerSec2 = 0.0,
+    float_32 tiltTolerance_rad = 0.0
+}
+
+// TurnTowardsLastFacePose
+//  Tell the robot to turn and tilt his head to face the pose of the last known face
+message TurnTowardsLastFacePose {
+    float_32 maxTurnAngle_rad,
+
+    // A value of 0 means 'Don't care' (i.e. use engine's default value)
+    float_32 maxPanSpeed_radPerSec = 0.0,
+    float_32 panAccel_radPerSec2 = 0.0,
+    float_32 panTolerance_rad = 0.0,
+    float_32 maxTiltSpeed_radPerSec = 0.0,
+    float_32 tiltAccel_radPerSec2 = 0.0,
+    float_32 tiltTolerance_rad = 0.0,
+
+    // If sayName is true:
+    // - If we face we see after turnin is named, say that name.
+    // - Use specified animation namedTrigger (or none if AnimationTrigger::Count)
+    // - If face is unnammed, play unnamedTrigger (unless it is AnimationTrigger::Count)
+    // If sayName is false, both triggers are unused/ignored.
+    bool             sayName = 0,
+    AnimationTrigger namedTrigger,
+    AnimationTrigger unnamedTrigger
+}
+
+// TurnTowardsObject - Turns and tilts head to look at object in last known position
+//   If facing the object requires less than a turnAngleTol turn, then no
+//   turn is performed. If a turn greater than maxTurnAngle is required,
+//   the action fails. For angles in between, the robot will first turn
+//   to face the object, then tilt its head. To completely disallow turning,
+//   set maxTurnAngle to zero. (All angles in radians and forced to be positive.)
+//   Set headTrackWhenDone to non-zero to enable head tracking to the specified
+//   object once the robot has successfully faced it.
+message TurnTowardsObject {
+    uint_32  objectID,
+    float_32 maxTurnAngle_rad,
+
+    // A value of 0 means 'Don't care' (i.e. use engine's default value)
+    float_32 maxPanSpeed_radPerSec = 0.0,
+    float_32 panAccel_radPerSec2 = 0.0,
+    float_32 panTolerance_rad = 0.0,
+    float_32 maxTiltSpeed_radPerSec = 0.0,
+    float_32 tiltAccel_radPerSec2 = 0.0,
+    float_32 tiltTolerance_rad = 0.0,
+
+    bool   visuallyVerifyWhenDone,
+    bool   headTrackWhenDone
+}
+
+// TurnTowardsPose
+//  Tell the robot to turn and tilt his head to face a give 3D pose in world
+//  coordinates.
+message TurnTowardsPose {
+    float_32 world_x,
+    float_32 world_y,
+    float_32 world_z,
+    float_32 maxTurnAngle_rad,
+
+    // A value of 0 means 'Don't care' (i.e. use engine's default value)
+    float_32 maxPanSpeed_radPerSec = 0.0,
+    float_32 panAccel_radPerSec2 = 0.0,
+    float_32 panTolerance_rad = 0.0,
+    float_32 maxTiltSpeed_radPerSec = 0.0,
+    float_32 tiltAccel_radPerSec2 = 0.0,
+    float_32 tiltTolerance_rad = 0.0
+}
+
+// VisuallyVerifyFace
+//   Succeeds if given face is visible from the robot's current pose
+message VisuallyVerifyFace {
+    int_32 faceID,
+    int_32 numImagesToWait
+}
+
+// VisuallyVerifyObject
+//   Succeeds if given object is visible from the robot's current pose
+message VisuallyVerifyObject {
+    uint_32 objectID,
+    int_32 numImagesToWait
+}
+
+// VisuallyVerifyNoObjectAtPose
+//   Succeeds if we don't see an object at the given pose within the thresholds
+message VisuallyVerifyNoObjectAtPose {
+  float_32 x_mm,
+  float_32 y_mm,
+  float_32 z_mm,
+  float_32 x_thresh_mm = 10.0,
+  float_32 y_thresh_mm = 10.0,
+  float_32 z_thresh_mm = 10.0
+}
+
+// Wait
+message Wait {
+  float_32 time_s
+}
+
+// WaitForImages - wait for the specified number of images to be processed
+message WaitForImages {
+  uint_32 numImages,
+  uint_32 afterTimeStamp = 0,  // Only count images with timestamp > than this
+  VisionMode visionMode // Indicates the mode that is REQUIRED to occur numImages times (or Count for any mode)
+}
+
+// TODO: Why can't I use the auto-union feature? I have to manually add each message or else I get an infinite CLAD recursion?
+//union RobotActionUnion { }
+
+
+// Again: Alphabetical please!
+union RobotActionUnion {
+  AlignWithObject               alignWithObject,
+  CalibrateMotors               calibrateMotors,
+  CliffAlignToWhite             cliffAlignToWhite,
+  DriveStraight                 driveStraight,
+  FacePlant                     facePlant,
+  FlipBlock                     flipBlock,
+  GotoObject                    gotoObject,
+  GotoPose                      gotoPose,
+  MountCharger                  mountCharger,
+  PanAndTilt                    panAndTilt,
+  PickupObject                  pickupObject,
+  PlaceObjectOnGround           placeObjectOnGround,
+  PlaceObjectOnGroundHere       placeObjectOnGroundHere,
+  PlaceOnObject                 placeOnObject,
+  PlaceRelObject                placeRelObject,
+  PlayAnimation                 playAnimation,
+  PlayAnimationGroup            playAnimationGroup,
+  PlayAnimationTrigger          playAnimationTrigger,
+  PopAWheelie                   popAWheelie,
+  RealignWithObject             realignWithObject,
+  RollObject                    rollObject,
+  SayText                       sayText,
+  SearchForNearbyObject         searchForNearbyObject,
+  SetHeadAngle                  setHeadAngle,
+  SetLiftHeight                 setLiftHeight,
+  SetLiftAngle                  setLiftAngle,
+  TrackToFace                   trackFace,
+  TrackToObject                 trackObject,
+  TrackToLaserPoint             trackLaserPoint,
+  TrackToPet                    trackPet,
+  TurnInPlace                   turnInPlace,
+  TurnTowardsFace               turnTowardsFace,
+  TurnTowardsImagePoint         turnTowardsImagePoint,
+  TurnTowardsLastFacePose       turnTowardsLastFacePose,
+  TurnTowardsObject             turnTowardsObject,
+  TurnTowardsPose               turnTowardsPose,
+  VisuallyVerifyFace            visuallyVerifyFace,
+  VisuallyVerifyNoObjectAtPose  visuallyVerifyNoObjectAtPose,
+  VisuallyVerifyObject          visuallyVerifyObject,
+  Wait                          wait,
+  WaitForImages                 waitForImages,
+
+  // Bogus member so we can know how many members of this union there are.
+  // Do not remove
+  uint_8                        count
+}
+
+
+
+} // namespace U2G
+} // namespace Vector
+} // namespace Anki

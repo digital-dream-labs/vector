@@ -1,0 +1,53 @@
+/** Clad message definitions for the messages sent from the WiFi to the engine.
+ */
+
+#include "clad/types/imageFormats.clad"
+
+namespace Anki {
+namespace Vector {
+
+
+enum uint_8 ImageSendMode {
+    Off,
+    Stream,
+    SingleShot,
+    SingleShotWithSensorData
+}
+
+enum uint_32 ImageConstants
+{
+  IMAGE_CHUNK_SIZE = 1200,
+}
+
+message ImageChunk {
+  uint_32         frameTimeStamp,
+  uint_32         imageId,
+  uint_16         width,
+  uint_16         height,
+  Anki::Vision::ImageEncoding imageEncoding,
+  uint_8          displayIndex,
+  uint_8          imageChunkCount,
+  uint_8          chunkId,
+  uint_8          data[uint_16:1200], // ^ IMAGE_CHUNK_SIZE above. Also need chunk to be u32 aligned
+}
+
+message CameraCalibration
+{
+  float_32 focalLength_x,
+  float_32 focalLength_y,
+  float_32 center_x,
+  float_32 center_y,
+  float_32 skew,
+  uint_16  nrows,
+  uint_16  ncols,
+  float_32 distCoeffs[8], // NUM_RADIAL_DISTORTION_COEFFS
+}
+
+enum uint_8 IlluminationState {
+  Unknown = 0,
+  Illuminated,
+  Darkened
+}
+
+} // namespace Vector
+} // namespace Anki

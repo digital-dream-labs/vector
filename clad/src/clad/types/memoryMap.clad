@@ -1,0 +1,53 @@
+/** Clad message definitions for the messages sent from the engine to either SDK (external) or viz (internal).
+ */
+
+
+namespace Anki {
+namespace Vector {
+namespace ExternalInterface {
+
+structure MemoryMapInfo
+{
+  int_32   rootDepth,
+  float_32 rootSize_mm,
+  float_32 rootCenterX,
+  float_32 rootCenterY,
+  float_32 rootCenterZ,
+  string   identifier
+}
+
+enum uint_8 ENodeContentTypeEnum
+{
+  Unknown,
+  ClearOfObstacle,
+  ClearOfCliff,
+  ObstacleCube,
+  ObstacleProx,
+  ObstacleProxExplored,
+  ObstacleUnrecognized,
+  Cliff,
+  InterestingEdge,
+  NotInterestingEdge,
+}
+
+// Info about an individual quad in the memory map
+structure MemoryMapQuadInfo
+{
+  ENodeContentTypeEnum content,
+  uint_8               depth,
+  uint_32              colorRGBA
+}
+
+// Full information including position of center of node and edge length
+structure MemoryMapQuadInfoFull
+{
+  uint_32              colorRGBA,
+  float_32             centerX_mm,
+  float_32             centerY_mm,
+  float_32             edgeLen_mm,
+}
+
+
+} // namespace ExternalInterface
+} // namespace Vector
+} // namespace Anki

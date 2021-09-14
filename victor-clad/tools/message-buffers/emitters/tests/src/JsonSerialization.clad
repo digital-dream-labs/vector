@@ -1,0 +1,116 @@
+namespace JsonSerialization {
+
+union testUnionPrimitive {
+  bool testBool,
+  uint_8 testUint8,
+  float_32 testFloat32,
+}
+
+structure testStruct1 {
+  bool test,
+}
+
+structure testStruct2 {
+  uint_32 test,
+}
+
+structure testStruct3 {
+  string test,
+}
+
+union testUnionStructures {
+  testStruct1 testStruct1,
+  testStruct2 testStruct2,
+  testStruct3 testStruct3,
+}
+
+enum uint_8 testEnum {
+  Zero = 0,
+  One = 1,
+  Two,
+  Five = 5
+}
+
+structure testStructure_Enums
+{
+  testEnum enumVal
+}
+
+structure testNestedStructure {
+  float_64 testDouble,
+  uint_64 testUint64,
+  testStruct1 testStruct1,
+  testStruct2 testStruct2,
+  testStruct3 testStruct3,
+}
+
+structure testStructure_BasicTypes
+{
+  bool testBool,
+  string testString,
+  int_16 testShort,
+  float_32 testFloat,
+}
+
+structure testStructure_Lists
+{
+  uint_16 testList[uint_8],
+}
+
+structure testStructure_ListOfEnums
+{
+  testEnum vals[uint_8],
+}
+
+structure testStructure_Nested {
+  testNestedStructure testNestedStructure,
+}
+
+structure testStructure_Unions
+{
+  testUnionPrimitive testUnionPrimitive,
+  testUnionStructures testUnionStructures,
+}
+
+structure testStructure_PartialJson
+{
+  bool testBool,
+  string unreadValue,
+}
+
+no_default_constructor structure testStructure_NoDefault
+{
+  string test
+}
+
+structure testStructure_NestedNoDefault
+{
+  bool testBool,
+  int_16 testInt,
+  testStructure_NoDefault testStruct,
+}
+
+union testUnion_NestedNoDefault
+{
+  testStruct1 t1,
+  testStructure_NoDefault a,
+  testStruct2 t2,
+  testStruct3 t3
+}
+
+structure testStructure_WithLists
+{
+  bool boolVal,
+  float_32 floatVal,
+  uint_16 intVal,
+  testEnum enumVal,
+  testUnionStructures unionVal,
+  
+  bool boolValList[uint_8],
+  float_32 floatValList[uint_8],
+  uint_16 intValList[uint_8],
+  testEnum enumValList[uint_8],
+  testUnionStructures unionValList[uint_8],
+}
+
+}

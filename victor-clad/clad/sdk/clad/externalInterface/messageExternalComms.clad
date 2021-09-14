@@ -1,0 +1,519 @@
+// Messages to be communicated over the wire from Victor to an External Device.
+//  for the C-Like Abstract Data language
+// Author: Nicolas Kent
+// Copyright: Anki Inc (c) 2018
+
+
+namespace Anki {
+namespace Vector {
+namespace ExternalComms {
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+// Actions
+
+// ====================================================
+//          Robot Transport Security Messages
+// ====================================================
+
+// Request initial pairing, supplying the robot's highest pairing protocol
+// version
+enum uint_8 RtsMode {
+    RAW,
+    CLAD,
+    CLAD_ENCRYPTED,
+}
+
+enum uint_8 RtsConnType {
+    FirstTimePair,
+    Reconnection,
+}
+
+enum uint_16 RtsResponseCode {
+    NotCloudAuthorized = 0,
+    UnsupportedRequest = 1,
+}
+
+enum uint_8 RtsCloudStatus {
+    UnknownError,
+    ConnectionError,
+    WrongAccount,
+    InvalidSessionToken,
+    AuthorizedAsPrimary,
+    AuthorizedAsSecondary,
+    Reauthorized,
+}
+
+message RtsWifiScanResult {
+    uint_8      authType,
+    uint_8      signalStrength,
+    string      wifiSsidHex,
+}
+
+message RtsWifiScanResult_2 {
+    uint_8      authType,
+    uint_8      signalStrength,
+    string      wifiSsidHex,
+    bool        hidden,
+}
+
+message RtsWifiScanResult_3 {
+    uint_8      authType,
+    uint_8      signalStrength,
+    string      wifiSsidHex,
+    bool        hidden,
+    bool        provisioned,
+}
+
+message RtsConnRequest {
+    uint_8      publicKey[32]
+}
+
+message RtsConnResponse {
+    RtsConnType connectionType,
+    uint_8      publicKey[32]
+}
+
+message RtsNonceMessage {
+    uint_8      toRobotNonce[24],
+    uint_8      toDeviceNonce[24]
+}
+
+message RtsAck {
+    uint_8      rtsConnectionTag
+}
+
+message RtsChallengeMessage {
+    uint_32     number
+}
+
+message RtsChallengeSuccessMessage {
+    //
+}
+
+message RtsWifiForgetRequest {
+    bool        deleteAll,
+    string      wifiSsidHex,
+}
+
+message RtsWifiForgetResponse {
+    bool        didDelete,
+    string      wifiSsidHex,
+}
+
+message RtsWifiConnectRequest {
+    string      wifiSsidHex,
+    string      password,
+    uint_8      timeout,
+    uint_8      authType,
+    bool        hidden,
+}
+
+message RtsWifiConnectResponse {
+    string      wifiSsidHex,
+    uint_8      wifiState,
+}
+
+message RtsWifiConnectResponse_3 {
+    string      wifiSsidHex,
+    uint_8      wifiState,
+    uint_8      connectResult,
+}
+
+message RtsWifiIpRequest {
+    //
+}
+
+message RtsWifiIpResponse {
+    uint_8      hasIpV4,
+    uint_8      hasIpV6,
+    uint_8      ipV4[4],
+    uint_8      ipV6[16],
+}
+
+message RtsStatusRequest {
+    //
+}
+
+message RtsStatusResponse {
+    string      wifiSsidHex,
+    uint_8      wifiState,
+    bool        accessPoint,
+    uint_8      bleState,
+    uint_8      batteryState,
+}
+
+message RtsStatusResponse_2 {
+    string      wifiSsidHex,
+    uint_8      wifiState,
+    bool        accessPoint,
+    uint_8      bleState,
+    uint_8      batteryState,
+    string      version,
+    bool        otaInProgress,
+}
+
+message RtsStatusResponse_3 {
+    string      wifiSsidHex,
+    uint_8      wifiState,
+    bool        accessPoint,
+    uint_8      bleState,
+    uint_8      batteryState,
+    string      version,
+    bool        otaInProgress,
+    bool        hasOwner,
+}
+
+message RtsStatusResponse_4 {
+    string      wifiSsidHex,
+    uint_8      wifiState,
+    bool        accessPoint,
+    uint_8      bleState,
+    uint_8      batteryState,
+    string      version,
+    string      esn,
+    bool        otaInProgress,
+    bool        hasOwner,
+}
+
+message RtsStatusResponse_5 {
+    string      wifiSsidHex,
+    uint_8      wifiState,
+    bool        accessPoint,
+    uint_8      bleState,
+    uint_8      batteryState,
+    string      version,
+    string      esn,
+    bool        otaInProgress,
+    bool        hasOwner,
+    bool        isCloudAuthed,
+}
+
+message RtsWifiScanRequest {
+    //
+}
+
+message RtsWifiScanResponse {
+    uint_8                  statusCode,
+    RtsWifiScanResult       scanResult[uint_8],
+}
+
+message RtsWifiScanResponse_2 {
+    uint_8                  statusCode,
+    RtsWifiScanResult_2     scanResult[uint_8],
+}
+
+message RtsWifiScanResponse_3 {
+    uint_8                  statusCode,
+    RtsWifiScanResult_3     scanResult[uint_8],
+}
+
+message RtsOtaUpdateRequest {
+    string      url
+}
+
+message RtsOtaCancelRequest {
+
+}
+
+message RtsOtaUpdateResponse {
+    uint_8      status,
+    uint_64     current,
+    uint_64     expected,
+}
+
+message RtsWifiAccessPointRequest {
+    bool        enable,
+}
+
+message RtsWifiAccessPointResponse {
+    bool        enabled,
+    string      ssid,
+    string      password,
+}
+
+message RtsCancelPairing {
+    //
+}
+
+message RtsForceDisconnect {
+    //
+}
+
+message RtsSshRequest {
+    string      sshAuthorizedKeyBytes[uint_16],
+}
+
+message RtsSshResponse {
+    
+}
+
+message RtsLogRequest {
+    uint_8      mode,
+    string      filter[uint_16],
+}
+
+message RtsLogResponse {
+    uint_8      exitCode,
+    uint_32     fileId,
+}
+
+message RtsFileDownload {
+    uint_8      status,
+    uint_32     fileId,
+    uint_32     packetNumber,
+    uint_32     packetTotal,
+    uint_8      fileChunk[uint_16],
+}
+
+message RtsCloudSessionRequest {
+    string[uint_16]      sessionToken,
+}
+
+message RtsCloudSessionRequest_5 {
+    string[uint_16]       sessionToken,
+    string                clientName,
+    string                appId,
+}
+
+message RtsCloudSessionResponse {
+    bool                  success,
+    RtsCloudStatus        statusCode,
+    string[uint_16]       clientTokenGuid,
+}
+
+message RtsAppConnectionIdRequest {
+    string[uint_16]       connectionId,
+}
+
+message RtsAppConnectionIdResponse {
+    //
+}
+
+message RtsResponse {
+    RtsResponseCode       code,
+    string[uint_16]       responseMessage,
+}
+
+message RtsSdkProxyRequest {
+  string            clientGuid,
+  string            messageId,
+  string            urlPath,
+  string[uint_16]   json,
+}
+
+message RtsSdkProxyResponse {
+  string            messageId,
+  uint_16           statusCode,
+  string            responseType,
+  string[uint_16]   responseBody,
+}
+
+message Error {
+    //
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// Rts Version 2
+union RtsConnection_2 {
+    Error                           Error                       = 0x00,
+    RtsConnRequest                  RtsConnRequest              = 0x01,
+    RtsConnResponse                 RtsConnResponse             = 0x02,
+    RtsNonceMessage                 RtsNonceMessage             = 0x03,
+    RtsChallengeMessage             RtsChallengeMessage         = 0x04,
+    RtsChallengeSuccessMessage      RtsChallengeSuccessMessage  = 0x05,
+    RtsWifiConnectRequest           RtsWifiConnectRequest       = 0x06,
+    RtsWifiConnectResponse          RtsWifiConnectResponse      = 0x07,
+    RtsWifiIpRequest                RtsWifiIpRequest            = 0x08,
+    RtsWifiIpResponse               RtsWifiIpResponse           = 0x09,
+    RtsStatusRequest                RtsStatusRequest            = 0x0A,
+    RtsStatusResponse_2             RtsStatusResponse_2         = 0x0B,     // This message is update from v1 to include build version.
+    RtsWifiScanRequest              RtsWifiScanRequest          = 0x0C,
+    RtsWifiScanResponse_2           RtsWifiScanResponse_2       = 0x0D,     // This message is update from v1 to include hidden flag.
+    RtsOtaUpdateRequest             RtsOtaUpdateRequest         = 0x0E,
+    RtsOtaUpdateResponse            RtsOtaUpdateResponse        = 0x0F,
+    RtsCancelPairing                RtsCancelPairing            = 0x10,
+    RtsForceDisconnect              RtsForceDisconnect          = 0x11,
+    RtsAck                          RtsAck                      = 0x12,
+    RtsWifiAccessPointRequest       RtsWifiAccessPointRequest   = 0x13,
+    RtsWifiAccessPointResponse      RtsWifiAccessPointResponse  = 0x14,
+    RtsSshRequest                   RtsSshRequest               = 0x15,
+    RtsSshResponse                  RtsSshResponse              = 0x16,
+    // New in v2
+    RtsOtaCancelRequest             RtsOtaCancelRequest         = 0x17,     // * new in v2
+    RtsLogRequest                   RtsLogRequest               = 0x18,     // * new in v2
+    RtsLogResponse                  RtsLogResponse              = 0x19,     // * new in v2
+    RtsFileDownload                 RtsFileDownload             = 0x1A,     // * new in v2
+}
+
+// Rts Version 3
+union RtsConnection_3 {
+    Error                           Error                       = 0x00,
+    RtsConnRequest                  RtsConnRequest              = 0x01,
+    RtsConnResponse                 RtsConnResponse             = 0x02,
+    RtsNonceMessage                 RtsNonceMessage             = 0x03,
+    RtsChallengeMessage             RtsChallengeMessage         = 0x04,
+    RtsChallengeSuccessMessage      RtsChallengeSuccessMessage  = 0x05,
+    RtsWifiConnectRequest           RtsWifiConnectRequest       = 0x06,
+    RtsWifiConnectResponse_3        RtsWifiConnectResponse_3    = 0x07,
+    RtsWifiIpRequest                RtsWifiIpRequest            = 0x08,
+    RtsWifiIpResponse               RtsWifiIpResponse           = 0x09,
+    RtsStatusRequest                RtsStatusRequest            = 0x0A,
+    RtsStatusResponse_3             RtsStatusResponse_3         = 0x0B,  // includes hasOwner field   
+    RtsWifiScanRequest              RtsWifiScanRequest          = 0x0C,
+    RtsWifiScanResponse_3           RtsWifiScanResponse_3       = 0x0D,  // includes provisioned flag
+    RtsOtaUpdateRequest             RtsOtaUpdateRequest         = 0x0E,
+    RtsOtaUpdateResponse            RtsOtaUpdateResponse        = 0x0F,
+    RtsCancelPairing                RtsCancelPairing            = 0x10,
+    RtsForceDisconnect              RtsForceDisconnect          = 0x11,
+    RtsAck                          RtsAck                      = 0x12,
+    RtsWifiAccessPointRequest       RtsWifiAccessPointRequest   = 0x13,
+    RtsWifiAccessPointResponse      RtsWifiAccessPointResponse  = 0x14,
+    RtsSshRequest                   RtsSshRequest               = 0x15,
+    RtsSshResponse                  RtsSshResponse              = 0x16,
+    RtsOtaCancelRequest             RtsOtaCancelRequest         = 0x17,     
+    RtsLogRequest                   RtsLogRequest               = 0x18,     
+    RtsLogResponse                  RtsLogResponse              = 0x19,     
+    RtsFileDownload                 RtsFileDownload             = 0x1A,
+    RtsWifiForgetRequest            RtsWifiForgetRequest        = 0x1B,  // * new in V3
+    RtsWifiForgetResponse           RtsWifiForgetResponse       = 0x1C,  // * new in V3
+    RtsCloudSessionRequest          RtsCloudSessionRequest      = 0x1D,  // * new in V3
+    RtsCloudSessionResponse         RtsCloudSessionResponse     = 0x1E,  // * new in V3
+}
+
+// Rts Version 4
+union RtsConnection_4 {
+    Error                           Error                       = 0x00,
+    RtsConnRequest                  RtsConnRequest              = 0x01,
+    RtsConnResponse                 RtsConnResponse             = 0x02,
+    RtsNonceMessage                 RtsNonceMessage             = 0x03,
+    RtsChallengeMessage             RtsChallengeMessage         = 0x04,
+    RtsChallengeSuccessMessage      RtsChallengeSuccessMessage  = 0x05,
+    RtsWifiConnectRequest           RtsWifiConnectRequest       = 0x06,
+    RtsWifiConnectResponse_3        RtsWifiConnectResponse_3    = 0x07,
+    RtsWifiIpRequest                RtsWifiIpRequest            = 0x08,
+    RtsWifiIpResponse               RtsWifiIpResponse           = 0x09,
+    RtsStatusRequest                RtsStatusRequest            = 0x0A,
+    RtsStatusResponse_4             RtsStatusResponse_4         = 0x0B,  // includes esn field   
+    RtsWifiScanRequest              RtsWifiScanRequest          = 0x0C,
+    RtsWifiScanResponse_3           RtsWifiScanResponse_3       = 0x0D,
+    RtsOtaUpdateRequest             RtsOtaUpdateRequest         = 0x0E,
+    RtsOtaUpdateResponse            RtsOtaUpdateResponse        = 0x0F,
+    RtsCancelPairing                RtsCancelPairing            = 0x10,
+    RtsForceDisconnect              RtsForceDisconnect          = 0x11,
+    RtsAck                          RtsAck                      = 0x12,
+    RtsWifiAccessPointRequest       RtsWifiAccessPointRequest   = 0x13,
+    RtsWifiAccessPointResponse      RtsWifiAccessPointResponse  = 0x14,
+    RtsSshRequest                   RtsSshRequest               = 0x15,
+    RtsSshResponse                  RtsSshResponse              = 0x16,
+    RtsOtaCancelRequest             RtsOtaCancelRequest         = 0x17,     
+    RtsLogRequest                   RtsLogRequest               = 0x18,     
+    RtsLogResponse                  RtsLogResponse              = 0x19,     
+    RtsFileDownload                 RtsFileDownload             = 0x1A,
+    RtsWifiForgetRequest            RtsWifiForgetRequest        = 0x1B,  
+    RtsWifiForgetResponse           RtsWifiForgetResponse       = 0x1C,  
+    RtsCloudSessionRequest          RtsCloudSessionRequest      = 0x1D,  
+    RtsCloudSessionResponse         RtsCloudSessionResponse     = 0x1E,  
+    RtsAppConnectionIdRequest       RtsAppConnectionIdRequest   = 0x1F,  // * new in V4
+    RtsAppConnectionIdResponse      RtsAppConnectionIdResponse  = 0x20,  // * new in V4
+    RtsResponse                     RtsResponse                 = 0x21,  // * new in V4
+}
+
+// Rts Version 5
+union RtsConnection_5 {
+    Error                           Error                       = 0x00,
+    RtsConnRequest                  RtsConnRequest              = 0x01,
+    RtsConnResponse                 RtsConnResponse             = 0x02,
+    RtsNonceMessage                 RtsNonceMessage             = 0x03,
+    RtsChallengeMessage             RtsChallengeMessage         = 0x04,
+    RtsChallengeSuccessMessage      RtsChallengeSuccessMessage  = 0x05,
+    RtsWifiConnectRequest           RtsWifiConnectRequest       = 0x06,
+    RtsWifiConnectResponse_3        RtsWifiConnectResponse_3    = 0x07,
+    RtsWifiIpRequest                RtsWifiIpRequest            = 0x08,
+    RtsWifiIpResponse               RtsWifiIpResponse           = 0x09,
+    RtsStatusRequest                RtsStatusRequest            = 0x0A,
+    RtsStatusResponse_5             RtsStatusResponse_5         = 0x0B,   // * modified in V5
+    RtsWifiScanRequest              RtsWifiScanRequest          = 0x0C,
+    RtsWifiScanResponse_3           RtsWifiScanResponse_3       = 0x0D,
+    RtsOtaUpdateRequest             RtsOtaUpdateRequest         = 0x0E,
+    RtsOtaUpdateResponse            RtsOtaUpdateResponse        = 0x0F,
+    RtsCancelPairing                RtsCancelPairing            = 0x10,
+    RtsForceDisconnect              RtsForceDisconnect          = 0x11,
+    RtsAck                          RtsAck                      = 0x12,
+    RtsWifiAccessPointRequest       RtsWifiAccessPointRequest   = 0x13,
+    RtsWifiAccessPointResponse      RtsWifiAccessPointResponse  = 0x14,
+    RtsSshRequest                   RtsSshRequest               = 0x15,
+    RtsSshResponse                  RtsSshResponse              = 0x16,
+    RtsOtaCancelRequest             RtsOtaCancelRequest         = 0x17,     
+    RtsLogRequest                   RtsLogRequest               = 0x18,     
+    RtsLogResponse                  RtsLogResponse              = 0x19,     
+    RtsFileDownload                 RtsFileDownload             = 0x1A,
+    RtsWifiForgetRequest            RtsWifiForgetRequest        = 0x1B,  
+    RtsWifiForgetResponse           RtsWifiForgetResponse       = 0x1C,  
+    RtsCloudSessionRequest_5        RtsCloudSessionRequest_5    = 0x1D,   // * modified in V5
+    RtsCloudSessionResponse         RtsCloudSessionResponse     = 0x1E,  
+    RtsAppConnectionIdRequest       RtsAppConnectionIdRequest   = 0x1F,
+    RtsAppConnectionIdResponse      RtsAppConnectionIdResponse  = 0x20,
+    RtsResponse                     RtsResponse                 = 0x21,
+    RtsSdkProxyRequest              RtsSdkProxyRequest          = 0x22,   // * new in V5
+    RtsSdkProxyResponse             RtsSdkProxyResponse         = 0x23,   // * new in V5
+}
+
+// The factory set of supported messages
+union RtsConnection_1 {
+    Error                           Error                       = 0x00,
+    RtsConnRequest                  RtsConnRequest              = 0x01,
+    RtsConnResponse                 RtsConnResponse             = 0x02,
+    RtsNonceMessage                 RtsNonceMessage             = 0x03,
+    RtsChallengeMessage             RtsChallengeMessage         = 0x04,
+    RtsChallengeSuccessMessage      RtsChallengeSuccessMessage  = 0x05,
+    RtsWifiConnectRequest           RtsWifiConnectRequest       = 0x06,
+    RtsWifiConnectResponse          RtsWifiConnectResponse      = 0x07,
+    RtsWifiIpRequest                RtsWifiIpRequest            = 0x08,
+    RtsWifiIpResponse               RtsWifiIpResponse           = 0x09,
+    RtsStatusRequest                RtsStatusRequest            = 0x0A,
+    RtsStatusResponse               RtsStatusResponse           = 0x0B,
+    RtsWifiScanRequest              RtsWifiScanRequest          = 0x0C,
+    RtsWifiScanResponse             RtsWifiScanResponse         = 0x0D,
+    RtsOtaUpdateRequest             RtsOtaUpdateRequest         = 0x0E,
+    RtsOtaUpdateResponse            RtsOtaUpdateResponse        = 0x0F,
+    RtsCancelPairing                RtsCancelPairing            = 0x10,
+    RtsForceDisconnect              RtsForceDisconnect          = 0x11,
+    RtsAck                          RtsAck                      = 0x12,
+    RtsWifiAccessPointRequest       RtsWifiAccessPointRequest   = 0x13,
+    RtsWifiAccessPointResponse      RtsWifiAccessPointResponse  = 0x14,
+    RtsSshRequest                   RtsSshRequest               = 0x15,
+    RtsSshResponse                  RtsSshResponse              = 0x16,
+}
+
+// The post-factory set of versions
+union RtsConnection {
+    Error                           Error                       = 0x00,
+    // Skipping 0x01 so that enum vals match the RTS protocol version
+    //                              Reserved                    = 0x01, 
+    RtsConnection_2                 RtsConnection_2             = 0x02,
+    RtsConnection_3                 RtsConnection_3             = 0x03,
+    RtsConnection_4                 RtsConnection_4             = 0x04,
+    RtsConnection_5                 RtsConnection_5             = 0x05,
+}
+
+message DeprecatedAndReserved {
+}
+
+// ====================================================
+//                      Outer Union
+// ====================================================
+
+// NOTE: Do not change the value assignments
+union ExternalComms {
+    Error                       Error                       = 0x00,
+    // Skipping 0x01 so that enum values match old Rts protocols
+    RtsConnection_1             RtsConnection_1             = 0x01,
+    RtsConnection               RtsConnection               = 0x04,
+}
+
+} // namespace ExternalComms
+} // namespace Vector
+} // namespace Anki

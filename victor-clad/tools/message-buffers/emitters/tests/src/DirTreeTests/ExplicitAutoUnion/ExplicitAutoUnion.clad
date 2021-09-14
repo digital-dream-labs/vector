@@ -1,0 +1,31 @@
+/*
+ * A quick test for explicitly tagged autounion.
+ * Union tags may be given explicit values, just like enums.
+ * Any
+*/
+
+message AnIntMessage {
+  uint_32 value
+}
+
+message ABoolMessage {
+  bool value
+}
+
+message AFloatMessage {
+  float_32 value
+}
+
+message AListOfDoublesMessage {
+  float_64 values[uint_8]
+}
+
+message AFixedListOfBytesMessage {
+  uint_8 values[4]
+}
+
+autounion ExplicitlyTaggedAutoUnion {
+  AnIntMessage              AnIntMessage              = 0x01,
+  AFixedListOfBytesMessage  AFixedListOfBytesMessage  = 0x02
+}
+

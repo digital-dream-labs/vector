@@ -1,0 +1,18 @@
+// Onboarding phaseStates mirroring external_interface::OnboardingPhaseState from messages.proto
+// Author: sam
+// Copyright: Anki Inc (c) 2018
+
+namespace Anki {
+namespace Vector {
+  
+enum uint_8 OnboardingPhaseState
+{
+  PhaseInvalid = 0,
+  PhasePending,
+  PhaseInProgress,
+  PhaseComplete
+}
+
+}
+}
+

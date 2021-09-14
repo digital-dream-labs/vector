@@ -1,0 +1,147 @@
+// UiMessageDefinitions message definition file
+//  for the C-Like Abstract Data language
+// Author: Greg Nagel
+// Copyright: Anki Inc (c) 2015
+
+#include "clad/audio/audioEventTypes.clad"
+//#include "clad/types/actionResults.clad"
+#include "clad/types/unexpectedMovementTypes.clad"
+
+namespace Anki {
+namespace Vector {
+
+enum no_cpp_class uint_32 ActionConstants {
+  INVALID_TAG      =          0,
+
+  FIRST_GAME_TAG   =    0000001,
+  LAST_GAME_TAG    =    1000000,
+
+  FIRST_GAME_INTERNAL_TAG = 1000001,
+  LAST_GAME_INTERNAL_TAG  = 2000000,
+
+  FIRST_SDK_TAG = 2000001,
+  LAST_SDK_TAG  = 3000000,
+
+  FIRST_ENGINE_TAG =    3000001,
+  LAST_ENGINE_TAG  = 4294967295
+}
+
+// Keep these alphabetized!
+// TODO: Convert to uint_8 or int_16
+enum int_32 RobotActionType {
+    COMPOUND = -2,
+    UNKNOWN = -1,
+
+    ALIGN_WITH_OBJECT,
+    BACKUP_ONTO_CHARGER,
+    CALIBRATE_MOTORS,
+    CLIFF_ALIGN_TO_WHITE,
+    DEVICE_AUDIO,              // This calls audio from WWise
+    DISPLAY_FACE_IMAGE,
+    DISPLAY_PROCEDURAL_FACE,
+    DRIVE_STRAIGHT,
+    DRIVE_TO_FLIP_BLOCK_POSE,
+    DRIVE_TO_OBJECT,
+    DRIVE_PATH,
+    DRIVE_TO_POSE,
+    DRIVE_TO_PLACE_CARRIED_OBJECT,
+    FACE_PLANT,
+    FLIP_BLOCK,
+    HANG,
+    MOUNT_CHARGER,
+    MOVE_HEAD_TO_ANGLE,
+    MOVE_LIFT_TO_ANGLE,
+    MOVE_LIFT_TO_HEIGHT,
+    PAN_AND_TILT,
+    PICK_AND_PLACE_INCOMPLETE, // type for PickAndPlaceAction if fail before SelectDockAction ()
+    PICKUP_OBJECT_LOW,         // Possible sub-type of PickAndPlaceAction
+    PICKUP_OBJECT_HIGH,        //   "
+    PLACE_OBJECT_LOW,          //   "
+    PLACE_OBJECT_HIGH,         //   "
+    PLAY_ANIMATION,
+    PLAY_CUBE_ANIMATION,
+    POP_A_WHEELIE,
+    RESELECTING_LOOP_ANIMATION,
+    ROLL_OBJECT_LOW,           // Possible sub-type of PickAndPlaceAction
+    SAY_TEXT,
+    SEARCH_FOR_NEARBY_OBJECT,
+    TRACK_OBJECT,
+    TRACK_FACE,
+    TRACK_GROUND_POINT,
+    TRACK_MOTION,
+    TRACK_PET_FACE,
+    TRAVERSE_OBJECT,
+    TURN_IN_PLACE,
+    TURN_TO_ALIGN_WITH_CHARGER,
+    TURN_TOWARDS_FACE,
+    TURN_TOWARDS_IMAGE_POINT,
+    TURN_TOWARDS_LAST_FACE_POSE,
+    TURN_TOWARDS_OBJECT,
+    TURN_TOWARDS_POSE,
+    VISUALLY_VERIFY_OBJECT,
+    VISUALLY_VERIFY_FACE,
+    VISUALLY_VERIFY_NO_OBJECT_AT_POSE,
+    WAIT,
+    WAIT_FOR_IMAGES,
+    WAIT_FOR_LAMBDA
+}
+
+enum uint_8 AlignmentType {
+  LIFT_FINGER = 0, // Fingers aligned with object
+  LIFT_PLATE,      // Lift plate aligned with object
+  BODY,            // Front of body aligned with object
+  CUSTOM
+}
+
+// Object Interaction completed is used by actions that interact with objects
+structure ObjectInteractionCompleted {
+    int_32 objectID
+}
+
+// Used by PlayAnimationAction
+structure AnimationCompleted {
+  string animationName,
+}
+
+// Used by DeviceAudioAction
+structure DeviceAudioCompleted {
+  AudioMetaData::GameEvent::GenericEvent audioEvent,
+}
+
+// Used by TrackFaceAction and TrackPetFaceAction
+structure TrackFaceCompleted {
+  int_32 faceID
+}
+
+// Used by TurnInPlaceAction
+structure TurnInPlaceCompleted {
+  uint_32 relocalizedCnt,  // number of times relocalization occurred during the turn
+}
+
+// Used by actions that don't have extra info on completion
+structure DefaultCompleted {
+
+}
+
+// Use tag to determine what struct to use
+union ActionCompletedUnion {
+  ObjectInteractionCompleted  objectInteractionCompleted,
+  AnimationCompleted          animationCompleted,
+  DeviceAudioCompleted        deviceAudioCompleted,
+  TrackFaceCompleted          trackFaceCompleted,
+  TurnInPlaceCompleted        turnInPlaceCompleted,
+  DefaultCompleted            defaultCompleted,
+}
+
+
+enum uint_8 QueueActionPosition {
+    NOW = 0,                 // Queue now, cancel current, but leave rest of queue intact
+    NOW_AND_CLEAR_REMAINING, // Queue now and clear rest of queue
+    NOW_AND_RESUME,          // Queue now, reset current and return to it once new action completes
+    NEXT,
+    AT_END,
+    IN_PARALLEL
+}
+
+} // namespace Vector
+} // namespace Anki

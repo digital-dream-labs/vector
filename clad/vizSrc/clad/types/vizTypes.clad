@@ -1,0 +1,51 @@
+// Cozmo Vizualization types
+//  for the C-Like Abstract Data language
+// Author: Andrew Stein
+// Copyright: Anki Inc (c) 2015
+
+namespace Anki {
+namespace Vector {
+
+enum uint_32 VizConstants
+{
+  VIZ_SERVER_PORT = 5252,
+  PHYSICS_PLUGIN_SERVER_PORT = 5253,
+  WEBOTS_PHYSICS_CONTROLLER_PORT = 5354,
+  ALL_PATH_IDs    = 0xffffffff,
+  ALL_QUAD_IDs    = 0xffffffff,
+  ALL_QUAD_TYPEs  = 0xffffffff,
+  ALL_OBJECT_IDs  = 0xffffffff,
+  OBJECT_ID_RANGE = 0xfffffffe,
+  MaxMessageSize = 2848, // i think the old value was 2600 (ds)
+}
+
+enum uint_32 VizObjectType {
+  VIZ_OBJECT_ROBOT = 0,
+  VIZ_OBJECT_CUBOID,
+  VIZ_OBJECT_CHARGER,      
+  VIZ_OBJECT_PREDOCKPOSE,
+  VIZ_OBJECT_HUMAN_HEAD,
+  VIZ_OBJECT_TEXT,
+
+  NUM_VIZ_OBJECT_TYPES
+}
+
+enum uint_8 VizQuadType {
+  VIZ_QUAD_GENERIC_2D = 0,
+  VIZ_QUAD_GENERIC_3D,
+  VIZ_QUAD_MAT_MARKER,
+  VIZ_QUAD_PLANNER_OBSTACLE,
+  VIZ_QUAD_PLANNER_OBSTACLE_REPLAN,
+  VIZ_QUAD_ROBOT_BOUNDING_BOX,
+  VIZ_QUAD_POSE_MARKER,
+
+  NUM_VIZ_QUAD_TYPES
+}
+
+enum uint_8 VizRobotMarkerType {
+  VIZ_ROBOT_MARKER_SMALL_TRIANGLE,
+  VIZ_ROBOT_MARKER_BIG_TRIANGLE
+}
+
+} // namespace Vector
+} // namespace Anki

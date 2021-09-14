@@ -1,0 +1,55 @@
+namespace TestClad{
+
+enum uint_8 EnumT {
+  One = 1,
+  Two,
+}
+
+namespace NameA {
+  message A {
+    bool boolA,
+  }
+}
+
+namespace NameB {
+namespace NameInner {
+  message B {
+    bool boolB,
+  }
+}
+}
+
+namespace NameA {
+  message A2 {
+    bool boolA,
+  }
+}
+
+message SubMessage {
+  bool testSubBool,
+  EnumT testSubEnum,
+}
+
+message Message {
+  bool                testBool,
+  uint_8              testUint8,
+  uint_16             testUint16,
+  uint_32             testUint32,
+  uint_64             testUint64,
+  float_32            testFloat32,
+  float_64            testFloat64,
+  SubMessage          testSubMessage,
+  string              testString,
+  string[uint_16]     testString16,
+  uint_8              testFArray8[27],
+  uint_8              testVArray8[uint_32],
+  float_32            testVArrayFloat32[uint_32],
+  string              testStringArray[uint_8],
+}
+
+union Union {
+  Message         Message,
+  SubMessage      SubMessage,
+}
+
+}

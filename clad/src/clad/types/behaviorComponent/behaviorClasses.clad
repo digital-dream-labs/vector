@@ -1,0 +1,281 @@
+// This file is manually generated using ./tools/ai/generateBehaviorCode.py
+// To add a behavior, just create the .cpp and .h files in the correct places
+// and re-run ./tools/ai/generateBehavior.py
+
+namespace Anki {
+namespace Vector {
+
+// BehaviorClass identifies the ICozmoBehavior child class which the behavior is
+// an instance of. The names of the BehaviorClass, the code file, and the actual C++ class
+// all match, with the filename and the C++ class being prefixed with 'Behavior'
+// (e.g. BehaviorRollBlock is defined in behaviorRollBlock.h and is associated with
+//  BehaviorClass::RollBlock).
+enum uint_8 BehaviorClass {
+
+  // <root>
+  GreetAfterLongTime,
+  HighLevelAI,
+  LookAroundInPlace,
+  ResetState,
+  SimpleVoiceResponse,
+  StayOnChargerUntilCharged,
+  Wait,
+
+  // alexa
+  Alexa,
+  AlexaSignInOut,
+
+  // animationWrappers
+  AnimGetInLoop,
+  AnimSequence,
+  AnimSequenceWithFace,
+  AnimSequenceWithObject,
+  CountingAnimation,
+  TextToSpeechLoop,
+
+  // appBehaviors
+  EyeColor,
+
+  // attentionTransfer
+  AttentionTransferIfNeeded,
+
+  // basicCubeInteractions
+  PickUpCube,
+  PutDownBlock,
+  PutDownBlockAtPose,
+  RollBlock,
+
+  // basicWorldInteractions
+  BumpObject,
+  ClearChargerArea,
+  DriveOffCharger,
+  FetchCube,
+  FindCube,
+  FindCubeAndThen,
+  FindFaces,
+  FindHome,
+  GoHome,
+  InteractWithFaces,
+  LookAtFaceInFront,
+  MoveHeadToAngle,
+  PlaceCubeByCharger,
+  PopAWheelie,
+  RequestToGoHome,
+  Turn,
+  TurnToFace,
+  WiggleOntoChargerContacts,
+
+  // blackjack
+  BlackJack,
+
+  // character/howOldAreYou
+  HowOldAreYou,
+
+  // coordinators
+  CoordinateGlobalInterrupts,
+  CoordinateInHabitat,
+  CoordinateWhileHeldInPalm,
+  CoordinateWhileInAir,
+  QuietModeCoordinator,
+
+  // cubeSpinner
+  VectorPlaysCubeSpinner,
+
+  // danceToTheBeat
+  DanceToTheBeat,
+  DanceToTheBeatCoordinator,
+  ListenForBeats,
+
+  // devBehaviors
+  DevBatteryLogging,
+  DevCubeSpinnerConsole,
+  DevDesignCubeLights,
+  DevDisplayReadingsOnFace,
+  DevEventSequenceCapture,
+  DevImageCapture,
+  DevSquawkBoxTest,
+  DevTestBlackjackViz,
+  DevTestSpriteBoxRemaps,
+  DevTouchDataCollection,
+  DevTurnInPlaceTest,
+  DevViewCubeBackpackLights,
+  DispatchAfterShake,
+  DockingTestSimple,
+  FactoryCentroidExtractor,
+  LiftLoadTest,
+  PlannerTest,
+  PowerSaveStressTest,
+  PowerSaveTest,
+  ReactToBody,
+  ReactToGazeDirection,
+
+  // devBehaviors/playpen
+  PlaypenCameraCalibration,
+  PlaypenDistanceSensor,
+  PlaypenDriftCheck,
+  PlaypenDriveForwards,
+  PlaypenEndChecks,
+  PlaypenInitChecks,
+  PlaypenMotorCalibration,
+  PlaypenPickupCube,
+  PlaypenSoundCheck,
+  PlaypenTest,
+  PlaypenWaitToStart,
+
+  // devBehaviors/selfTest
+  SelfTest,
+  SelfTestButton,
+  SelfTestDockWithCharger,
+  SelfTestDriftCheck,
+  SelfTestDriveForwards,
+  SelfTestInitChecks,
+  SelfTestLookAtCharger,
+  SelfTestMotorCalibration,
+  SelfTestPickup,
+  SelfTestPutOnCharger,
+  SelfTestScreenAndBackpack,
+  SelfTestSoundCheck,
+  SelfTestTouch,
+
+  // dispatch
+  DispatcherPassThrough,
+  DispatcherQueue,
+  DispatcherRandom,
+  DispatcherRerun,
+  DispatcherScoring,
+  DispatcherStrictPriority,
+  DispatcherStrictPriorityWithCooldown,
+
+  // exploring
+  Exploring,
+  ExploringExamineObstacle,
+
+  // eyeColor
+  EyeColorVoiceCommand,
+
+  // freeplay/putDownDispatch
+  LookForFaceAndCube,
+
+  // freeplay/userInteractive
+  FistBump,
+  InspectCube,
+  Keepaway,
+  PounceWithProx,
+  PuzzleMaze,
+
+  // gateBehaviors
+  ConnectToCube,
+
+  // habitat
+  ConfirmHabitat,
+
+  // heldInPalm
+  InitialHeldInPalmReaction,
+  ReactToPalmEdge,
+
+  // knowledgeGraph
+  KnowledgeGraphQuestion,
+
+  // meetCozmo
+  EnrollFace,
+  RespondToRenameFace,
+
+  // messaging
+  LeaveAMessage,
+  PlaybackMessage,
+
+  // observing
+  ObservingLookAtFaces,
+  ObservingWithoutTurn,
+
+  // onboarding
+  OnboardingCoordinator,
+
+  // onboarding/phases
+  OnboardingEmulate1p0WaitForVC,
+  OnboardingLookAtPhone,
+  OnboardingLookAtUser,
+  OnboardingTeachWakeWord,
+  OnboardingWakeUp,
+
+  // photoTaking
+  AestheticallyCenterFaces,
+  TakeAPhotoCoordinator,
+
+  // prDemo
+  PRDemo,
+  PRDemoBase,
+
+  // proxBehaviors
+  ProxGetToDistance,
+
+  // reactions
+  AskForHelp,
+  CheckForAndReactToSalientPoint,
+  ReactToCliff,
+  ReactToCubeTap,
+  ReactToDarkness,
+  ReactToFrustration,
+  ReactToHand,
+  ReactToMicDirection,
+  ReactToMotion,
+  ReactToMotorCalibration,
+  ReactToPlacedOnSlope,
+  ReactToPutDown,
+  ReactToRobotOnBack,
+  ReactToRobotOnFace,
+  ReactToRobotOnSide,
+  ReactToRobotShaken,
+  ReactToSound,
+  ReactToUncalibratedHeadAndLift,
+  ReactToUnexpectedMovement,
+  ReactToVoiceCommand,
+
+  // robotDrivenDialog
+  PromptUserForVoiceCommand,
+
+  // sdkBehaviors
+  SDKInterface,
+  SDKLock,
+
+  // simpleFaceBehaviors
+  DriveToFace,
+  FindFaceAndThen,
+  LookAtMe,
+  SayName,
+  SearchWithinBoundingBox,
+
+  // sleeping
+  SleepCycle,
+  Sleeping,
+
+  // timer
+  AdvanceClock,
+  DisplayWallTime,
+  ProceduralClock,
+  TimerUtilityCoordinator,
+  WallTimeCoordinator,
+
+  // userDefinedBehaviorTree
+  UserDefinedBehaviorSelector,
+  UserDefinedBehaviorTreeRouter,
+
+  // victor
+  ConfirmObject,
+  PoweringRobotOff,
+  ReactToTouchPetting,
+  ReactToUnclaimedIntent,
+  RobustChargerObservation,
+  TrackCube,
+  TrackFace,
+
+  // volume
+  Volume,
+
+  // weather
+  CoordinateWeather,
+  DisplayWeather,
+}
+
+}
+}

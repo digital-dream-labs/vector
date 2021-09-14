@@ -1,0 +1,347 @@
+#include "clad/gateway/shared.clad"
+
+namespace Anki {
+namespace Vector {
+namespace Gateway {
+
+message UiDeviceConnected {
+  string placeholder,
+}
+
+structure AnimationCompleted {
+  string animationName,
+}
+
+union ActionCompletedUnion {
+  AnimationCompleted          animationCompleted = 0x01,
+}
+
+enum int_32 RobotActionType {
+    UNKNOWN = -1,
+}
+
+enum uint_32 ActionResult {
+  SUCCESS                 = 0, // This is still zero
+  RUNNING                 = 16777216,
+  CANCELLED_WHILE_RUNNING = 33554432,
+}
+
+// Note: ObjectFamily is deprecated and is only still here for compatiblity with SDK version 0.5.1 and earlier.
+//       This should eventually be removed when we no longer care about maintaining compatibility with that version.
+// DO NOT change the values for these enum entries!
+enum int_32 ObjectFamily {
+  Invalid      = -1,
+  Unknown      = 0,
+  Block        = 1,
+  LightCube    = 2,
+  Charger      = 3,
+  CustomObject = 6,
+}
+
+structure ActiveAccel
+{
+  float_32 x,
+  float_32 y,
+  float_32 z
+}
+
+enum uint_8 UpAxis {
+  XNegative,
+  XPositive,
+  YNegative,
+  YPositive,
+  ZNegative,
+  ZPositive,
+  NumAxes,
+  UnknownAxis
+}
+
+///////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////  CUBES  ////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+
+// Indicates that a cube has connected or disconnected
+message ObjectConnectionState
+{
+  uint_32 objectID,
+  string factoryID,
+  ObjectType  object_type,
+  bool connected
+}
+
+message ObjectMoved
+{
+  uint_32     timestamp,
+  uint_32     objectID,
+}
+
+message ObjectAvailable
+{
+  string      factory_id,
+  ObjectType  objectType,
+  int_8       rssi
+}
+
+message ObjectStoppedMoving
+{
+  uint_32 timestamp,
+  uint_32 objectID,
+}
+
+message ObjectUpAxisChanged
+{
+  uint_32 timestamp,
+  uint_32 objectID,
+  UpAxis  upAxis,
+}
+
+message ObjectTapped
+{
+  uint_32 timestamp,
+  uint_32 objectID,
+}
+
+message ObjectAccel
+{
+  uint_32 timestamp,
+  uint_32 objectID,
+  ActiveAccel accel,
+}
+
+///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////  ANIMATIONS  //////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+
+message RobotCompletedAction {
+    uint_32 idTag,                                 // The identifier of the specific action that completed
+    RobotActionType      actionType,
+    ActionResult         result,
+    ActionResult         subActionResults[uint_8], // vector of all results from this action's subActions
+    ActionCompletedUnion completionInfo,
+}
+
+message LoadedKnownFace {
+    int_64   secondsSinceFirstEnrolled,
+    int_64   secondsSinceLastUpdated,
+    int_64   secondsSinceLastSeen,
+    int_64   lastSeenSecondsSinceEpoch,
+    int_32   faceID,
+    string   name,
+}
+
+// Receives the requested list of names and IDs.
+message EnrolledNamesResponse {
+  LoadedKnownFace faces[uint_8],
+}
+
+structure AccelData {
+  float_32 x,  // mm/s^2
+  float_32 y,
+  float_32 z
+}
+
+structure GyroData {
+  float_32 x,  // rad/s
+  float_32 y,
+  float_32 z
+}
+
+structure CladPoint2d
+{
+  float_32 x,
+  float_32 y
+}
+
+structure CladRect
+{
+  float_32 x_topLeft,
+  float_32 y_topLeft,
+  float_32 width,
+  float_32 height
+}
+
+enum int_8 FacialExpression
+{
+        Unknown = -1,    // e.g. expression estimation disabled
+
+        Neutral = 0,
+        Happiness,
+        Surprise,
+        Anger,
+        Sadness,
+        
+        Count
+}
+
+structure SmileAmount {
+  bool      wasChecked,  // If false, degree and confidence are not valid (and will both be zero)
+  float_32  amount,      // Ranges from 0.0=Not Smiling to 1.0=Full Smile
+  float_32  confidence   // How confident in "degree", [0.0,1.0]
+}
+
+// Gaze angles are in the image plane and in the range +/- 90 degrees. Left/right are in the image, *not* face's left/right.
+structure Gaze {
+  bool      wasChecked,    // If false, angles will both be invalid (and set to zero)
+  float_32  leftRight_deg, // 0 = looking straight ahead, >0 = towards image right, <0 = towards image left
+  float_32  upDown_deg     // 0 = looking straightahead,  >0 = looking up,          <0 = looking down
+}
+
+// Left/right are as the eyes appear in the image to the viewer, not the face's left/right
+structure BlinkAmount {
+  bool      wasChecked,       // If false, both blink degrees will be invalid (and set to zero)
+  float_32  blinkAmountLeft,  // Ranges from 0.0=no blink (eye fully open) to 1.0=full blink (eye fully closed)
+  float_32  blinkAmountRight  // Left/right are as seen in the image, *not* the face's left and right
+}
+
+// RobotObservedObject for signaling that an object
+//  with specified ID/Type/Family was seen at a particular location in the image
+//  and the world
+message RobotObservedObject {
+    uint_32       timestamp,
+    ObjectFamily  objectFamily,
+    ObjectType    objectType,
+    int_32        objectID,      // signed to match U2G::PickAndPlaceObject which has the option to have objectID<0
+    CladRect      img_rect,      // position in image coords
+    PoseStruct3d  pose,
+    float_32      topFaceOrientation_rad, // absolute orienation of top face, iff isActive==true
+    uint_8        isActive
+}
+
+// Message for the robot observing a possible object (existence hasn't been confirmed yet)
+message RobotObservedPossibleObject {
+    // objectID will always be -1
+    RobotObservedObject possibleObject
+}
+
+// RobotObservedFace
+message RobotObservedFace {
+    int_32        faceID,         // negative: tracked but not recognized; positive: recognized face
+    uint_32       timestamp,
+    PoseStruct3d  pose,
+    CladRect      img_rect,       // position in image coords
+    string        name,           // Empty if none assigned yet
+
+    FacialExpression  expression,
+    SmileAmount       smileAmount,
+    Gaze              gaze,
+    BlinkAmount       blinkAmount,
+
+    // Individual expression values histogram, sums to 100 (Exception: all zero if expression=Unknown)
+    uint_8        expressionValues[uint_8],
+
+    // Face landmarks
+    CladPoint2d   leftEye[uint_8],
+    CladPoint2d   rightEye[uint_8],
+    CladPoint2d   nose[uint_8],
+    CladPoint2d   mouth[uint_8]
+}
+
+// RobotChangedObservedFaceID
+//  This generally happens when a tracked face (negative ID) is recognized and
+//  receives a positive ID or when face records get merged
+message RobotChangedObservedFaceID {
+    int_32   oldID,
+    int_32   newID
+}
+
+// Anything that the robot wishes to push to the app that 
+// is not a response to a request from the app.
+// DEPRECATED. Please try to use protobuf's Event instead
+message RequiredEmptyMessage{}
+union Event {
+  RequiredEmptyMessage replaceMe,
+}
+
+// RobotDeletedFixedCustomObjects
+message RobotDeletedFixedCustomObjects {
+}
+
+// RobotDeletedCustomMarkerObjects
+message RobotDeletedCustomMarkerObjects {
+}
+
+// CreatedFixedCustomObject
+message CreatedFixedCustomObject {
+  uint_32 objectID
+}
+
+// DefinedCustomObject
+message DefinedCustomObject {
+  bool success     // false if the last custom object definition failed (e.g. due to duplicate marker already in use)
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/////////////////////////////  MEMORY MAP DATA  ///////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+
+enum uint_8 ENodeContentTypeEnum
+{
+  Unknown,
+  ClearOfObstacle,
+  ClearOfCliff,
+  ObstacleCube,
+  ObstacleProx,
+  ObstacleProxExplored,
+  ObstacleUnrecognized,
+  Cliff,
+  InterestingEdge,
+  NotInterestingEdge,
+}
+
+// Info about an individual quad in the memory map
+structure MemoryMapQuadInfo
+{
+  ENodeContentTypeEnum content,
+  uint_8               depth,
+  uint_32              colorRGBA
+}
+
+// We are about to send one or several messages with memory map info
+message MemoryMapMessageBegin
+{
+  uint_32  originId,
+  int_32   rootDepth,
+  float_32 rootSize_mm,
+  float_32 rootCenterX,
+  float_32 rootCenterY
+}
+
+// A group of quad infos
+message MemoryMapMessage
+{
+  MemoryMapQuadInfo quadInfos[uint_16]
+}
+
+// We finished sending memory map messages
+message MemoryMapMessageEnd
+{
+}
+
+// Note: these values and messages must match the values that get added to MessageEngineToGame
+union MessageRobotToExternal {
+  UiDeviceConnected                 UiDeviceConnected                  = 0x00, // DO NOT CHANGE THIS VALUE
+  RobotCompletedAction              RobotCompletedAction               = 0x01,
+  Event                             Event                              = 0x02,
+  EnrolledNamesResponse             EnrolledNamesResponse              = 0x05,
+  RobotObservedFace                 RobotObservedFace                  = 0x06, // TODO: Add this to Events once webots dependancy on heirarchy is lifted
+  RobotChangedObservedFaceID        RobotChangedObservedFaceID         = 0x07, // TODO: Add this to Events once webots dependancy on heirarchy is lifted
+  ObjectConnectionState             ObjectConnectionState              = 0x0A, // TODO: Add this to Events once webots dependancy on heirarchy is lifted
+  ObjectMoved                       ObjectMoved                        = 0x0B, // TODO: Add this to Events once webots dependancy on heirarchy is lifted
+  ObjectStoppedMoving               ObjectStoppedMoving                = 0x0C, // TODO: Add this to Events once webots dependancy on heirarchy is lifted
+  ObjectUpAxisChanged               ObjectUpAxisChanged                = 0x0D, // TODO: Add this to Events once webots dependancy on heirarchy is lifted
+  ObjectTapped                      ObjectTapped                       = 0x0E, // TODO: Add this to Events once webots dependancy on heirarchy is lifted
+  ObjectAccel                       ObjectAccel                        = 0x0F, // TODO: The engine is not yet sending this message, holding this tag id near the other object events for when it's implemented
+  RobotObservedObject               RobotObservedObject                = 0x10, // TODO: Add this to Events once webots dependancy on heirarchy is lifted
+  ObjectAvailable                   ObjectAvailable                    = 0x11, // TODO: Add this to Events once webots dependancy on heirarchy is lifted
+  RobotDeletedFixedCustomObjects    RobotDeletedFixedCustomObjects     = 0x12,
+  RobotDeletedCustomMarkerObjects   RobotDeletedCustomMarkerObjects    = 0x13,
+  CreatedFixedCustomObject          CreatedFixedCustomObject           = 0x14,
+  DefinedCustomObject               DefinedCustomObject                = 0x15,
+  MemoryMapMessageBegin             MemoryMapMessageBegin              = 0x16,
+  MemoryMapMessage                  MemoryMapMessage                   = 0x17,
+  MemoryMapMessageEnd               MemoryMapMessageEnd                = 0x18,
+}
+
+} // Gateway
+} // Victor
+} // Anki

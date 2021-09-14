@@ -1,0 +1,12 @@
+/** Clad message definitions for onboarding
+*/
+
+namespace Anki {
+namespace Vector {
+
+structure OnboardingData {
+  bool hasCompletedOnboarding = 0
+}
+
+} // namespace Vector
+} // namespace Anki

@@ -1,0 +1,48 @@
+/** Clad message definitions for engine error codes
+*/
+
+
+namespace Anki {
+namespace Vector {
+
+// Error codes from things in engine going wrong that game should know about
+// Each error code should have a cause, and solution if one exists
+enum uint_8 EngineErrorCode
+{
+  // Description
+  //  Storage on robot is full
+  // Solution
+  //  Erase some things in storage or do a factory reset to wipe everything
+  RobotNVStorageFull,
+
+  // Description
+  //  Failed to write unlock data to robot
+  // Solution
+  //  -
+  WriteUnlocksToRobot,
+
+  // Description
+  //  Failed to read unlock data from robot
+  // Solution
+  //  -
+  ReadUnlocksFromRobot,
+
+  // Description
+  //  Failed to write face data to robot
+  // Solution
+  //  -
+  WriteFacesToRobot,
+
+  // Description
+  //  Image quality appears to be too bright or too dark (or has returned to good)
+  // Solution
+  //  Notify user to adjust lighting
+  ImageQualityTooDark,
+  ImageQualityTooBright,
+  ImageQualityGood,
+
+  Count
+}
+
+} // namespace Vector
+} // namespace Anki

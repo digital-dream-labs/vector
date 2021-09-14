@@ -1,0 +1,32 @@
+namespace Anki {
+namespace Vector {
+
+// Single range reading from an ROI
+// Mirrors "VL53L1_TargetRangeData_t" in vl53l1_def.h
+structure RangeReading {
+  float_32 signalRate_mcps, // Millions of counts per second
+  float_32 ambientRate_mcps,
+  float_32 sigma_mm,
+  int_16 rawRange_mm,
+  uint_8 status
+}
+
+// Data about an individual ROI
+// Contains a vector of actual distance readings
+// Mirrors "VL53L1_MultiRangingData_t" in vl53l1_def.h
+structure RangingData {
+  RangeReading readings[uint_8],
+  float_32 spadCount,
+  int_16 processedRange_mm,
+  uint_8 roi,
+  uint_8 numObjects,
+  uint_8 roiStatus
+}
+
+// Contains all 16 ROIs worth of raw ranging data
+structure RangeDataRaw {
+  RangingData data[16]
+}
+
+} // namespace Vector
+} // namespace Anki

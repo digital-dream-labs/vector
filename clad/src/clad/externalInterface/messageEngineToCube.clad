@@ -1,0 +1,36 @@
+/** Clad for messages from Engine to cubes.
+ *
+ */
+
+namespace Anki {
+namespace Vector {
+
+structure CubeLightKeyframe
+{
+  uint_8 color[3],    // RGB color
+  uint_8 holdFrames,  // frames to hold the color for
+  uint_8 decayFrames, // frames for which to blend into the next keyframe
+  uint_8 nextIndex,   // index of the next keyframe
+}
+
+message CubeLightKeyframeChunk
+{
+  uint_8 startingIndex,
+  CubeLightKeyframe keyframes[3]
+}
+
+message CubeLightSequence
+{
+  uint_8 flags = 0,
+  uint_8 initialIndex[4]
+}
+
+union MessageEngineToCube
+{
+  CubeLightSequence      lightSequence  = 0, // tag must match COMMAND_LIGHT_INDEX in cube firmware
+  CubeLightKeyframeChunk lightKeyframes = 1, // tag must match COMMAND_LIGHT_KEYFRAMES in cube firmware
+}
+
+
+} // Cozmo
+} // Anki

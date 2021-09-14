@@ -1,0 +1,28 @@
+/** Clad definitions for things related to the accelerometer in ActiveObjects (orientation, movement...)
+ *
+ */
+
+namespace Anki {
+namespace Vector {
+
+// Convenience structure definition
+structure ActiveAccel
+{
+  float_32 x,
+  float_32 y,
+  float_32 z
+}
+
+enum uint_8 UpAxis {
+  XNegative,
+  XPositive,
+  YNegative,
+  YPositive,
+  ZNegative,
+  ZPositive,
+  NumAxes,
+  UnknownAxis
+}
+
+} // namespace Vector
+} // namespace Anki

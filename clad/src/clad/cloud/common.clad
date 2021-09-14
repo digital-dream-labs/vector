@@ -1,0 +1,8 @@
+namespace Anki {
+namespace Vector {
+
+structure Void {
+}
+
+}
+}

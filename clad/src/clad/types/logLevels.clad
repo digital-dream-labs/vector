@@ -1,0 +1,21 @@
+// File: LogLevels
+// Author: Mark Wesley
+// Copyright: Anki Inc (c) 2017
+
+
+namespace Anki {
+namespace Vector {
+
+
+enum uint_8 LogLevel
+{
+  Debug = 0,
+  Info,
+  Event,
+  Warning,
+  Error
+}
+
+
+} // namespace Vector
+} // namespace Anki

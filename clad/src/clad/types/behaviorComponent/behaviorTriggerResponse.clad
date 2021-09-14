@@ -1,0 +1,28 @@
+/**
+ * File: behaviorTriggerResponse.clad
+ *
+ * Author: Brad Neuman
+ * Created: 2018-08-27
+ *
+ * Description: Helper struct to set trigger word response from JSON
+ *
+ * Copyright: Anki, Inc. 2018
+ *
+ **/
+
+#include "clad/audio/audioEventTypes.clad"
+#include "clad/types/animationTrigger.clad"
+#include "clad/types/behaviorComponent/streamAndLightEffect.clad"
+
+namespace Anki {
+namespace Vector {
+
+structure TriggerWordResponseData {
+  AudioMetaData::GameEvent::GenericEvent postAudioEvent,
+  int_32 minStreamingDuration_ms = -1,
+  StreamAndLightEffect streamAndLightEffect,
+  AnimationTrigger getInTrigger
+}
+
+} // namespace Vector
+} // namespace Anki

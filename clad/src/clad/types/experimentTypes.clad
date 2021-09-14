@@ -1,0 +1,19 @@
+/** Clad message definitions for experiments (AB testing)
+*/
+
+namespace Anki {
+namespace Vector {
+
+structure LabAssignment
+{
+  string experiment_key,
+  string variation_key,
+}
+
+structure LabAssignments
+{
+  LabAssignment labAssignments[uint_8],
+}
+
+} // namespace Vector
+} // namespace Anki

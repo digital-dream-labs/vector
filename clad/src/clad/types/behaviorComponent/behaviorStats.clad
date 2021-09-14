@@ -1,0 +1,43 @@
+/**
+ * File: behaviorStats.clad
+ *
+ * Author: Brad Neuman
+ * Created: 2018-06-08
+ *
+ * Description: Stat types to track things that happen in behaviors
+ *
+ * Copyright: Anki, Inc. 2018
+ *
+ **/
+
+
+namespace Anki {
+namespace Vector {
+
+enum uint_32 BehaviorStat {
+
+  AVS, // alexa
+  AnimationPlayed,
+  AttemptedFistBump,
+  AttemptedPounceOnCube,
+  BehaviorActivated,
+  BlackjackDealerWon,
+  BlackjackGameComplete,
+  EnrolledFace,
+  FistBumpSuccess,
+  MountedCharger,
+  PettingBlissIncrease,
+  PettingReachedMaxBliss,
+  PickedUpCube,
+  PounceOnCubeSuccess,
+  ReactedToCliff,
+  ReactedToEyeContact,
+  ReactedToMotion,
+  ReactedToSound,
+  ReactedToTriggerWord,
+  RolledCube,
+  
+} // enum class BehaviorStat
+  
+} // namespace Vector
+} // namespace Anki

@@ -1,0 +1,35 @@
+/**
+ * File: faceSelectionTypes.clad
+ *
+ * Author: Brad Neuman
+ * Created: 2018-05-03
+ *
+ * Description: Types for face selection
+ *
+ * Copyright: Anki, Inc. 2018
+ *
+ **/
+
+
+namespace Anki {
+namespace Vector {
+
+// Enum that specifies the way that score penalties are applied when selecting face
+// enums that are unspecified apply a penalty of 0
+enum uint_8 FaceSelectionPenaltyMultiplier {
+
+  RelativeBodyAngleRadians = 0,
+  RelativeHeadAngleRadians,
+  RelativeMicDirectionRadians,
+  UnnamedFace,
+  TrackingOnly,
+  TimeSinceSeen_s,
+  NotMakingEyeContact,
+  Distance_m,
+
+  Count
+  
+}
+
+} // namespace Vector
+} // namespace Anki

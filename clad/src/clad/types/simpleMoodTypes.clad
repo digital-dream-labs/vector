@@ -1,0 +1,25 @@
+// File: simpleMoodTypes
+// Author: Trevor Dasch
+// Created: 2/17/16
+// Copyright: Anki, inc. 2016
+
+namespace Anki {
+namespace Vector {
+
+
+enum uint_8 SimpleMoodType {
+
+Default = 0,
+
+LowStim,
+MedStim,
+HighStim,
+
+Frustrated,
+
+Count
+}
+
+
+} // namespace Vector
+} // namespace Anki

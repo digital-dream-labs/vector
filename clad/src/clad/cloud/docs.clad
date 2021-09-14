@@ -1,0 +1,101 @@
+#include "clad/cloud/common.clad"
+
+namespace Anki {
+namespace Vector {
+namespace JDocs {
+
+structure Doc {
+    uint_64 docVersion,
+    uint_64 fmtVersion,
+    string metadata, // max 32 chars
+    string[uint_32] jsonDoc // max depth = 16, max size = 204800 bytes
+}
+
+structure WriteRequest {
+    string[uint_16] account,
+    string[uint_16] thing,
+    string[uint_16] docName,
+    Doc doc
+}
+
+enum uint_8 DocError {
+    ErrorConnecting // could not connect to jdoc server
+}
+
+enum uint_8 WriteStatus {
+    Accepted,
+    RejectedDocVersion, // not fatal - written doc version was not up to date
+    RejectedFmtVersion, // not fatal - written fmt version was not up to date
+    Error,
+}
+
+structure WriteResponse {
+    WriteStatus status,
+    uint_64 latestVersion
+}
+
+structure ReadItem {
+    string docName,
+    uint_64 myDocVersion
+}
+
+structure ReadRequest {
+    string[uint_16] account,
+    string[uint_16] thing,
+    ReadItem items[uint_16]
+}
+
+enum uint_8 ReadStatus {
+    Unchanged,
+    Changed,
+    NotFound,
+    PermissionDenied
+}
+
+structure ResponseDoc {
+    ReadStatus status,
+    Doc doc // will be empty if status == unchanged!
+}
+
+structure ReadResponse {
+    ResponseDoc items[uint_16]
+}
+
+structure DeleteRequest {
+    string[uint_16] account,
+    string[uint_16] thing,
+    string[uint_16] docName
+}
+
+union dupes_allowed DocRequest {
+    WriteRequest write,
+    ReadRequest read,
+    DeleteRequest deleteReq, // every form of delete is a keyword
+    Void user,
+    Void thing,
+}
+
+structure ErrorResponse {
+    DocError err,
+}
+
+structure UserResponse {
+    string userId,
+}
+
+structure ThingResponse {
+    string thingName,
+}
+
+union DocResponse {
+    WriteResponse write,
+    ReadResponse read,
+    Void deleteResp,
+    ErrorResponse err,
+    UserResponse user,
+    ThingResponse thing,
+}
+
+}
+}
+}

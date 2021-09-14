@@ -1,0 +1,12 @@
+cxx_project(
+    name = 'canned_anim_lib_anim',
+    srcs = cxx_src_glob(['.']),
+    headers = cxx_header_glob(['.'])
+)
+
+cxx_project(
+    name = 'canned_anim_lib_engine',
+    srcs = cxx_src_glob(['.']),
+    headers = cxx_header_glob(['.'])
+)
+

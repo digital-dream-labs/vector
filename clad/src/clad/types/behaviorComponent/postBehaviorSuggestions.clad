@@ -1,0 +1,24 @@
+// File: postBehaviorSuggestions
+// Author: ross
+// Created: Apr 16 2018
+// Copyright: Anki, Inc. 2018
+//
+// Desc: Thematic suggestions of what should follow a behavior
+
+namespace Anki {
+namespace Vector {
+
+enum uint_8 PostBehaviorSuggestions {
+  Invalid=0,
+
+  Socialize,
+  PlayWithCube,
+  Nothing,
+  ReactToPutDownFromPalm,
+  Sleep,
+  SleepOnCharger,
+  SleepOnPalm,
+}
+
+} // namespace Vector
+} // namespace Anki

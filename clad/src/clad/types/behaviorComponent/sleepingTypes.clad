@@ -1,0 +1,117 @@
+// File: sleepingTypes.clad
+// Author: Brad Neuman
+// Created: 2018-08-13
+// Copyright: Anki, inc. 2018
+
+namespace Anki {
+namespace Vector {
+
+enum uint_8 SleepStateID {
+
+  Invalid = 0,
+
+  Awake,
+
+  // states which need to do something before the robot goes to sleep (or back to sleep)
+  PreSleepAnimation,
+  GoingToCharger,
+  CheckingForPerson,
+
+  // deep sleep where only voice command will wake (not movement)
+  Comatose,
+  EmergencySleep,
+  
+  // deep sleep when the robot is held in a user's palm, petting will wake (not movement)
+  HeldInPalmSleep,
+
+  DeepSleep,
+  LightSleep,
+}
+
+enum uint_8 WakeReason {
+
+  Invalid = 0,
+
+  // always wakes
+  SDK,
+  TimerShouldRing,
+  VoiceCommand,
+  
+  // wakes from held-in-palm sleep
+  Jolted,
+  NotInAir,
+  PickedUpFromPalm,
+
+  // wakes from deep sleep or above
+  PickedUp,
+  Poked,
+  Touched,
+
+  // only wakes from light sleep (or person detection)
+  Sound,
+  LightsOn,
+  SawPerson,
+
+  // slept long enough, time to wake up
+  NotSleepy,
+
+  // SleepCycle behavior was interrupted
+  Interrupted
+}
+
+enum_concept bool ShouldPlayWakeUpAnimForReason[WakeReason] {
+  Invalid = 0,
+  SDK = 1,
+  TimerShouldRing = 1,
+  VoiceCommand = 0, // already awake from the wake word behavior
+  Jolted = 0, // already awake from the jolt reaction
+  NotInAir = 1,
+  PickedUp = 1,
+  PickedUpFromPalm = 0, // already awake from the palm pick-up reaction
+  Poked = 1,
+  Touched = 1,
+  Sound = 0, // already awake from the sound reaction
+  LightsOn = 1, // TODO:(bn) use a custom wake up here (change this concept to return AnimTrigger?)
+  SawPerson = 0,
+  NotSleepy = 1,
+  Interrupted = 0
+}
+
+enum uint_8 SleepReason {
+  Invalid = 0,
+
+  ConsoleVar,
+  SleepCommand,
+  GoodnightCommand,
+  
+  // Robot has been on a palm for a long time and trusts the user
+  HeldInPalmSleep,
+
+  // set by some reaction behavior (probably ReactToDarkness)
+  SleepOnChargerSuggestion,
+  SleepSuggestion,
+
+  // decided autonomously (stim level, sleep debt)
+  Sleepy,
+
+  // Too long on charger without charging
+  // (because the battery is hot)
+  TooLongOnChargerNotCharging,
+
+  // e.g. low battery or high temp
+  Emergency,
+
+  NightTimeReboot,
+}
+
+enum uint_8 SleepReactionType {
+  NotReacting = 0,
+  Jolted,
+  PickedUpFromPalm,
+  Sound,
+  TriggerWord,
+  WiggleOntoCharger,
+}
+
+}
+}

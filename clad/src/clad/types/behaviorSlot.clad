@@ -1,0 +1,21 @@
+/**
+* File: behaviorSlot.clad
+*
+* Author: Michelle Sintov
+* Date:   6/4/2018
+*
+* Description: CLAD enum for Victor SDK behavior slots
+*
+* Copyright: Anki, Inc. 2018
+**/
+
+namespace Anki {
+namespace Vector {
+
+enum uint_32 BehaviorSlot
+{
+  SDK_HIGH_PRIORITY = 0
+}
+
+} // namespace Vector
+} // namespace Anki

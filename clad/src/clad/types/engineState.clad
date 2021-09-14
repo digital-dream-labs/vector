@@ -1,0 +1,29 @@
+// File: engineState
+// Author: Lee Crippen
+// Created: 2/19/2016
+// Copyright: Anki, inc. 2016
+
+namespace Anki {
+namespace Vector {
+
+enum uint_8 EngineState {
+  Stopped,
+  LoadingData,
+  ConnectingToRobot,
+  Running,
+  ShuttingDown,
+}
+
+enum uint_8 RobotConnectionResult {
+  Success,
+  ConnectionFailure,
+  ConnectionRejected,
+  OutdatedFirmware,
+  OutdatedApp,
+  NeedsPin,
+  InvalidPin,
+  PinMaxAttemptsReached,
+}
+
+} // namespace Vector
+} // namespace Anki

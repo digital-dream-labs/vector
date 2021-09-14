@@ -1,0 +1,11 @@
+cxx_project(
+    name = 'osState',
+    srcs = cxx_src_glob(['.'],
+                        excludes = ['*_mac.*',
+                                    '*_vicos.*']),
+    platform_srcs = [
+        ('mac', glob(['**/*_mac.cpp'])),
+        ('vicos', glob(['**/*_vicos.cpp']))
+    ],
+    headers = cxx_header_glob(['.'])
+)

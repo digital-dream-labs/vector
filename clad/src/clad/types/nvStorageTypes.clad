@@ -1,0 +1,40 @@
+/** CLAD definitions for robot non-volatile storage
+ * WARNING For backwards forward compatibility, all structures must be left as defined and new versions added with their
+ * Own unique identifier when needed.
+ */
+
+namespace Anki {
+namespace Vector {
+namespace NVStorage {
+
+  enum uint_32 NVConst
+  {
+    NVConst_FACTORY_DATA_BIT = 0x80000000,  // aka playpen tags
+  }
+
+  enum uint_32 NVEntryTag
+  {
+    // ===== Non-factory entries =====
+    NVEntry_LabAssignments     = 0x196000,
+    
+    // ====== Factory entries ========
+    NVEntry_BirthCertificate   = 0x80000000,
+    NVEntry_CameraCalib        = 0x80000001,
+    NVEntry_ObservedCubePose   = 0x80000005,
+    NVEntry_IMUInfo            = 0x80000006,
+    NVEntry_PlaypenTestResults = 0x80000010,
+    NVEntry_CalibImage1        = 0x80010000,
+  }
+
+  // Nominally 0 is success > 0 is conditional success and < 0 is error
+  enum int_8 NVResult {
+    NV_OKAY = 0,
+    NV_NOT_FOUND = -1,
+    NV_NO_ROOM   = -2,
+    NV_BAD_ARGS  = -3, // Invalid arguments to call
+  }
+
+}
+
+}
+}

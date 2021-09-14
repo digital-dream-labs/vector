@@ -1,0 +1,32 @@
+/**
+* File: faceEnrollmentResult.clad
+*
+* Author: Andrew Stein
+* Date:   11/22/2016
+*
+* Description: CLAD enum for Cozmo face-enrollment result
+*
+* Copyright: Anki, Inc. 2016
+**/
+
+namespace Anki {
+namespace Vector {
+
+enum uint_8 FaceEnrollmentResult
+{
+    Success = 0,
+
+    // Failures:
+    SawWrongFace,
+    SawMultipleFaces,
+    TimedOut,
+    SaveFailed,
+    Incomplete,
+    Cancelled,
+    NameInUse,
+    NamedStorageFull,
+    UnknownFailure
+}
+
+} // namespace Vector
+} // namespace Anki

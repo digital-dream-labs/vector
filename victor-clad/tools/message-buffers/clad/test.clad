@@ -1,0 +1,84 @@
+// Copyright 2015-2016 Anki Inc.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+// Include a file
+#include "ankienum.clad"
+// A sample .adef file
+// ( by Mark Pauley for Anki, Inc 01/2015)
+
+/*
+Test Block Comment
+*/
+
+message foo {
+  bool isFoo,
+  int_8 myByte,
+  uint_8 byteTwo,
+  int_16 myShort,
+  uint_32 normal,
+  AnkiEnum foo
+}
+
+message bar {
+  int_8    byteBuff[uint_8],
+  int_16   shortBuff[uint_8],
+  AnkiEnum enumBuff[int_8]
+}
+
+message so_many_strings {
+  string   varStringBuff[uint_16],
+  string   fixedStringBuff[3],
+  string[uint_16] anotherVarStringBuff[uint_8],
+  string[uint_8] anotherFixedStringBuff[2]
+}
+
+union MultiMessage {
+  int_8 messageOne,
+  foo messageTwo,
+  bar messageThree
+}
+
+namespace Bar {
+  enum int_8 AnkiEnum {
+    b1 = 3,
+    b2,
+    b3
+  }
+} // namespace Bar
+
+namespace Foo {
+   message sos {
+     AnkiEnum a,
+     Bar::AnkiEnum b,
+   }
+namespace Bar {
+  enum int_8 AnkiEnum {
+    c1 = 5,
+    c2,
+    c3
+  }
+namespace Baz {
+  message lol {
+    AnkiEnum c,
+    Bar::AnkiEnum d
+  }
+
+  union NotherMultiMessage {
+    bar messageOne,
+    lol messageTwo,
+    int_8 messageThree
+  }
+} // namespace Baz
+} // namespace Bar
+} // namespace Foo

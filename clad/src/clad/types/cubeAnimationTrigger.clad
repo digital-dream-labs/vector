@@ -1,0 +1,77 @@
+// File: cubeAnimationTrigger
+// Author: Al Chaussee
+// Created: 3/31/16
+// Copyright: Anki, inc. 2016
+
+
+namespace Anki {
+namespace Vector {
+
+enum int_32 CubeAnimationTrigger
+{
+  // Please keep alphabetical
+
+  Carrying,
+  Connected,
+  CubePouncePlayerLose,
+  CubePouncePlayerWin,
+  DrivingTo,
+  Flash,
+  GatherCubesAllCubesInBeacon,
+  GatherCubesCubeInBeacon,
+  Interacting,
+  InteractingBehaviorLock,
+  Onboarding,
+  ShutDown,
+  Sleep,
+  SleepNoFade,
+  SpeedTapWin,
+  SpeedTapLose,
+
+
+  SpinnerBlueCelebration,
+  SpinnerBlueCycle,
+  SpinnerBlueLockIn,
+  SpinnerBlueLockedPulse,
+  SpinnerBlueLocked,
+
+  SpinnerGreenCelebration,
+  SpinnerGreenCycle,
+  SpinnerGreenLockIn,
+  SpinnerGreenLockedPulse,
+  SpinnerGreenLocked,
+
+  SpinnerPlayerError,
+
+  SpinnerPurpleCelebration,
+  SpinnerPurpleCycle,
+  SpinnerPurpleLockIn,
+  SpinnerPurpleLockedPulse,
+  SpinnerPurpleLocked,
+
+  SpinnerRedCelebration,
+  SpinnerRedCycle,
+  SpinnerRedLockIn,
+  SpinnerRedLockedPulse,
+  SpinnerRedLocked,
+
+  SpinnerStartGame,
+
+  SpinnerYellowCelebration,
+  SpinnerYellowCycle,
+  SpinnerYellowLockIn,
+  SpinnerYellowLockedPulse,
+  SpinnerYellowLocked,
+
+  TapResponsePulse,
+  TestAllLeds,
+  TestOffset,
+  TestRotation,
+  Visible,
+  WakeUp,
+
+  Count
+}
+
+} // end namespace Vector
+} // end namespace Anki

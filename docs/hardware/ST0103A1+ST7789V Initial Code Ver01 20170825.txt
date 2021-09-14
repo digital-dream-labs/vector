@@ -1,0 +1,84 @@
+HW_Reset();                
+
+delay_ms(120);                
+
+comm_out(0x11);     
+delay_ms(120);	//delay_ms 120ms 
+
+comm_out(0x36);	//MADCTL (36h): Memory Data Access Control    
+data_out(0x00);	//'00h' invalid data andy nov6,2017   
+
+comm_out(0x3A);	//COLMOD (3Ah): Interface Pixel Format     
+data_out(0x06);	   
+
+comm_out(0xB2);	//PORCTRL (B2h): Porch Setting
+data_out(0x0C);   
+data_out(0x0C);   
+data_out(0x00);   
+data_out(0x33);   
+data_out(0x33);   
+
+comm_out(0xB7);	//GCTRL (B7h): Gate Control 
+data_out(0x72);   
+
+comm_out(0xBB);	//VCOMS (BBh): VCOMS Setting
+data_out(0x36);   
+
+comm_out(0xC0);	//LCMCTRL (C0h): LCM Control      
+data_out(0x2C);   
+
+comm_out(0xC2);	//VDVVRHEN (C2h): VDV and VRH Command Enable  
+data_out(0x01);   
+
+comm_out(0xC3); //VRHS (C3h): VRH Set 
+data_out(0x14);   
+
+comm_out(0xC4);	//VDVS (C4h): VDV Set    
+data_out(0x20);   
+
+comm_out(0xC6);	//FRCTRL2 (C6h): Frame Rate Control in Normal Mode   
+data_out(0x0F);   
+
+comm_out(0xD0);	//PWCTRL1 (D0h): Power Control 1    
+data_out(0xA4);   
+data_out(0xA1);   
+
+comm_out(0xE0); //PVGAMCTRL (E0h): Positive Voltage Gamma Control  
+data_out(0xD0);   
+data_out(0x10);   
+data_out(0x16);   
+data_out(0x0A);   
+data_out(0x0A);   
+data_out(0x26);   
+data_out(0x3C);   
+data_out(0x53);   
+data_out(0x53);   
+data_out(0x18);   
+data_out(0x15);   
+data_out(0x12);   
+data_out(0x36);   
+data_out(0x3C);   
+
+comm_out(0xE1);	//NVGAMCTRL (E1h): Negative Voltage Gamma Control     
+data_out(0xD0);   
+data_out(0x11);   
+data_out(0x19);   
+data_out(0x0A);   
+data_out(0x09);   
+data_out(0x25);   
+data_out(0x3D);   
+data_out(0x35);   
+data_out(0x54);   
+data_out(0x17);   
+data_out(0x15);   
+data_out(0x12);   
+data_out(0x36);   
+data_out(0x3C);   
+
+comm_out(0x21);	//INVON (21h): Display Inversion On    
+
+comm_out(0x11);	//SLPOUT (11h): Sleep Out     
+delay_ms(120); 
+
+comm_out(0x29);	//DISPON (29h): Display On     
+delay_ms(120);

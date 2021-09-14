@@ -1,0 +1,27 @@
+/**
+ * File: attentionTransferTypes.clad
+ *
+ * Author: Brad Neuman
+ * Created: 2018-06-15
+ *
+ * Description: Types for attention transfer system
+ *
+ * Copyright: Anki, Inc. 2018
+ *
+ **/
+
+namespace Anki {
+namespace Vector {
+
+// NOTE: must match message in messages.proto
+enum uint_8 AttentionTransferReason {
+  Invalid = 0,
+
+  NoCloudConnection = 1,
+  NoWifi = 2,
+  UnmatchedIntent = 3,
+
+}
+
+}
+}

@@ -1,0 +1,24 @@
+// File: weatherConditions.clad
+// Author: Kevin M. Karol
+// Created: 5/18/2017
+// Copyright: Anki, inc. 2017
+
+namespace Anki {
+namespace Vector {
+
+enum uint_8 WeatherConditionType {
+  Cloudy,
+  Cold,
+  Rain,
+  Snow,
+  Stars,
+  Sunny,
+  Thunderstorms,
+  Windy,
+
+  // Must be last element for iteration puproses
+  Count
+}
+
+} // namespace Vector
+} // namespace Anki

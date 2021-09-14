@@ -1,0 +1,28 @@
+// File: behaviorTimerTypes.clad
+// Author: ross
+// Created: Feb 1 2017
+// Copyright: Anki, Inc. 2018
+//
+// Desc: Named timers shared among behaviors
+
+namespace Anki {
+namespace Vector {
+
+// PLEASE KEEP ALPHABETIZED
+enum uint_8 BehaviorTimerTypes {
+  Invalid,
+
+  DancingCooldown,
+  FistBump,
+  ListenForBeatsCooldown,
+  PlayingWithCube,
+  ReactToIllumination,
+  Socializing,
+  ObservingOnCharger,
+  ObservingOffCharger,
+  ReactToTouchPetting,
+  
+}
+
+} // namespace Vector
+} // namespace Anki

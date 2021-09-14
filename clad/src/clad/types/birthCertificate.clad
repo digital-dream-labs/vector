@@ -1,0 +1,24 @@
+/** Robot birth certificate
+ */
+
+namespace Anki {
+ namespace Vector {
+
+    /// These are all hard-coded - in 2017 production, we may start using different values here
+    structure BirthCertificate {
+      uint_8 atFactory = 0,
+      uint_8 whichFactory = 1,
+      uint_8 whichLine = 1,
+      uint_8 model = 1,
+
+      // Time taken from phone (ideally UTC, not China time zone, but it doesn't matter as long as you know which)
+      uint_8 year,
+      uint_8 month,
+      uint_8 day,
+      uint_8 hour,
+      uint_8 minute,
+      uint_8 second
+    }
+
+  } // namespace Vector
+} // namespace Anki

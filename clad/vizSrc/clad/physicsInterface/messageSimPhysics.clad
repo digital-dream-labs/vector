@@ -1,0 +1,18 @@
+namespace Anki {
+namespace Vector {
+namespace PhysicsInterface {
+
+message ApplyForce {
+  // Apply force for one physics/simulation tick. Units in Newtons.
+  float_32 xForce = 0.0,
+  float_32 yForce = 0.0,
+  float_32 zForce = 0.0,
+  string DefName
+}
+
+// an explicit auto-union that includes all messages in this file
+autounion MessageSimPhysics { }
+
+} // namespace PhysicsInterface
+} // namespace Vector
+} // namespace Anki

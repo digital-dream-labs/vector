@@ -1,0 +1,197 @@
+// Cozmo known object type definitions file
+//  for the C-Like Abstract Data language
+// Author: Andrew Stein
+// Copyright: Anki Inc (c) 2015
+
+namespace Anki {
+namespace Vector {
+
+  // TODO: change to int_16 or uint_8
+  enum int_32 ObjectType {
+    UnknownObject = 0,
+    
+    //////////////////////////////////////////////////////////////////////////
+    // Light Cubes (a.k.a. Active Blocks)
+    //
+    
+    Block_LIGHTCUBE1 = 1, // value is specified here for SDK backward compatibility
+    Block_LIGHTCUBE2,
+    Block_LIGHTCUBE3,
+
+    Block_LIGHTCUBE_GHOST,
+
+    //////////////////////////////////////////////////////////////////////////
+    // Charger
+    //
+    Charger_Basic = 5, // value is specified here for SDK backward compatibility
+
+    //////////////////////////////////////////////////////////////////////////
+    // Custom Objects defined via DefineCustomObject
+    CustomType00 = 14, // value is specified here for SDK backward compatibility
+    CustomType01,
+    CustomType02,
+    CustomType03,
+    CustomType04,
+    CustomType05,
+    CustomType06,
+    CustomType07,
+    CustomType08,
+    CustomType09,
+    CustomType10,
+    CustomType11,
+    CustomType12,
+    CustomType13,
+    CustomType14,
+    CustomType15,
+    CustomType16,
+    CustomType17,
+    CustomType18,
+    CustomType19,
+
+    // INSERT ADDITIONAL CustomTypes here
+
+    // DO NOT ADD anything other than new CustomTypes before CustomFixedObstacle!
+
+    // Custom "fixed" object (i.e. obstacle)
+    CustomFixedObstacle,
+
+  } // enum class ObjectType
+  
+  
+// Enum Concepts for ObjectType:
+
+  enum_concept bool IsValidLightCube[ObjectType] {
+    UnknownObject          = 0,
+    Block_LIGHTCUBE1       = 1,
+    Block_LIGHTCUBE2       = 1,
+    Block_LIGHTCUBE3       = 1,
+    Block_LIGHTCUBE_GHOST  = 0,
+    Charger_Basic          = 0,
+    CustomType00           = 0,
+    CustomType01           = 0,
+    CustomType02           = 0,
+    CustomType03           = 0,
+    CustomType04           = 0,
+    CustomType05           = 0,
+    CustomType06           = 0,
+    CustomType07           = 0,
+    CustomType08           = 0,
+    CustomType09           = 0,
+    CustomType10           = 0,
+    CustomType11           = 0,
+    CustomType12           = 0,
+    CustomType13           = 0,
+    CustomType14           = 0,
+    CustomType15           = 0,
+    CustomType16           = 0,
+    CustomType17           = 0,
+    CustomType18           = 0,
+    CustomType19           = 0,
+    CustomFixedObstacle    = 0
+  }
+  
+  enum_concept bool IsBlockType[ObjectType] {
+    UnknownObject          = 0,
+    Block_LIGHTCUBE1       = 1,
+    Block_LIGHTCUBE2       = 1,
+    Block_LIGHTCUBE3       = 1,
+    Block_LIGHTCUBE_GHOST  = 1,
+    Charger_Basic          = 0,
+    CustomType00           = 0,
+    CustomType01           = 0,
+    CustomType02           = 0,
+    CustomType03           = 0,
+    CustomType04           = 0,
+    CustomType05           = 0,
+    CustomType06           = 0,
+    CustomType07           = 0,
+    CustomType08           = 0,
+    CustomType09           = 0,
+    CustomType10           = 0,
+    CustomType11           = 0,
+    CustomType12           = 0,
+    CustomType13           = 0,
+    CustomType14           = 0,
+    CustomType15           = 0,
+    CustomType16           = 0,
+    CustomType17           = 0,
+    CustomType18           = 0,
+    CustomType19           = 0,
+    CustomFixedObstacle    = 0
+  }
+  
+  enum_concept bool IsChargerType[ObjectType] {
+    UnknownObject          = 0,
+    Block_LIGHTCUBE1       = 0,
+    Block_LIGHTCUBE2       = 0,
+    Block_LIGHTCUBE3       = 0,
+    Block_LIGHTCUBE_GHOST  = 0,
+    Charger_Basic          = 1,
+    CustomType00           = 0,
+    CustomType01           = 0,
+    CustomType02           = 0,
+    CustomType03           = 0,
+    CustomType04           = 0,
+    CustomType05           = 0,
+    CustomType06           = 0,
+    CustomType07           = 0,
+    CustomType08           = 0,
+    CustomType09           = 0,
+    CustomType10           = 0,
+    CustomType11           = 0,
+    CustomType12           = 0,
+    CustomType13           = 0,
+    CustomType14           = 0,
+    CustomType15           = 0,
+    CustomType16           = 0,
+    CustomType17           = 0,
+    CustomType18           = 0,
+    CustomType19           = 0,
+    CustomFixedObstacle    = 0
+  }
+  
+  enum_concept bool IsCustomType[ObjectType] {
+    UnknownObject          = 0,
+    Block_LIGHTCUBE1       = 0,
+    Block_LIGHTCUBE2       = 0,
+    Block_LIGHTCUBE3       = 0,
+    Block_LIGHTCUBE_GHOST  = 0,
+    Charger_Basic          = 0,
+    CustomType00           = 1,
+    CustomType01           = 1,
+    CustomType02           = 1,
+    CustomType03           = 1,
+    CustomType04           = 1,
+    CustomType05           = 1,
+    CustomType06           = 1,
+    CustomType07           = 1,
+    CustomType08           = 1,
+    CustomType09           = 1,
+    CustomType10           = 1,
+    CustomType11           = 1,
+    CustomType12           = 1,
+    CustomType13           = 1,
+    CustomType14           = 1,
+    CustomType15           = 1,
+    CustomType16           = 1,
+    CustomType17           = 1,
+    CustomType18           = 1,
+    CustomType19           = 1,
+    CustomFixedObstacle    = 1
+  }
+  
+  // Note: ObjectFamily is deprecated and is only still here for compatiblity with SDK version 0.5.1 and earlier.
+  //       This should eventually be removed when we no longer care about maintaining compatibility with that version.
+  // DO NOT change the values for these enum entries!
+  enum int_32 ObjectFamily {
+    Invalid      = -1,
+    Unknown      = 0,
+    Block        = 1,
+    LightCube    = 2,
+    Charger      = 3,
+    CustomObject = 6,
+  }
+
+  
+} // namespace Vector
+} // namespace Anki

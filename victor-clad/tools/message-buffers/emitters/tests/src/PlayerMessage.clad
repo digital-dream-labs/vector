@@ -1,0 +1,89 @@
+// Copyright 2015-2016 Anki Inc.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+// PlayerMessage message definition file
+//  for the C-Like Abstract Data language
+// Author: Mark Pauley
+// Copyright: Anki, Inc (c) 2015
+
+message Void {}
+
+// Wrapped buffer
+message Buffer16
+{
+  uint_8 buffer[uint_16]
+}
+
+// PlayerId
+message PlayerId
+{
+  uint_8 playerId
+}
+
+// Player and Profile pair
+message PlayerAndProfile
+{
+  uint_8 playerId,
+  uint_8 profileBuffer[uint_8]
+}
+
+// Player And Vehicle pair
+message PlayerAndVehicle
+{
+  uint_8 playerId,
+  uint_64 vehicleUUID
+}
+
+// Lobby Service
+enum uint_8 ClientLobbyState {
+  Nil = 0,
+  PreLobby,
+  InLobby,
+  GameReady,
+  InGame
+}
+
+message LobbyState
+{
+  ClientLobbyState lobbyState
+}
+
+// Emotion Service
+enum uint_8 EmotionRequestType {
+  Nil = 0,
+  Start,
+  Stop
+}
+
+message PlayerEmotion
+{
+  string soundToPlay,
+  EmotionRequestType requestType
+}
+
+union PlayerMessage
+{
+    Buffer16         UiMessageData, // wrapped UIMessage
+    Void             RequestLobbyData,
+    Buffer16         ResponseLobbyData,
+    PlayerId         RequestPlayerData,  //data for playerId
+    PlayerAndProfile ResponsePlayerData, //wrapped profile
+    PlayerAndVehicle PlayerRequestVehicleSelect,
+    Void             HostReadyForGameStart,
+    Void             HostBackToLobby,
+    Void             ClientReadForGameStart,
+    LobbyState       ClientStateUpdate,
+    PlayerEmotion    EmotionMessage,
+    Buffer16         VehicleControllerMessage
+}

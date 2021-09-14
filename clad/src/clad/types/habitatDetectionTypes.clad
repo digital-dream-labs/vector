@@ -1,0 +1,39 @@
+/** Clad message definitions for habitat detection
+*/
+
+namespace Anki {
+namespace Vector {
+
+enum uint_8 HabitatBeliefState
+{
+  Unknown,
+  InHabitat,
+  NotInHabitat
+}
+
+// this enum represents all possible configurations of the cliff sensors that
+// the robot can observe when positioned inside the habitat. It accounts for 
+// multiple sensors detecting white based on its placement
+enum uint_8 HabitatLineRelPose
+{
+  // 4 grey
+  AllGrey,
+
+  // 3 grey 1 white
+  WhiteFR,
+  WhiteFL,
+  WhiteBR,
+  WhiteBL,
+
+  // 2 grey 2 white
+  WhiteFLFR,
+  WhiteFLBL,
+  WhiteFRBR,
+  WhiteBLBR,
+
+  Invalid
+}
+
+}
+}
+

@@ -1,0 +1,20 @@
+cxx_project(
+    name = 'victor_web_library',
+    srcs = cxx_src_glob(['src'],
+                        excludes = ['victorWebServerMain.cpp']),
+    platform_srcs = [
+    ],
+    headers = cxx_header_glob(['src']),
+    platform_headers = [
+    ]
+)
+
+cxx_project(
+    name = 'vic-webserver',
+    srcs = glob(['src/victorWebServerMain.cpp']),
+    platform_srcs = [
+    ],
+    headers = [],
+    platform_headers = [
+    ]
+)

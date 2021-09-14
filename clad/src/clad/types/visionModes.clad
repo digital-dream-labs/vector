@@ -1,0 +1,120 @@
+/** Clad message definitions for the messages sent from the WiFi to the engine.
+ */
+
+
+namespace Anki {
+namespace Vector {
+
+  enum uint_32 VisionMode
+  {    
+    //
+    // Full-blown vision modes
+    //
+    Markers = 0x00,       // By default, uses cropping. See also "FullFrame/Height/Width" modifiers below.
+    Faces,
+    Motion,
+    BrightColors,
+    OverheadEdges,
+    Calibration,
+    AutoExp,
+    WhiteBalance,
+    Stats,
+    Pets,
+    Lasers,
+    OverheadMap,
+    Obstacles,
+    Benchmark,
+    SaveImages,
+    People,
+    Hands,
+    Illumination,
+    Viz,                    // For getting images out of VisionSystem to send to Viz/SDK
+    MirrorMode,             // Draw images/detections on the robot's face, mirrored
+    Offboard,               // Attempts to send images over a network for development
+
+    // This is a gross thing to do: a mode to disable another mode. TODO: Remove with VIC-6838
+    // If this is "enabled", then it takes precedence over Markers mode above and will force that
+    // mode to be skipped.
+    Markers_Off,
+    
+    //
+    // Vision mode "modifiers" (require one of the above to be enabled to have an effect)
+    // The name convention is <Mode>_<Modifier>
+    //   TODO: Make "modifiers" a separate type (hard now because vision schedules consist only of VisionModes)
+    //   TODO: Enforce that modifiers always have their "required" mode enabled via unit test
+    //
+    
+    // Require Markers
+    Markers_ChargerOnly,         // For auto-exposure metering, only use charger marker, if detected
+    Markers_FullFrame,           // Slower, process entire frame, without crop scheduling. Subsumes FullHeight/Width options below.
+    Markers_FullHeight,          // Still does horizontal crop scheduling, but does not consider head angle / height
+    Markers_FullWidth,           // Considers head angle to search only near ground, but no horizontal crop scheduling
+    Markers_FastRotation,        // Mostly for unit tests: allow markers to be detected when rotating fast (or without IMU data)
+    Markers_Composite,           // Averages a buffer of images, periodically detecting markers in the image
+
+    // Require Faces:
+    Faces_Expression,
+    Faces_Smile,
+    Faces_Gaze,
+    Faces_Blink,
+    Faces_Crop,
+    
+    // Require AutoExposure
+    AutoExp_Cycling,             // Cycles through a list of AE target values to aid search in extreme lighting. This mode is marked as
+                                 //  processed if it tried all exposure settings to cycle through, or something (faces, pets, or markers)
+                                 //  was detected. This is because detections will trigger metering which locks the exposure.
+    AutoExp_MinGain,             // Vs. min-exposure-time mode. Useful for less grainy images when TakingPhotos
+
+    Count
+  }
+
+  // For the given VisionMode, this map tells whether the mode
+  // can be completed in a single vision-processing frame.
+  // If it is true, then one frame of this mode turned on is enough
+  // to get a result from this mode.
+  // If it is false, then >1 frames of this mode turned on are
+  // needed to get a result from this mode.
+  enum_concept bool CycleCompletesInOneFrame[VisionMode]
+  {
+    Markers                  = 1,
+    Faces                    = 1,
+    Motion                   = 1,
+    BrightColors             = 1,
+    OverheadEdges            = 1,
+    Calibration              = 1,
+    AutoExp                  = 1,
+    WhiteBalance             = 1,
+    Stats                    = 1,
+    Pets                     = 1,
+    Lasers                   = 1,
+    OverheadMap              = 1,
+    Obstacles                = 1,
+    Benchmark                = 1,
+    SaveImages               = 1,
+    People                   = 1,
+    Hands                    = 1,
+    Illumination             = 1,
+    Viz                      = 1,
+    MirrorMode               = 1,
+    Markers_Off              = 1,
+    Markers_ChargerOnly      = 1,
+    Markers_FullFrame        = 1,
+    Markers_FullHeight       = 1,
+    Markers_FullWidth        = 1,
+    Markers_FastRotation     = 1,
+    Faces_Expression         = 1,
+    Faces_Smile              = 1,
+    Faces_Gaze               = 1,
+    Faces_Blink              = 1,
+    Faces_Crop               = 1,
+    AutoExp_MinGain          = 1,
+    Offboard                 = 1,
+    
+    AutoExp_Cycling          = 0,
+    Markers_Composite        = 0,
+
+    Count                    = 1
+  }
+
+} // namespace Vector
+} // namespace Anki

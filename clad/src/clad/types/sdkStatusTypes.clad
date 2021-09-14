@@ -1,0 +1,19 @@
+// File: sdkStatusTypes
+// Author: Mark Wesley
+// Copyright: Anki Inc (c) 2016
+
+
+namespace Anki {
+namespace Vector {
+
+
+enum uint_8 SdkStatusType
+{
+  Behavior,
+  Action,
+  Anim
+}
+
+
+} // namespace Vector
+} // namespace Anki

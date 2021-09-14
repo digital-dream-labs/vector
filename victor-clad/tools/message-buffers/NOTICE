@@ -1,0 +1,17 @@
+CLAD --  The "C-Like Algebraic Data" language
+Copyright 2015-2016 Anki Inc.
+
+This product includes software developed by
+Anki Inc. (http://anki.com/).
+
+The following files contain source code developed and copyrighted by others.
+See individual files for their license details.
+
+clad/plyparser.py is Copyright 2008-2012 by Eli Bendersky
+clad/ast.py is based heavily on c_ast.py from the py_c_parser project, Copyright 2008-2015 Eli Bendersky
+
+clad/ply/* is Copyright (C) 2001-2011 by David M. Beazley (Dabeaz LLC)
+
+emitters/tests/support/greatest.h is Copyright 2011-2015 Scott Vokes <vokes.s@gmail.com>
+
+support/cpp/include/json/* and support/cpp/source/jsoncpp.cpp is Copyright 2007-2010 by Baptiste Lepilleur

@@ -1,0 +1,201 @@
+// File: activeFeatures
+// Author: Brad Neuman
+// Created: 2018-05-07
+// Copyright: Anki, inc. 2018
+
+
+namespace Anki {
+namespace Vector {
+
+enum uint_8 ActiveFeatureType {
+
+  Invalid = 0,
+
+  // System features or features that dont fit elsewhere
+  System,
+
+  Onboarding,
+
+  SDK,
+
+  // failure cases like unmatched intents
+  Failure,
+
+  // sleep
+  Sleep,
+
+  // self-directed activities the robots do
+  Autonomous,
+
+  // features that attempt to interact with humans
+  Social,
+
+  // utility functions that are useful to the _user_
+  Utility,
+
+  // playful / game features
+  Play,
+
+}
+
+enum uint_32 ActiveFeature {
+
+  NoFeature = 0,
+  
+  Alexa,
+  AskForHelp,
+  BeQuiet,
+  Blackjack,
+  CantDoThat,
+  Clock,
+  ComeHere,
+  CubeSpinner,
+  DanceToTheBeat,
+  EyeColor,
+  Exploring,
+  FetchCube,
+  FindCube,
+  FindHome,
+  FistBump,
+  Frustrated,
+  GoHome,
+  HeldInPalm,
+  HowOldAreYou,
+  InTheAir,
+  InteractWithFaces,
+  Keepaway,
+  KnowledgeGraph,
+  ListeningForBeats,
+  LookAtMe,
+  LowBattery,
+  MeetVictor,
+  MoveCube,
+  MovementForward,
+  MovementBackward,
+  MovementLeft,
+  MovementRight,
+  MovementTurnAround,
+  Observing,
+  ObservingOnCharger,
+  Onboarding,
+  Petting,
+  PlayingMessage,
+  PopAWheelie,
+  ReactToAbuse,
+  ReactToAffirmative,
+  ReactToApology,
+  ReactToCliff,
+  ReactToGazeDirection,
+  ReactToGoodBye,
+  ReactToGoodMorning,
+  ReactToHand,
+  ReactToHello,
+  ReactToLove,
+  ReactToNegative,
+  ReactToRobotOnSide,
+  RecordingMessage,
+  RequestCharger,
+  RobotShaken,
+  RollBlock,
+  SDK,
+  SeasonalHappyHolidays,
+  SeasonalHappyNewYear,
+  Sleeping,
+  ShutUp,
+  StuckOnEdge,
+  TakeAPhoto,
+  TimerCanceled,
+  TimerChecked,
+  TimerReminder,
+  TimerRinging,
+  TimerSet,
+  UnmatchedVoiceIntent,
+  VolumeAdjustment,
+  BasicVoiceCommand,
+  Weather,
+  WhatsMyName,
+
+  // Legacy name -- kept around to keep analytics in sync for the "big greeting" behavior
+  VC_Greeting,
+}
+
+enum_concept ActiveFeatureType GetActiveFeatureType[ActiveFeature] {
+  NoFeature = verbatim ActiveFeatureType::System,
+  
+  Alexa                   = verbatim ActiveFeatureType::Utility,
+  AskForHelp              = verbatim ActiveFeatureType::Failure,
+  BeQuiet                 = verbatim ActiveFeatureType::Autonomous,
+  Blackjack               = verbatim ActiveFeatureType::Play,
+  CantDoThat              = verbatim ActiveFeatureType::Failure,
+  Clock                   = verbatim ActiveFeatureType::Utility,
+  ComeHere                = verbatim ActiveFeatureType::Social,
+  CubeSpinner             = verbatim ActiveFeatureType::Play,
+  DanceToTheBeat          = verbatim ActiveFeatureType::Autonomous,
+  EyeColor                = verbatim ActiveFeatureType::System,
+  Exploring               = verbatim ActiveFeatureType::Autonomous,
+  FetchCube               = verbatim ActiveFeatureType::Autonomous,
+  FindCube                = verbatim ActiveFeatureType::Play,
+  FindHome                = verbatim ActiveFeatureType::Autonomous,
+  FistBump                = verbatim ActiveFeatureType::Social,
+  Frustrated              = verbatim ActiveFeatureType::Failure,
+  GoHome                  = verbatim ActiveFeatureType::Autonomous,
+  HeldInPalm              = verbatim ActiveFeatureType::Social,
+  HowOldAreYou            = verbatim ActiveFeatureType::Social,
+  InTheAir                = verbatim ActiveFeatureType::Social,
+  InteractWithFaces       = verbatim ActiveFeatureType::Social,
+  Keepaway                = verbatim ActiveFeatureType::Play,
+  KnowledgeGraph          = verbatim ActiveFeatureType::Utility,
+  ListeningForBeats       = verbatim ActiveFeatureType::Autonomous,
+  LookAtMe                = verbatim ActiveFeatureType::Social,
+  LowBattery              = verbatim ActiveFeatureType::Autonomous,
+  MeetVictor              = verbatim ActiveFeatureType::Social,
+  MoveCube                = verbatim ActiveFeatureType::Play,
+  MovementForward         = verbatim ActiveFeatureType::Social,
+  MovementBackward        = verbatim ActiveFeatureType::Social,
+  MovementLeft            = verbatim ActiveFeatureType::Social,
+  MovementRight           = verbatim ActiveFeatureType::Social,
+  MovementTurnAround      = verbatim ActiveFeatureType::Social,
+  Observing               = verbatim ActiveFeatureType::Autonomous,
+  ObservingOnCharger      = verbatim ActiveFeatureType::Autonomous,
+  Onboarding              = verbatim ActiveFeatureType::Onboarding,
+  Petting                 = verbatim ActiveFeatureType::Social,
+  PlayingMessage          = verbatim ActiveFeatureType::Utility,
+  PopAWheelie             = verbatim ActiveFeatureType::Autonomous,
+  ReactToAbuse            = verbatim ActiveFeatureType::Social,
+  ReactToAffirmative      = verbatim ActiveFeatureType::Social,
+  ReactToApology          = verbatim ActiveFeatureType::Social,
+  ReactToCliff            = verbatim ActiveFeatureType::Autonomous,
+  ReactToGazeDirection    = verbatim ActiveFeatureType::Autonomous,
+  ReactToGoodBye          = verbatim ActiveFeatureType::Social,
+  ReactToGoodMorning      = verbatim ActiveFeatureType::Social,
+  ReactToHand             = verbatim ActiveFeatureType::Autonomous,
+  ReactToHello            = verbatim ActiveFeatureType::Social,
+  ReactToLove             = verbatim ActiveFeatureType::Social,
+  ReactToNegative         = verbatim ActiveFeatureType::Social,
+  ReactToRobotOnSide      = verbatim ActiveFeatureType::Autonomous,
+  RecordingMessage        = verbatim ActiveFeatureType::Utility,
+  RequestCharger          = verbatim ActiveFeatureType::Failure,
+  RobotShaken             = verbatim ActiveFeatureType::Social,
+  RollBlock               = verbatim ActiveFeatureType::Autonomous,
+  SDK                     = verbatim ActiveFeatureType::SDK,
+  SeasonalHappyHolidays   = verbatim ActiveFeatureType::Social,
+  SeasonalHappyNewYear    = verbatim ActiveFeatureType::Social,
+  Sleeping                = verbatim ActiveFeatureType::Sleep,
+  ShutUp                  = verbatim ActiveFeatureType::Autonomous,
+  StuckOnEdge             = verbatim ActiveFeatureType::Autonomous,
+  TakeAPhoto              = verbatim ActiveFeatureType::Utility,
+  TimerCanceled           = verbatim ActiveFeatureType::Utility,
+  TimerChecked            = verbatim ActiveFeatureType::Utility,
+  TimerReminder           = verbatim ActiveFeatureType::Utility,
+  TimerRinging            = verbatim ActiveFeatureType::Utility,
+  TimerSet                = verbatim ActiveFeatureType::Utility,
+  UnmatchedVoiceIntent    = verbatim ActiveFeatureType::Failure,
+  VolumeAdjustment        = verbatim ActiveFeatureType::System,
+  BasicVoiceCommand       = verbatim ActiveFeatureType::Social,
+  Weather                 = verbatim ActiveFeatureType::Utility,
+  WhatsMyName             = verbatim ActiveFeatureType::Social,
+  VC_Greeting             = verbatim ActiveFeatureType::Social
+}
+
+} // namespace Vector
+} // namespace Anki

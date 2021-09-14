@@ -1,0 +1,8 @@
+{
+  fprintf
+  Memcheck:Leak
+  match-leak-kinds: definite
+  ...
+  fun:fprintf
+  ...
+}

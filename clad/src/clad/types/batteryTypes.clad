@@ -1,0 +1,17 @@
+// Battery Types
+// Author: Matt Michini
+// Copyright: Anki Inc (c) 2018
+
+namespace Anki {
+namespace Vector {
+
+enum int_8 BatteryLevel {
+  Unknown = 0,
+  Low,
+  Nominal,
+  Full
+}
+
+
+} // namespace Vector
+} // namespace Anki

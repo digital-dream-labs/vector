@@ -1,0 +1,23 @@
+// File: uiConnectionTypes
+// Author: Mark Wesley
+// Created: 03/03/16
+// Copyright: Anki Inc (c) 2016
+
+
+namespace Anki {
+namespace Vector {
+
+
+enum uint_8 UiConnectionType {
+
+    UI = 0,
+    SdkOverUdp,
+    SdkOverTcp,
+    Switchboard,
+    Gateway,
+    Count
+}
+
+
+} // namespace Vector
+} // namespace Anki

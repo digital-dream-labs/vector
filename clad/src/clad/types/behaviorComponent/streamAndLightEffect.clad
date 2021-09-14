@@ -1,0 +1,12 @@
+namespace Anki {
+namespace Vector {
+
+enum uint_8 StreamAndLightEffect
+{
+  StreamingDisabled = 0,          // no light
+  StreamingEnabled,               // light (legal requirement
+  StreamingDisabledButWithLight,  // not streaming, but light enabled
+}
+
+} // namespace Vector
+} // namespace Anki

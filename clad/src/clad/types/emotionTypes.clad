@@ -1,0 +1,23 @@
+// File: emotionTypes
+// Author: Mark Wesley
+// Created: 10/14/15
+// Copyright: Anki, inc. 2015
+
+namespace Anki {
+namespace Vector {
+
+
+enum uint_8 EmotionType {
+
+    Happy = 0,
+    Confident,
+    Social,
+    Stimulated,
+    Trust,
+
+    Count
+}
+
+
+} // namespace Vector
+} // namespace Anki

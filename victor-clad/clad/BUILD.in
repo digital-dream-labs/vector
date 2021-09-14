@@ -1,0 +1,10 @@
+
+cxx_project(
+    name = 'sdk_clad',
+    srcs = glob(['sdk/clad/**/*.clad']),
+    platform_srcs = [],
+    headers = [
+        'sdk/clad/externalInterface/messageExternalComms.clad',
+    ],
+    platform_headers = [],
+)

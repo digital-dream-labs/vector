@@ -1,0 +1,717 @@
+// UiMessageDefinitions message definition file
+//  for the C-Like Abstract Data language
+// Author: Greg Nagel
+// Copyright: Anki Inc (c) 2015
+
+#include "clad/audio/audioCallbackMessage.clad"
+#include "clad/externalInterface/messageShared.clad"
+#include "clad/types/actionTypes.clad"
+#include "clad/types/actionResults.clad"
+#include "clad/types/activeObjectAccel.clad"
+#include "clad/types/animationEvents.clad"
+#include "clad/types/behaviorComponent/behaviorIDs.clad"
+#include "clad/types/behaviorComponent/userIntent.clad"
+#include "clad/types/behaviorSlot.clad"
+#include "clad/types/debugConsoleTypes.clad"
+#include "clad/types/engineErrorCodes.clad"
+#include "clad/types/engineState.clad"
+#include "clad/types/faceDetectionMetaData.clad"
+#include "clad/types/faceEnrollmentResult.clad"
+#include "clad/types/facialExpressions.clad"
+#include "clad/types/factoryTestTypes.clad"
+#include "clad/types/featureGateTypes.clad"
+#include "clad/types/imageTypes.clad"
+#include "clad/types/imu.clad"
+#include "clad/types/loadedKnownFace.clad"
+#include "clad/types/logLevels.clad"
+#include "clad/types/motorTypes.clad"
+#include "clad/types/objectTypes.clad"
+#include "clad/types/onboardingStages.clad"
+#include "clad/types/offTreadsStates.clad"
+#include "clad/types/petTypes.clad"
+#include "clad/types/poseStructs.clad"
+#include "clad/types/proxMessages.clad"
+#include "clad/types/cladPoint.clad"
+#include "clad/types/cladRect.clad"
+#include "clad/types/robotCompletedAction.clad"
+#include "clad/types/robotStatusAndActions.clad"
+#include "clad/types/selfTestTypes.clad"
+#include "clad/types/sdkStatusTypes.clad"
+#include "clad/types/uiConnectionTypes.clad"
+#include "clad/types/visionModes.clad"
+#include "clad/types/ledTypes.clad"
+#include "clad/types/memoryMap.clad"
+#include "clad/types/robotToSwitchboard.clad"
+#include "clad/types/salientPointTypes.clad"
+#include "util/ankiLab/ankiLabDef.clad"
+
+namespace Anki {
+namespace Vector {
+namespace ExternalInterface {
+
+///////////////////////////////////////////////////////////////////////////////
+////////////////////////  ADVERTISING & CONNECTING  ///////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+
+
+message UiDeviceAvailable {
+    UiConnectionType  connectionType,
+    uint_32 deviceID
+}
+
+message RobotConnectionResponse {
+    RobotConnectionResult result
+}
+
+
+// DO NOT CHANGE THIS MESSAGE - it must be compatible across all versions so we can reliably handshake with SDK
+message UiDeviceConnected {
+    uint_8  reserved, // future-proofing (we can increase tag size to a uint_16 and still retain binary compatability)
+    UiConnectionType  connectionType,
+    uint_32 deviceID,
+    uint_8  successful,
+    uint_8  toGameCLADHash[16],
+    uint_8  toEngineCLADHash[16],
+    string  buildVersion
+}
+
+message GoingToSleep {
+  bool triggeredFromVoiceCommand = 0
+}
+
+message CurrentCameraParams {
+  float_32 cameraGain,
+  uint_16  exposure_ms,
+  bool     autoExposureEnabled
+}
+
+// Camera configuration for the Robot (set per-robot at the factory)
+structure CameraConfig {
+  float_32 focalLengthX,
+  float_32 focalLengthY,
+  float_32 centerX,
+  float_32 centerY,
+  float_32 fovX,  // Full FOV in degrees
+  float_32 fovY,  // Full FOV in degrees
+  int_32   minCameraExposureTime_ms,
+  int_32   maxCameraExposureTime_ms,
+  float_32 minCameraGain,
+  float_32 maxCameraGain
+}
+
+// All settings that are static and unique for a given robot
+message PerRobotSettings {
+  uint_32 serialNumberHead,
+  CameraConfig cameraConfig
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/////////////////////////////  ROBOT STATE  ///////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+
+message RobotState {
+    PoseStruct3d    pose,
+    float_32        poseAngle_rad,    // heading in X-Y plane
+    float_32        posePitch_rad,    // robot pitch angle
+    float_32        leftWheelSpeed_mmps,
+    float_32        rightWheelSpeed_mmps,
+    float_32        headAngle_rad,
+    float_32        liftHeight_mm,
+    float_32        batteryVoltage,
+    AccelData       accel,                 // in head frame (mm/s^2)
+    GyroData        gyro,                  // in head frame (rad/s)
+    int_32          carryingObjectID,      // will be -1 if not carrying object
+    int_32          carryingObjectOnTopID, // will be -1 if no object on top of object being carried
+    int_32          headTrackingObjectID,  // will be -1 if head is not tracking to any object
+    int_32          localizedToObjectID,   // Will be -1 if not localized to any object
+    uint_32         lastImageTimeStamp,    // Last image processed by the vision system
+    uint_32         status,                // See RobotStatusFlag in robotStatusAndActions.clad
+}
+
+message RobotDelocalized {
+}
+
+message RobotStopped {
+  StopReason reason,
+  uint_8 cliffDetectedFlags,
+  uint_8 whiteDetectedFlags
+}
+
+message RobotOffTreadsStateChanged {
+    OffTreadsState treadsState
+}
+
+// Tests a collision, not contacts.
+message RobotOnChargerPlatformEvent {
+  bool   onCharger
+}
+
+// Whether or not the robot's charge contacts are in contact with the charger contacts
+message ChargerEvent {
+  bool   onCharger
+}
+
+message TouchButtonEvent {
+  bool  isPressed
+}
+
+// Unexpected movement was detected so robot was stopped and all actions were cancelled
+message UnexpectedMovement {
+  uint_32 timestamp,
+  UnexpectedMovementType movementType,
+  UnexpectedMovementSide movementSide
+}
+
+message RobotFallingEvent {
+  uint_32 duration_ms
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////  VISION  ////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+
+// RobotProcessedImage
+//  Sent every time a full frame processing is completed, whether or not anything was
+//  detected. Reports the image timestamp that was processed. Sent _after_ any results
+//  or observations from the same image to indicate nothing else is coming from that
+//  image.
+message RobotProcessedImage {
+   uint_32 timestamp,
+   VisionMode visionModes[uint_8],
+   uint_8 mean // Valid iff Stats mode enabled
+}
+
+// RobotObservedObject for signaling that an object
+//  with specified ID/Type was seen at a particular location in the image
+//  and the world
+message RobotObservedObject {
+    uint_32       timestamp,
+    ObjectFamily  objectFamily,  // Note: This field is deprecated and is only here for SDK v0.5.1 compatibility
+    ObjectType    objectType,
+    int_32        objectID,      // signed to match U2G::PickAndPlaceObject which has the option to have objectID<0
+    CladRect      img_rect,      // position in image coords
+    PoseStruct3d  pose,
+    float_32      topFaceOrientation_rad, // absolute orienation of top face, iff isActive==true
+    uint_8        isActive
+}
+
+// Message for the robot observing a possible object (existence hasn't been confirmed yet)
+message RobotObservedPossibleObject {
+    // objectID will always be -1
+    RobotObservedObject possibleObject
+}
+
+// RobotObservedFace
+message RobotObservedFace {
+    int_32        faceID,         // negative: tracked but not recognized; positive: recognized face
+    uint_32       timestamp,
+    PoseStruct3d  pose,
+    CladRect      img_rect,       // position in image coords
+    string        name,           // Empty if none assigned yet
+
+    Vision::FacialExpression  expression,
+    Vision::SmileAmount       smileAmount,
+    Vision::Gaze              gaze,
+    Vision::BlinkAmount       blinkAmount,
+
+    // Individual expression values histogram, sums to 100 (Exception: all zero if expression=Unknown)
+    uint_8        expressionValues[verbatim Anki::Vision::FacialExpression::Count],
+
+    // Face landmarks
+    CladPoint2d   leftEye[uint_8],
+    CladPoint2d   rightEye[uint_8],
+    CladPoint2d   nose[uint_8],
+    CladPoint2d   mouth[uint_8]
+}
+
+// RobotChangedObservedFaceID
+//  This generally happens when a tracked face (negative ID) is recognized and
+//  receives a positive ID or when face records get merged
+message RobotChangedObservedFaceID {
+    int_32   oldID,
+    int_32   newID
+}
+
+// RobotObservedPet
+message RobotObservedPet {
+    int_32           petID,
+    uint_32          timestamp,
+    uint_32          numTimesObserved,
+    float_32         score,
+    CladRect         img_rect,    // Detection rectangle in image
+    Vision::PetType  petType
+}
+
+// RobotObservedMotion
+message RobotObservedMotion {
+    uint_32  timestamp,     // Of the corresponding image
+
+    // Area of the supporting region for the point, as a fraction of the image
+    float_32 img_area,
+    // Pixel coordinate of the point in the image, relative to top-left corner.
+    int_16   img_x,
+    int_16   img_y,
+
+    // Area of the supporting region for the point, as a fraction of the ground ROI
+    // If unable to map to the ground, area=0
+    float_32 ground_area,
+    // Coordinates of the point on the ground, relative to robot, in mm
+    int_16   ground_x,
+    int_16   ground_y,
+
+    // Top area
+    // Area of the supporting region for the point, as a fraction of the top region (size specified in vision_config.json)
+    float_32 top_img_area,
+    // Pixel coordinate of the point in the image, relative to top-left corner.
+    int_16   top_img_x,
+    int_16   top_img_y,
+
+    // Bottom area
+    // Area of the supporting region for the point, as a fraction of the bottom region (size specified in vision_config.json)
+    float_32 bottom_img_area,
+    // Pixel coordinate of the point in the image, relative to top-left corner.
+    int_16   bottom_img_x,
+    int_16   bottom_img_y,
+
+    // Left area
+    // Area of the supporting region for the point, as a fraction of the left region (size specified in vision_config.json)
+    float_32 left_img_area,
+    // Pixel coordinate of the point in the image, relative to top-left corner.
+    int_16   left_img_x,
+    int_16   left_img_y,
+
+    // Right area
+    // Area of the supporting region for the point, as a fraction of the right region (size specified in vision_config.json)
+    float_32 right_img_area,
+    // Pixel coordinate of the point in the image, relative to top-left corner.
+    int_16   right_img_x,
+    int_16   right_img_y
+}
+
+// SalientPoint
+message RobotObservedSalientPoint {
+    Vision::SalientPoint salientPoint
+}
+
+// RobotObservedLaserPoint
+message RobotObservedLaserPoint {
+    uint_32  timestamp,
+
+    // Coordinates of the point on the ground, relative to robot, in mm.
+    // Area of the supporting region for the point, as a fraction of the ground ROI.
+    // If unable to map to the ground, area=0.
+    float_32 ground_area_fraction,
+    int_16   ground_x_mm,
+    int_16   ground_y_mm
+}
+
+// RobotObservedIllumination
+message RobotObservedIllumination {
+    uint_32           timestamp,
+    IlluminationState state
+}
+
+// RobotDeletedFace - sent when an _observed_ face has been deleted (e.g. if not seen for too long)
+message RobotDeletedFace {
+    int_32  faceID
+}
+
+// RobotDeletedLocatedObject: This message is broadcasted when we delete an object from the current origin. It's intended
+// to notify clients that the object is no longer in the current origin, and thus its pose is not reliable.
+// Note the robot might be able to "bring back" a location for the object by relocalizing to a previously known
+// object.
+message RobotDeletedLocatedObject {
+    uint_32 objectID
+}
+
+// RobotDeletedAllCustomObjects
+message RobotDeletedAllCustomObjects {
+}
+
+// RobotDeletedFixedCustomObjects
+message RobotDeletedFixedCustomObjects {
+}
+
+// RobotDeletedCustomMarkerObjects
+message RobotDeletedCustomMarkerObjects {
+}
+
+// CreatedFixedCustomObject
+message CreatedFixedCustomObject {
+    uint_32 objectID
+}
+
+// DefinedCustomObject
+message DefinedCustomObject {
+    bool success     // false if the last custom object definition failed (e.g. due to duplicate marker already in use)
+}
+
+structure LocatedObjectState {
+    uint_32      objectID,
+    uint_32      lastObservedTimestamp,
+    ObjectType   objectType,
+    PoseStruct3d pose,
+    PoseState    poseState,
+    bool         isConnected,
+}
+
+message LocatedObjectStates {
+    LocatedObjectState objects[uint_8]
+}
+
+structure ConnectedObjectState {
+    uint_32      objectID,
+    ObjectType   objectType
+}
+
+message ConnectedObjectStates {
+    ConnectedObjectState objects[uint_8]
+}
+
+// Status messages that will be superceded by some sort of generic status message (VIC-1423)
+
+message MeetVictorStarted
+{
+  string name
+}
+
+// Tell the app the robot is starting a facial scan for the Meet Victor flow
+message MeetVictorFaceScanStarted
+{
+}
+
+// Tell the app the robot is finishing a facial scan for the Meet Victor flow
+message MeetVictorFaceScanComplete
+{
+}
+
+message MeetVictorNameSaved {
+}
+
+// NOTE: This is separate from deleting an _observed_ face.
+message RobotErasedEnrolledFace {
+    int_32 faceID,
+    string name
+}
+
+message EnrolledNamesResponse {
+  Vision::LoadedKnownFace faces[uint_8],
+}
+
+// Sent if all enrolled faces are cleared, e.g. when a new face album is loaded from
+// memory (in which case RobotAddedNamedFaces messages should follow).
+// NOTE: This is separate from _observed_ faces.
+message RobotErasedAllEnrolledFaces {
+
+}
+
+// RobotCompletedFactoryDotTest
+//  Only sent during factory tests
+message RobotCompletedFactoryDotTest {
+    float_32 camPoseX_mm,
+    float_32 camPoseY_mm,
+    float_32 camPoseZ_mm,
+    float_32 camPoseRoll_rad,
+    float_32 camPosePitch_rad,
+    float_32 camPoseYaw_rad,
+    float_32 dotCenX_pix[4],  // Centroids in "standard" order: upper left, lower left, upper right, lower right
+    float_32 dotCenY_pix[4],  //    "
+    float_32 headAngle,
+    bool     success = 0,
+    bool     didComputePose = 0, // If false, camPose members will all be invalid
+}
+
+// Only sent during factory test
+// Engine->Engine message for asynchronous playpen checks
+message PlaypenBehaviorFailed {
+  FactoryTestResultCode result
+}
+
+// Engine->Engine message for asynchronous selftest checks
+message SelfTestBehaviorFailed {
+  SelfTestResultCode result
+}
+
+message SelfTestEnd {
+
+}
+
+///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////  ANIMATIONS  //////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+
+message AnimationAvailable {
+  string animName
+}
+
+message AnimationGroupAvailable {
+  string animGroupName
+}
+
+// Broadcast by AnimationStreamer when a new streaming animation is requested
+// before the last one finished.
+message AnimationAborted {
+  uint_32 tag
+}
+
+message AnimationEvent {
+  uint_32   timestamp, // AnimTimeStamp_t
+  AnimEvent event_id
+}
+
+///////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////  CUBES  ////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+
+// Indicates that a cube is advertising, but not connected.
+message ObjectAvailable
+{
+  string      factory_id,
+  ObjectType  objectType,
+  int_8       rssi
+}
+
+// Indicates that a cube has connected or disconnected
+message ObjectConnectionState
+{
+  uint_32 objectID,
+  string factoryID,
+  ObjectType  object_type,
+  bool connected
+}
+
+message ObjectMoved
+{
+  uint_32     timestamp,
+  uint_32     objectID,
+}
+
+message ObjectStoppedMoving
+{
+  uint_32 timestamp,
+  uint_32 objectID,
+}
+
+message ObjectUpAxisChanged
+{
+  uint_32 timestamp,
+  uint_32 objectID,
+  UpAxis  upAxis,
+}
+
+message ObjectTapped
+{
+  uint_32 timestamp,
+  uint_32 objectID,
+}
+
+message ObjectAccel
+{
+  uint_32 timestamp,
+  uint_32 objectID,
+  ActiveAccel accel,
+}
+
+///////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////  META  /////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+
+// For messages where an end of message might make sense to denote the full list of messages has
+// been broadcasted. Example: robot might broadcast all available animations, however, there would
+// be no way to tell if all the AnimationAvailable messages have been received without an `end of
+// message` message.
+// Can be extended for other message types later
+
+enum uint_8 MessageType {
+  AnimationAvailable
+}
+
+message EndOfMessage {
+  MessageType messageType
+}
+
+
+///////////////////////////////////////////////////////////////////////////////
+// Mood / Emotions
+///////////////////////////////////////////////////////////////////////////////
+
+message MoodState {
+  float_32 emotionValues[uint_8]
+}
+
+
+///////////////////////////////////////////////////////////////////////////////
+// Debug / Console
+///////////////////////////////////////////////////////////////////////////////
+
+structure DebugConsoleVar {
+  string varName,
+  string category,
+  float_64 minValue,
+  float_64 maxValue,
+  ConsoleVarUnion varValue
+}
+
+message InitDebugConsoleVarMessage {
+  DebugConsoleVar varData[uint_16]
+}
+
+message JsonDasLogMessage {
+  string fileName,
+  string[uint_16] jsonData
+}
+
+message JsonDasLogAllSentMessage {
+  uint_8 filesSent
+}
+
+message VerifyDebugConsoleFuncMessage {
+  string funcName,
+  string[uint_16] statusMessage,
+  bool success
+}
+
+message VerifyDebugConsoleVarMessage {
+  string varName,
+  string[uint_16] statusMessage,
+  ConsoleVarUnion varValue,
+  bool success
+}
+
+message DebugAppendConsoleLogLine {
+  string[uint_16] line,
+  LogLevel logLevel
+}
+
+structure TimingInfo
+{
+  float_32  avgTime_ms,
+  float_32  minTime_ms,
+  float_32  maxTime_ms
+}
+
+structure CurrentTimingInfo
+{
+  float_32 avgTime_ms,
+  float_32 minTime_ms,
+  float_32 maxTime_ms,
+  float_32 currentTime_ms
+}
+
+///////////////////////////////////////////////////////////////////////////////
+// State
+///////////////////////////////////////////////////////////////////////////////
+
+message EngineErrorCodeMessage {
+  EngineErrorCode errorCode
+}
+
+///////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////  Behavior  /////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+
+//notify the game that behavior has transitioned
+message BehaviorTransition{
+}
+
+///////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////  Onboarding  ///////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+
+message OnboardingState {
+  OnboardingStages stage,
+  bool forceSkipStackReset, // if true, even if the stage is Complete, this won't change the behavior stack
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/////////////////////////////  MEMORY MAP DATA  ///////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+
+// We are about to send one or several messages with memory map info
+message MemoryMapMessageBegin
+{
+  uint_32  originId,
+  int_32   rootDepth,
+  float_32 rootSize_mm,
+  float_32 rootCenterX,
+  float_32 rootCenterY
+}
+
+// A group of quad infos
+message MemoryMapMessage
+{
+  MemoryMapQuadInfo quadInfos[uint_16]
+}
+
+// We finished sending memory map messages
+message MemoryMapMessageEnd
+{
+}
+
+///////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////  MISC  /////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+
+
+//  Audio stages are map to different music updates that
+//  should be performed by Unity.
+//  0 - Play__SFX__Cube_Feeding_Loop_Play - begin looping sfx
+//  1 - Play__SFX__Cube_Feeding_Up - shake tick point up
+//  2 - Play__SFX__Cube_Feeding_Down - shake tick point drops
+//  3 - Play__SFX__Cube_Feeding_Success - game is over (also play the stop loop)
+//  4 - Stop__SFX__Cube_Feeding_Loop_Stop - stop looping sfx
+
+enum uint_8 BehaviorStackState {
+  NotActive = 0,
+  Active
+} 
+message AudioBehaviorStackUpdate {
+  BehaviorStackState state,
+  BehaviorID branchPath[uint_16],
+}
+
+
+// Anything that the robot wishes to push to the app that 
+// is not a response to a request from the app.
+// DEPRECATED. Please try to use protobuf's Event instead
+message RequiredEmptyMessage{}
+union Event {
+  RequiredEmptyMessage replaceMe,
+}
+
+// explicit autounion - this will force the values given, and then add every other messages in this file
+// if you do not want to include messages in this union, use the keyword "structure" instead of "message"
+// DO NOT CHANGE ANY EXPLICITELY DECLARED VALUES - they must be compatible across all versions so we can reliably
+// handshake between and App and SDK version combination
+autounion MessageEngineToGame
+{
+  UiDeviceConnected                 UiDeviceConnected                  = 0x00, // DO NOT CHANGE THIS VALUE
+  RobotCompletedAction              RobotCompletedAction               = 0x01,
+  Event                             Event                              = 0x02,
+  // empty slot, feel free to use
+  // empty slot, feel free to use
+  EnrolledNamesResponse             EnrolledNamesResponse              = 0x05,
+  RobotObservedFace                 RobotObservedFace                  = 0x06, // TODO: Add this to Events once webots dependancy on heirarchy is lifted
+  RobotChangedObservedFaceID        RobotChangedObservedFaceID         = 0x07, // TODO: Add this to Events once webots dependancy on heirarchy is lifted
+  AnimationAvailable                AnimationAvailable                 = 0x08,
+  EndOfMessage                      EndOfMessage                       = 0x09,
+  ObjectConnectionState             ObjectConnectionState              = 0x0A, // TODO: Add this to Events once webots dependancy on heirarchy is lifted
+  ObjectMoved                       ObjectMoved                        = 0x0B, // TODO: Add this to Events once webots dependancy on heirarchy is lifted
+  ObjectStoppedMoving               ObjectStoppedMoving                = 0x0C, // TODO: Add this to Events once webots dependancy on heirarchy is lifted
+  ObjectUpAxisChanged               ObjectUpAxisChanged                = 0x0D, // TODO: Add this to Events once webots dependancy on heirarchy is lifted
+  ObjectTapped                      ObjectTapped                       = 0x0E, // TODO: Add this to Events once webots dependancy on heirarchy is lifted
+  ObjectAccel                       ObjectAccel                        = 0x0F, // TODO: The engine is not yet sending this message, holding this tag id near the other object events for when it's implemented
+  RobotObservedObject               RobotObservedObject                = 0x10, // TODO: Add this to Events once webots dependancy on heirarchy is lifted
+  ObjectAvailable                   ObjectAvailable                    = 0x11,
+  RobotDeletedFixedCustomObjects    RobotDeletedFixedCustomObjects     = 0x12,
+  RobotDeletedCustomMarkerObjects   RobotDeletedCustomMarkerObjects    = 0x13,
+  CreatedFixedCustomObject          CreatedFixedCustomObject           = 0x14,
+  DefinedCustomObject               DefinedCustomObject                = 0x15,
+  MemoryMapMessageBegin             MemoryMapMessageBegin              = 0x16,
+  MemoryMapMessage                  MemoryMapMessage                   = 0x17,
+  MemoryMapMessageEnd               MemoryMapMessageEnd                = 0x18,
+}
+
+} // namespace ExternalInterface
+} // namespace Vector
+} // namespace Anki

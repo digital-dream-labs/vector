@@ -1,0 +1,88 @@
+// A sample .clad file
+// containing enums
+
+enum no_cpp_class uint_32 FooEnum {
+  foo1,
+  foo2 = verbatim 2 * 4, //8
+  foo3,
+  foo4 = 10,
+  foo5 = 0x500, //1280
+  foo6,
+  foo7 = verbatim 1000
+}
+
+enum uint_32 BarEnum {
+  bar1,
+  bar2 = verbatim FooEnum::foo2, //8
+  bar3,
+  bar4 = verbatim FooEnum::foo4 + FooEnum::foo6, //1281 + 10 = 1291
+  bar5 = verbatim bar3 + 7, //9 + 7 = 16
+  bar6
+}
+
+enum_concept bool IsFooOdd[FooEnum] {
+  foo1 = 1,
+  foo2 = 0,
+  foo3 = 1,
+  foo4 = 0,
+  foo5 = 1,
+  foo6 = 0,
+  foo7 = 1
+}
+
+enum_concept bool IsFoo4[FooEnum] {
+  foo1 = 0,
+  foo2 = 0,
+  foo3 = 0,
+  foo4 = 1,
+  foo5 = 0,
+  foo6 = 0,
+  foo7 = 0
+}
+
+enum_concept FooEnum BarEnumToFooEnum[BarEnum] {
+  bar1 = verbatim FooEnum::foo1,
+  bar2 = verbatim FooEnum::foo2,
+  bar3 = verbatim FooEnum::foo3,
+  bar4 = verbatim FooEnum::foo4,
+  bar5 = verbatim FooEnum::foo5,
+  bar6 = verbatim FooEnum::foo6
+}
+
+enum_concept string BarToString[BarEnum] {
+  bar1 = verbatim "bar1",
+  bar2 = verbatim "bar2",
+  bar3 = verbatim "bar3",
+  bar4 = verbatim "bar4",
+  bar5 = verbatim "bar5",
+  bar6 = verbatim "bar6"
+}
+
+enum_concept float_32 DoubleFoo[FooEnum] {
+  foo1 = verbatim FooEnum::foo1 * 2.0,
+  foo2 = verbatim FooEnum::foo2 * 2.0,
+  foo3 = verbatim FooEnum::foo3 * 2.0,
+  foo4 = verbatim FooEnum::foo4 * 2.0,
+  foo5 = verbatim FooEnum::foo5 * 2.0,
+  foo6 = verbatim FooEnum::foo6 * 2.0,
+  foo7 = verbatim FooEnum::foo7 * 2.0
+}
+
+enum_concept bool IsValid[FooEnum] {
+  foo1 = 1,
+  foo2 = 0,
+  foo3 = 0,
+  foo4 = 0,
+  foo5 = 0,
+  foo6 = 0,
+  foo7 = 0
+}
+
+enum_concept bool IsValid[BarEnum] {
+  bar1 = 1,
+  bar2 = 0,
+  bar3 = 0,
+  bar4 = 0,
+  bar5 = 0,
+  bar6 = 0
+}

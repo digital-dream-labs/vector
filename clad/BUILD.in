@@ -1,0 +1,31 @@
+
+cxx_project(
+    name = 'engine_clad',
+    srcs = glob(['src/clad/**/*.clad']),
+    platform_srcs = [],
+    headers = [
+        'src/clad/externalInterface/messageGameToEngine.clad',
+        'src/clad/externalInterface/messageEngineToGame.clad',
+    ],
+    platform_headers = [],
+)
+
+cxx_project(
+    name = 'viz_clad',
+    srcs = glob(['vizSrc/clad/**/*.clad']),
+    platform_srcs = [],
+    headers = [],
+    platform_headers = [],
+)
+
+cxx_project(
+    name = 'cloud_clad',
+    srcs = glob(['src/clad/cloud/**/*.clad']),
+    headers = []
+)
+
+cxx_project(
+    name = 'gateway_clad',
+    srcs = glob(['src/clad/gateway/**/*.clad']),
+    headers = []
+)

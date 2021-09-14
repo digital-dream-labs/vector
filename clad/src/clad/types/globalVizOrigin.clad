@@ -1,0 +1,21 @@
+// Common message used both by physVizController and as a ExternalInterface::MessageGameToEngine
+//  for the C-Like Abstract Data language
+// Author: Andrew Stein
+// Copyright: Anki Inc (c) 2015
+
+namespace Anki {
+namespace Vector {
+
+message SetVizOrigin
+{
+  float_32 rot_rad,
+  float_32 rot_axis_x,
+  float_32 rot_axis_y,
+  float_32 rot_axis_z,
+  float_32 trans_x_mm, // millimeters
+  float_32 trans_y_mm, // millimeters
+  float_32 trans_z_mm  // millimeters
+}
+
+} // namespace Vector
+} // namespace Anki

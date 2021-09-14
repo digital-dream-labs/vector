@@ -1,0 +1,21 @@
+# Investigate ways to speed up cube tracking
+
+Created by Samuel Russell Jan 22, 2019
+
+## Goal
+
+Natural interaction with vector by moving his cube in front of him depends largely on how responsive Vector can be to the moving cube. At present cube position is only available from BlockWorld, but updates to BlockWorld are too slow to provide smooth interaction. Investigate ways to improve his responsiveness while tracking a moving cube
+
+## Date
+05 Jan 2018
+
+## Summary
+Pose confirmation within BlockWorld requires multiple observations of the cube, and with an average marker processing rate of ~5hz, pose confirmation was occuring at less than ~2hz. My initial investigation was to see what would happen if I used marker observations directly as they came out of the vision system to derive a position for the cube instead of waiting for pose confirmation. This did in fact speed up tracking considerably, but ~5hz is still pretty slow. Additionally, Vector's ability to track the cubes visually is heavily dependent on users moving the cube very slowly, as motion blur defeats the marker detector entirely, and the cube often leaves his field of view without being observed again, and that's effectively the end of tracking that cube.
+
+I moved on to investigate augmenting pose estimates using filtered dead reckoning techniques based on measurements from the accelerometers of a connected cube. This is a tricky, and tenuous proposition from a technical perspective. Dead reckoning is heavily dependent on accurate pose estimation, in rotation in particular. The cubes do not have gyroscopes, so pose estimation is entirely dependent upon the vision system providing an accurate initial pose, and the technique falls apart entirely if the cube is rotated during motion. However, the tracking use case generally involves a user moving the cube around in a region that is generally in front of the robot, so additional visual observations can be filtered into the position estimate as we intermittently detect markers in an image, so dead-reckoning could be an effective technique for very limited time periods between visual observations, which may be enough to be useful.
+
+I constructed a system of low-pass filters for measuring the steady-state measurements of the accelerometers when the cube is at rest, and for conditioning the accelerometer signals for integration into a running velocity estimate once the cube is detected to have started moving. The velocity estimate is then integrated to provide estimated position deltas which are added to the last known pose of the cube from marker detection, and new observations of the cube are used to correct the dead reckoned pose estimate as they are available. The estimated pose is then used as a target for the robot to aim at, improving our odds of successfully detecting markers on occasions where the user slows their motion. I built some visualization tools using Webots that make the utility and limitations of using unconfirmed poses and dead reckoning easier to detect. The last confirmed pose, last marker observation based pose, and dead-reckoning based estimated pose are all rendered, demonstrating the responsiveness vs. accuracy trade-offs of each technique.
+
+The results are modestly promising, demonstrating a significant improvement in Vector's ability to track a moving cube when working properly. However, the lack of gyros in the cubes makes the technique highly susceptible to orientation errors if the user rotates the cube, and sliding the cube along the table occasionally generates significant estimation errors as a result of vibration aliasing into the accelerometer measurements as a bias. Ultimately... I don't think this technique is very viable except in extremely limited time deltas after a marker observation, and even then the error in the pose estimate is from vision techniques is likely insurmountable.
+
+Unfortunately an inability to generate smoother and more reliable tracking greatly limits the feasibility of direct cube interactions while the user is holding and moving the cube. Tightly constrained, semi-static cases like keepaway, cubespinner, fetch, hide-n-seek, are probably our best bets for extended utility from the cube, alongside designs where cube orientation can be determined independent of cube position such as using cube-tilt as a controller.

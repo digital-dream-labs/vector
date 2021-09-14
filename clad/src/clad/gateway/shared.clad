@@ -1,0 +1,73 @@
+namespace Anki {
+namespace Vector {
+namespace Gateway {
+
+structure PoseStruct3d
+{
+  // Translation
+  float_32 x,
+  float_32 y,
+  float_32 z,
+
+  // Rotation quaternion
+  float_32 q0,
+  float_32 q1,
+  float_32 q2,
+  float_32 q3,
+
+  uint_32 originID, // Which coordinate frame this pose is in (0 for none or unknown)
+}
+
+enum int_32 ObjectType {
+  UnknownObject = 0,
+    
+  //////////////////////////////////////////////////////////////////////////
+  // Light Cubes (a.k.a. Active Blocks)
+  //
+  
+  Block_LIGHTCUBE1 = 1, // value is specified here for SDK backward compatibility
+  Block_LIGHTCUBE2,
+  Block_LIGHTCUBE3,
+
+  Block_LIGHTCUBE_GHOST,
+
+  //////////////////////////////////////////////////////////////////////////
+  // Charger
+  //
+  Charger_Basic = 5, // value is specified here for SDK backward compatibility
+
+  //////////////////////////////////////////////////////////////////////////
+  // Custom Objects defined via DefineCustomObject
+  CustomType00 = 14, // value is specified here for SDK backward compatibility
+  CustomType01,
+  CustomType02,
+  CustomType03,
+  CustomType04,
+  CustomType05,
+  CustomType06,
+  CustomType07,
+  CustomType08,
+  CustomType09,
+  CustomType10,
+  CustomType11,
+  CustomType12,
+  CustomType13,
+  CustomType14,
+  CustomType15,
+  CustomType16,
+  CustomType17,
+  CustomType18,
+  CustomType19,
+
+  // INSERT ADDITIONAL CustomTypes here
+
+  // DO NOT ADD anything other than new CustomTypes before CustomFixedObstacle!
+
+  // Custom "fixed" object (i.e. obstacle)
+  CustomFixedObstacle,
+
+} // enum class ObjectType
+
+} // namespace Gateway
+} // namespace Vector
+} // namespace Anki

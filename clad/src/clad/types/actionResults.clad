@@ -1,0 +1,86 @@
+// All possible reasons actions can fail
+
+namespace Anki {
+namespace Vector {
+
+enum no_cpp_class uint_8 ActionResultCategory {
+  SUCCESS = 0,
+  RUNNING,
+  CANCELLED,
+  ABORT,
+  RETRY,
+}
+
+// ActionResultCategory BitShift
+enum no_cpp_class uint_32 ARCBitShift {
+  NUM_BITS = 24, // The number of bits to shift ActionResult to get the ActionResultCategory
+  SHIFT = 16777216, // = 1 << NUM_BITS
+}
+
+// The upper 8 bits of each ActionResult is an ActionResultCategory
+enum uint_32 ActionResult {
+  SUCCESS                             = verbatim ActionResultCategory::SUCCESS * ARCBitShift::SHIFT, // This is still zero
+  RUNNING                             = verbatim ActionResultCategory::RUNNING * ARCBitShift::SHIFT,
+
+  CANCELLED_WHILE_RUNNING             = verbatim ActionResultCategory::CANCELLED * ARCBitShift::SHIFT,
+  NOT_STARTED, // NOT_STARTED is considered a CANCELLED type failure as
+               // it can only occur if the action was destroyed/cancelled before starting
+
+  // ADD FAILURES BELOW
+
+  ABORT                               = verbatim ActionResultCategory::ABORT * ARCBitShift::SHIFT,
+  ANIM_ABORTED,
+  BAD_MARKER,
+  BAD_MESSAGE_TAG,
+  BAD_OBJECT,
+  BAD_POSE,
+  BAD_TAG,
+  CHARGER_UNPLUGGED_ABORT,
+  CLIFF_ALIGN_FAILED_TIMEOUT,
+  CLIFF_ALIGN_FAILED_NO_TURNING,
+  CLIFF_ALIGN_FAILED_OVER_TURNING,
+  CLIFF_ALIGN_FAILED_NO_WHITE,
+  CLIFF_ALIGN_FAILED_STOPPED,
+  FAILED_SETTING_CALIBRATION,
+  FOLLOWING_PATH_BUT_NOT_TRAVERSING,
+  INTERRUPTED,
+  INVALID_OFF_TREADS_STATE,
+  MISMATCHED_UP_AXIS,
+  NO_ANIM_NAME,
+  NO_DISTANCE_SET,
+  NO_FACE,
+  NO_GOAL_SET,
+  NO_PREACTION_POSES,
+  NOT_CARRYING_OBJECT_ABORT,
+  NOT_ON_CHARGER_ABORT,
+  NULL_SUBACTION,
+  PATH_PLANNING_FAILED_ABORT,
+  PICKUP_OBJECT_UNEXPECTEDLY_MOVING,
+  SEND_MESSAGE_TO_ROBOT_FAILED,
+  STILL_CARRYING_OBJECT,
+  TIMEOUT,
+  TRACKS_LOCKED,
+  UNEXPECTED_DOCK_ACTION,
+  UNKNOWN_TOOL_CODE,
+  UPDATE_DERIVED_FAILED,
+  VISUAL_OBSERVATION_FAILED,
+  SHOULDNT_DRIVE_ON_CHARGER,
+
+
+  RETRY                               = verbatim ActionResultCategory::RETRY * ARCBitShift::SHIFT,
+  DID_NOT_REACH_PREACTION_POSE,
+  FAILED_TRAVERSING_PATH,
+  LAST_PICK_AND_PLACE_FAILED,
+  MOTOR_STOPPED_MAKING_PROGRESS,
+  NOT_CARRYING_OBJECT_RETRY,
+  NOT_ON_CHARGER_RETRY,
+  PATH_PLANNING_FAILED_RETRY,
+  PLACEMENT_GOAL_NOT_FREE,
+  PICKUP_OBJECT_UNEXPECTEDLY_NOT_MOVING,
+  STILL_ON_CHARGER,
+  UNEXPECTED_PITCH_ANGLE,
+
+}
+
+} // namespace Vector
+} // namespace Anki

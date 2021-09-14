@@ -1,0 +1,14 @@
+cxx_project(
+    name = 'cubeBleClient',
+    srcs = cxx_src_glob(['.'],
+                        excludes = ['*_mac.*',
+                                    '*_vicos.*',
+                                    './bleClient/*',
+                                    ]),
+    platform_srcs = [
+        ('vicos', glob(['**/*_vicos.cpp',
+                          '**/bleClient/*'])),
+        ('mac', glob(['**/*_mac.cpp']))
+    ],
+    headers = cxx_header_glob(['.'])
+)

@@ -1,0 +1,890 @@
+// UiMessageDefinitions message definition file
+//  for the C-Like Abstract Data language
+// Author: Greg Nagel
+// Copyright: Anki Inc (c) 2015
+
+#include "clad/audio/audioMessage.clad"
+
+#include "clad/externalInterface/messageActions.clad"
+#include "clad/externalInterface/messageShared.clad"
+#include "clad/types/actionTypes.clad"
+#include "clad/types/behaviorSlot.clad"
+#include "clad/types/controllerChannels.clad"
+#include "clad/types/cubeAnimationTrigger.clad"
+#include "clad/types/customObjectMarkers.clad"
+#include "clad/types/debugConsoleTypes.clad"
+#include "clad/types/emotionTypes.clad"
+#include "clad/types/featureGateTypes.clad"
+#include "clad/types/globalVizOrigin.clad"
+#include "clad/types/imageFormats.clad"
+#include "clad/types/imageTypes.clad"
+#include "clad/types/imu.clad"
+#include "clad/types/ledTypes.clad"
+#include "clad/types/objectTypes.clad"
+#include "clad/types/onboardingStages.clad"
+#include "clad/types/pathMotionProfile.clad"
+#include "clad/types/poseStructs.clad"
+#include "clad/types/proceduralFaceTypes.clad"
+#include "clad/types/robotTestModes.clad"
+#include "clad/types/uiConnectionTypes.clad"
+#include "clad/types/visionModes.clad"
+#include "clad/types/switchboardToRobot.clad"
+#include "util/ankiLab/ankiLabDef.clad"
+
+
+namespace Anki {
+namespace Vector {
+namespace ExternalInterface {
+
+///////////////////////////////////////////////////////////////////////////////
+// Communication / Connectivity
+///////////////////////////////////////////////////////////////////////////////
+
+
+// DO NOT CHANGE THIS MESSAGE - it must be compatible across all versions so we can reliably handshake with SDK
+//                            - (and by definition this message implies a version mismatch)
+message UiDeviceConnectionWrongVersion {
+  uint_8  reserved, // future-proofing (we can increase tag size to a uint_16 and still retain binary compatibility)
+  UiConnectionType  connectionType,
+  uint_32 deviceID,
+  string  buildVersion,
+}
+
+// ConnectToUiDevice
+message ConnectToUiDevice {
+    UiConnectionType  connectionType,
+    uint_8 deviceID
+}
+
+// DisconnectFromUiDevice
+message DisconnectFromUiDevice {
+    UiConnectionType  connectionType,
+    uint_8 deviceID
+}
+
+// Message from switchboard when user is authorized
+message UserLoggedIn {
+}
+
+
+///////////////////////////////////////////////////////////////////////////////
+// Low-level Robot Controls
+///////////////////////////////////////////////////////////////////////////////
+
+// DriveWheels
+message DriveWheels {
+    float_32 lwheel_speed_mmps,
+    float_32 rwheel_speed_mmps,
+    float_32 lwheel_accel_mmps2 = 0.0,
+    float_32 rwheel_accel_mmps2 = 0.0
+}
+
+message DriveArc {
+  float_32 speed,               // Target speed in mm/sec
+                                // If curvatureRadius_mm == 0, the speed is in rad/s where +ve means CCW rotation.
+  float_32 accel,               // Acceleration to approach target speed in mm/sec^2 (Sign is ignored)
+                                // (or rad/s^2 if curvatureRadius_mm == 0)
+                                // 0: Max acceleration
+  int_16 curvatureRadius_mm     // Radius of arc to drive
+                                // u16_MAX or u16_MIN: Straight
+                                // +ve: curves left, -ve: curves right
+                                // 0: Point turn
+}
+
+// MoveHead
+message MoveHead {
+    float_32 speed_rad_per_sec
+}
+
+// MoveLift
+message MoveLift {
+    float_32 speed_rad_per_sec
+}
+
+// EnableLiftPower
+message EnableLiftPower {
+    bool enable
+}
+
+message EnableCliffSensor {
+    bool enable
+}
+
+message EnableStopOnCliff {
+    bool enable
+}
+
+// StopAllMotors
+message StopAllMotors {
+}
+
+// ControllerGains
+message ControllerGains
+{
+  float_32 kp,
+  float_32 ki,
+  float_32 kd,
+  float_32 maxIntegralError,
+  ControllerChannel controller
+}
+
+message RollActionParams
+{
+  float_32 liftHeight_mm,
+  float_32 driveSpeed_mmps,
+  float_32 driveAccel_mmps2,
+  uint_32 driveDuration_ms,
+  float_32 backupDist_mm,
+}
+
+message SetMotionModelParams
+{
+  float_32 slipFactor,
+}
+
+// SetRobotVolume
+message SetRobotVolume {
+  float_32 volume
+}
+
+message ForceDelocalizeRobot {
+}
+
+///////////////////////////////////////////////////////////////////////////////
+// Action Queuing Commands  (Actions themselves are in messageActions.clad!)
+///////////////////////////////////////////////////////////////////////////////
+
+// CancelAction
+//  Use actionType to cancel any queued actions of the specified type.
+//  Use actionType = -1 to cancel all actions, regardless of type.
+message CancelAction {
+  RobotActionType actionType  // See actionTypes.def
+}
+
+// CancelActionByIdTag
+message CancelActionByIdTag {
+  uint_32 idTag
+}
+
+// QueueSingleAction
+  message QueueSingleAction {
+  uint_32 idTag,  // caller-specified identifier that will be returned with the completion message
+  uint_8  numRetries = 0,
+  QueueActionPosition    position,
+  RobotActionUnion       action
+}
+
+// QueueCompoundAction
+message QueueCompoundAction {
+  uint_32 idTag,   // caller-specified identifier that will be returned with the completion message
+  uint_8  numRetries = 0,
+  bool  parallel,  // false means sequential
+  QueueActionPosition    position,
+  RobotActionUnion       actions[uint_8]
+}
+
+
+
+///////////////////////////////////////////////////////////////////////////////
+// Image-Related Commands
+///////////////////////////////////////////////////////////////////////////////
+
+// Redirects Viz messages to go to the specified IP addr
+message RedirectViz {
+    uint_32 ipAddr, // LSB.X.X.MSB
+}
+
+// ImageRequest
+message ImageRequest {
+    ImageSendMode mode
+}
+
+// SaveImages (via VizController)
+message SaveImages {
+    ImageSendMode mode,                    // For single image vs. streaming (aka continuous saving)
+    int_8         qualityOnRobot,          // 0: disable on-robot saving, [1-100]:JPEG quality, -1: use PNG
+    bool          removeRadialDistortion = 0,
+    string        path                     // Relative to "<webotsControllersDir>/webotsCtrlViz/saved_images"
+                                           // (on robot, relative to "<reourceCacheDir>/camera/images")
+}
+
+// Enable/disable the streaming of colored images
+message EnableColorImages {
+  bool enable
+}
+
+// SaveRobotState (via VizController)
+message SaveRobotState {
+    bool    enabled,
+    string  path
+}
+
+// EnableDisplay
+message EnableDisplay {
+    uint_8 enable
+}
+
+// ExecuteTestPlans
+message ExecuteTestPlan {
+    PathMotionProfile motionProf
+}
+
+// SelectNextObject
+message SelectNextObject {
+
+}
+
+// SetRobotCarryingObject
+// (Override robot's current belief about whether it's carrying a block)
+// (Ideally, for dev/prototyping only)
+message SetRobotCarryingObject {
+    int_32 objectID // use -1 to specify "none"
+}
+
+
+///////////////////////////////////////////////////////////////////////////////
+// Vision Settings and Commands
+///////////////////////////////////////////////////////////////////////////////
+
+// DeleteAllCustomObjects
+// Deletes *all* custom objects ("fixed" ones and those with markers).
+// "RobotDeletedAllCustomObjects" message will be sent back as confirmation.
+message DeleteAllCustomObjects {
+}
+
+// DeleteCustomMarkerObjects
+// Deletes all instantiations of any custom marker objects defined below.
+// "Fixed" markerless custom objects remain.
+// The definitions remain valid so new ones can still be created.
+// "RobotDeletedCustomMarkerObjects" message will be sent back as confirmation.
+message DeleteCustomMarkerObjects {
+}
+
+// DeleteFixedCustomObjects
+// Deletes all "fixed" (markerless) custom objects created with CreateFixedCustomObject.
+// Custom marker objects will remain.
+// "RobotDeletedFixedCustomObjects" message will be sent back as confirmation.
+message DeleteFixedCustomObjects {
+}
+
+// UndefineAllCustomMarkerObjects
+// All custom marker objects definitions defined with messages below are completely removed
+// and any instantiations of those objects are deleted.
+// "Fixed" (markerless) custom objects remain.
+// "RobotDeletedCustomMarkerObjects" message will be sent back as confirmation.
+message UndefineAllCustomMarkerObjects {
+}
+
+// CreateFixedCustomObject
+// Creates a CustomObject at the specific pose with no markers associated with it
+// Since this object has no markers with which to be observed, it will remain in the
+// specified pose as an obstacle forever (or until deleted with a deletion message above)
+message CreateFixedCustomObject {
+    PoseStruct3d pose,
+    float_32 xSize_mm,
+    float_32 ySize_mm,
+    float_32 zSize_mm,
+}
+
+// DefineCustomBox
+// Defines a custom object of the given size with the given markers centered on each side
+// If isUnique=true, there is guaranteed to be no more than one object of this type present in the world
+message DefineCustomBox {
+    ObjectType         customType, // One of CustomTypeN, where N=0..19
+    CustomObjectMarker markerFront,
+    CustomObjectMarker markerBack,
+    CustomObjectMarker markerTop,
+    CustomObjectMarker markerBottom,
+    CustomObjectMarker markerLeft,
+    CustomObjectMarker markerRight,
+    float_32   xSize_mm,
+    float_32   ySize_mm,
+    float_32   zSize_mm,
+    float_32   markerWidth_mm,
+    float_32   markerHeight_mm,
+    bool       isUnique
+}
+
+// DefineCustomCube
+// Defines a custom cube of the given size. The cube will have the same marker centered on all faces.
+// If isUnique=true, there is guaranteed to be no more than one cube of this type present in the world at a time.
+message DefineCustomCube {
+    ObjectType         customType, // One of CustomTypeN, where N=0..19
+    CustomObjectMarker marker,
+    float_32   size_mm,
+    float_32   markerWidth_mm,
+    float_32   markerHeight_mm,
+    bool       isUnique
+}
+
+// DefineCustomWall
+// Defines a custom wall of the given height and width, with the same marker centered on both sides (front and back).
+// The wall's thickness is assumed to be 1cm (and thus there are no markers on its left, right, top, or bottom)
+// If isUnique=true, there is guaranteed to be no more than one wall of this type present in the world at a time.
+message DefineCustomWall {
+    ObjectType         customType, // One of CustomTypeN, where N=0..19
+    CustomObjectMarker marker,
+    float_32   width_mm,
+    float_32   height_mm,
+    float_32   markerWidth_mm,
+    float_32   markerHeight_mm,
+    bool       isUnique
+}
+
+// VisionWhileMoving
+// For development, enable/disable robots' ability to use VisionMarkers while moving
+// May be necessary to have this disabled while we have frame sync issues.
+// NOTE: This will apply to all robots currently connected.
+message VisionWhileMoving {
+    uint_8 enable // True or false
+}
+
+// SetFaceToEnroll - Send face enrollments settings. Actual face enrollment only happens
+//                   when the BehaviorEnrollFace runs. That behavior requires these settings
+//                   be sent in order to be activatable.
+message SetFaceToEnroll {
+    string name,
+
+    int_32 observedID=0,  // The ID of a specific observed face to enroll (0 for next one we see)
+    int_32 saveID=0,      // The ID of an existing face to merge final enrollment into (0 for none,
+                          // i.e. use observedID)
+
+    bool saveToRobot=1,   // Save to robot's NVStorage when done (NOTE: will (re)save everyone enrolled!)
+    bool sayName=0,       // Play say-name/celebration animations on success before completing
+    bool useMusic=0       // Starts special music during say-name animations (will leave music playing!)
+}
+
+// CancelFaceEnrollment - Unsets face enrollment settings, meaning BehaviorEnrollFace will no
+//                        longer be activatable
+message CancelFaceEnrollment {
+
+}
+
+message RequestEnrolledNames {
+
+}
+
+// Erase a face record by ID
+message EraseEnrolledFaceByID {
+  int_32 faceID
+}
+
+// Erase all enrolled faces (use with care!)
+message EraseAllEnrolledFaces {
+
+}
+
+message EnableVisionMode {
+   VisionMode mode,
+   bool       enable
+}
+
+// Rename given ID+oldName pair to use newName. For safety if current face with given ID
+// does not match oldName, nothing happens.
+// On success, a RobotLoadedKnownFace message with faceID and newName will be sent.
+message UpdateEnrolledFaceByID {
+  int_32 faceID,
+  string oldName,
+  string newName
+}
+
+message VisionRunMode {
+  bool isSync
+}
+
+// Save the enrolled face album to a file
+message SaveFaceAlbumToFile {
+  string path,
+  bool   isRelativePath=1  // If true, use 'path' relative to internal album path
+}
+
+// Load the face album from a file (this clears all faces stored on the robot!)
+message LoadFaceAlbumFromFile {
+  string path,
+  bool   isRelativePath=1  // If true, use 'path' relative to internal album path
+}
+
+message SetCameraCaptureFormat {
+  Anki::Vision::ImageEncoding format,
+}
+
+message SetMemoryMapRenderEnabled {
+  bool enabled
+}
+
+message SetMemoryMapBroadcastFrequency_sec {
+  float_32 frequency=-1.0  // If frequency is negative, don't send
+}
+
+///////////////////////////////////////////////////////////////////////////////
+// Behavior Commands
+///////////////////////////////////////////////////////////////////////////////
+
+// Fake trigger word detection to the behavior component
+message FakeTriggerWordDetected
+{
+}
+
+// Fake an intent coming from the cloud
+message FakeCloudIntent{
+  string intent
+}
+
+// Fake a user intent
+message FakeUserIntent {
+  string intent,
+}
+
+message ExecuteBehaviorByID {
+  string behaviorID,
+  int_32 numRuns = -1, // Number of times to run the behavior (-1 is infinite)
+  bool presetConditions = 0, // If true, lets a behavior prepare for force activation
+}
+
+// Special message to make BehaviorLiftLoadTest activatable.
+// Send this message before sending ExecuteBehaviorByName("LiftLoadTest")
+message SetLiftLoadTestAsActivatable {
+}
+
+// AbortPath
+message AbortPath {
+}
+
+// AbortAll
+message AbortAll {
+
+}
+
+// StartTestMode
+message StartTestMode {
+    int_32 p1,
+    int_32 p2,
+    int_32 p3,
+    TestMode mode
+}
+
+
+// The app requests that the robot perform some non-instantaneous action, usually
+// an action with an associated voice command, such as "go to your charger"
+// todo (VIC-1398): eventually AppIntent should be its own union of structures, but
+// currently there's only one intent, with one arg, and it's not possible to transmit
+// a union over the temporary webservice handler. This will need replacing once the
+// real app->engine channel is working
+message AppIntent {
+  string intent,
+  string param,
+}
+
+
+///////////////////////////////////////////////////////////////////////////////
+// Visualization (Viz) Related
+///////////////////////////////////////////////////////////////////////////////
+
+// DrawPoseMarker
+message DrawPoseMarker {
+    float_32 x_mm,
+    float_32 y_mm,
+    float_32 rad,
+    uint_8 level
+}
+
+// ErasePoseMarker
+message ErasePoseMarker {
+
+}
+
+// VisualizeQuad
+//  Draws the specified quadrilateral using the Visualization system.
+//  The quadID will be created if new or replaced if it already exists (i.e., you
+//  do not need to send an EraseQuad message before updating an existing quad).
+message VisualizeQuad {
+  uint_32 quadID,
+  uint_32 color, // RGBA
+  float_32 xUpperLeft,
+  float_32 yUpperLeft,
+  float_32 zUpperLeft,
+  float_32 xLowerLeft,
+  float_32 yLowerLeft,
+  float_32 zLowerLeft,
+  float_32 xUpperRight,
+  float_32 yUpperRight,
+  float_32 zUpperRight,
+  float_32 xLowerRight,
+  float_32 yLowerRight,
+  float_32 zLowerRight
+}
+
+// EraseQuad
+//  Erase the visualized quad with the specified ID
+message EraseQuad {
+  uint_32 quadID
+}
+
+
+///////////////////////////////////////////////////////////////////////////////
+// Animation Commands
+///////////////////////////////////////////////////////////////////////////////
+
+
+// ReadAnimationFile
+message ReadAnimationFile {
+  string full_path
+}
+
+// RequestAvailableAnimations
+message RequestAvailableAnimations{
+  
+}
+
+// RequestAvailableAnimationGroups
+message RequestAvailableAnimationGroups{
+  
+}
+
+// PushDrivingAnimations
+message PushDrivingAnimations {
+    AnimationTrigger drivingStartAnim,
+    AnimationTrigger drivingLoopAnim,
+    AnimationTrigger drivingEndAnim,
+    string lockName
+}
+
+message RemoveDrivingAnimations {
+  string lockName
+}
+
+// DisplayProceduralFace
+message DisplayProceduralFace 
+{
+    ProceduralFaceParameters  faceParams,
+    uint_32                   duration_ms,     // Use uint_32 max value to keep the image on the screen (still subject to scanline switching)
+    bool                      interruptRunning
+}
+
+// SetFaceHue
+message SetFaceHue
+{
+    float_32 hue // [0,1]
+}
+
+
+// TODO: Move to shared file with anim process?
+// DisplayFaceImageBinaryChunk
+// Bit-image: one bit for each of 184x96 pixels = 2208 bytes
+// If index == 0, this is the top half of the image
+// If index == 1, this is the bottom half of the image
+// Image is actually drawn when index == 1 as long as the associated 
+// top half (i.e. index == 0) message with matching tag was received.
+// The duration_ms that is actually used is whichever last image half
+// is sent. Just make sure they're the same for both halves!
+message DisplayFaceImageBinaryChunk {
+    uint_32  duration_ms,    // Use uint_32 max value to keep the image on the screen
+    uint_8   faceData[1104],
+    uint_8   imageId,
+    uint_8   chunkIndex,
+    bool     interruptRunning
+}
+
+// Sends a chunk of oled data, to be later displayed using DisplayFaceImageRGB
+message DisplayFaceImageRGBChunk {
+    uint_16  faceData[600], // Splitting into chunks of 600 similar to the e2r layer
+    uint_16  numPixels,
+    uint_8   chunkIndex,
+    uint_8   numChunks,
+    uint_32  duration_ms,     // Use uint_32 max value to keep the image on the screen
+    bool     interruptRunning
+}
+
+///////////////////////////////////////////////////////////////////////////////
+// Robot / Cube LED Controls
+///////////////////////////////////////////////////////////////////////////////
+
+message SetActiveObjectLEDs {
+    uint_32  objectID,
+    uint_32  onColor,
+    uint_32  offColor,
+    uint_32  onPeriod_ms,
+    uint_32  offPeriod_ms,
+    uint_32  transitionOnPeriod_ms,  // The fade period from off color to on color
+    uint_32  transitionOffPeriod_ms,  // The fade period from on color to off color
+    int_32   offset = 0,
+    float_32 relativeToX,  // ignored if makeRelative is RELATIVE_LED_MODE_OFF
+    float_32 relativeToY,  // ignored if makeRelative is RELATIVE_LED_MODE_OFF
+    bool     rotate = 0,   // Should the pattern rotate through all LEDS on the cube?
+    WhichCubeLEDs   whichLEDs,
+    MakeRelativeMode   makeRelative,
+    uint_8   turnOffUnspecifiedLEDs, // whether to augment current pattern, or turn off everything but what's specified
+}
+
+
+// See SetActiveObjectLEDs for parameter documentation
+message SetAllActiveObjectLEDs {
+  uint_32  objectID,
+  uint_32  onColor[4],
+  uint_32  offColor[4],
+  uint_32  onPeriod_ms[4],
+  uint_32  offPeriod_ms[4],
+  uint_32  transitionOnPeriod_ms[4],
+  uint_32  transitionOffPeriod_ms[4],
+  int_32   offset[4],
+  float_32 relativeToX,
+  float_32 relativeToY,
+  bool     rotate = 0,
+  MakeRelativeMode makeRelative
+}
+
+// SetBackpackLEDs
+//  See ledTypes.h for the enumeration of the available backpack LEDs.
+message SetBackpackLEDs {
+  uint_32  onColor[3],
+  uint_32  offColor[3],
+  uint_32  onPeriod_ms[3],
+  uint_32  offPeriod_ms[3],
+  uint_32  transitionOnPeriod_ms[3],
+  uint_32  transitionOffPeriod_ms[3],
+  int_32   offset[3]
+}
+
+// Enables/disables specific cube light states
+message EnableLightStates {
+  bool enable,
+  int_32 objectID = -1 // -1 is to enable/disable all cube light states
+}
+
+// Plays a cube animation on the specified object
+message PlayCubeAnim {
+  uint_32 objectID,
+  CubeAnimationTrigger trigger
+}
+
+// Stops a cube animation that is playing on the specified object
+message StopCubeAnim {
+  uint_32 objectID,
+  CubeAnimationTrigger trigger
+}
+
+///////////////////////////////////////////////////////////////////////////////
+// Onboarding
+///////////////////////////////////////////////////////////////////////////////
+
+message SetOnboardingStage {
+  OnboardingStages stage,
+}
+
+///////////////////////////////////////////////////////////////////////////////
+// Mood / Emotions
+///////////////////////////////////////////////////////////////////////////////
+
+structure GetEmotions {
+}
+
+structure SetEmotion {
+  EmotionType emotionType,
+  float_32 newVal
+}
+
+structure AddToEmotion {
+  EmotionType emotionType,
+  float_32 deltaVal,
+  string uniqueIdString
+}
+
+structure TriggerEmotionEvent {
+  string emotionEventName
+}
+
+union MoodMessageUnion {
+  GetEmotions  GetEmotions,
+  SetEmotion   SetEmotion,
+  AddToEmotion AddToEmotion,
+  TriggerEmotionEvent TriggerEmotionEvent
+}
+
+message MoodMessage {
+  MoodMessageUnion  MoodMessageUnion
+}
+
+///////////////////////////////////////////////////////////////////////////////
+// Debug / Logging
+///////////////////////////////////////////////////////////////////////////////
+
+message SetDebugConsoleVarMessage {
+  string varName,
+  string tryValue
+}
+
+// Same as above, but for setting console vars in the anim process
+message SetAnimDebugConsoleVarMessage {
+  string varName,
+  string tryValue
+}
+
+message RunDebugConsoleFuncMessage {
+  string funcName,
+  string funcArgs
+}
+
+// Same as above, but for setting console funcs in the anim process
+message RunAnimDebugConsoleFuncMessage {
+  string funcName,
+  string funcArgs
+}
+
+message GetDebugConsoleVarMessage {
+  string varName
+}
+
+message GetAllDebugConsoleVarMessage {
+}
+
+message GetJsonDasLogsMessage {
+}
+
+
+// Message to disable path speed randomization (useful for webots tests)
+message SetEnableSpeedChooser {
+  bool enabled
+}
+
+message LogRawCliffData {
+  uint_32 length_ms // length of time to record data for. Data will appear in <CACHE>/sensorData/cliffSensors
+}
+
+message LogRawProxData {
+  uint_32 length_ms // length of time to record data for. Data will appear in <CACHE>/sensorData/proxSensor
+}
+
+///////////////////////////////////////////////////////////////////////////////
+// BlockPool
+///////////////////////////////////////////////////////////////////////////////
+
+// Attempt to connect to a cube. If a cube is currently connected,
+// this will do nothing.
+message ConnectToCube {
+}
+
+// Requests a disconnection from the currently connected cube.
+// The connection will be held for gracePeriod_sec before actually
+// disconnecting. Any attempt to connect during this "grace period"
+// will succeed instantaneously, so this is useful if you are
+// frequently disconnecting/connecting to cubes. A grace period
+// of 0 will immediately disconnect the cube.
+message DisconnectFromCube {
+  float_32 gracePeriod_sec
+}
+
+// 'Forget' the robot's preferred cube. This will cause the robot to
+// connect to the cube with the highest RSSI (signal strength) next
+// time a connection is requested. Saves this preference to disk.
+// The next cube that the robot connects to will become its
+// preferred cube.
+message ForgetPreferredCube {
+}
+
+// Set the robot's preferred cube and save it to disk. The robot
+// will always attempt to connect to this cube if it is available.
+// This is only used in simulation (for now).
+message SetPreferredCube {
+  string factoryId
+}
+
+message SendAvailableObjects {
+  bool enable
+}
+
+
+///////////////////////////////////////////////////////////////////////////////
+// Camera calibration
+///////////////////////////////////////////////////////////////////////////////
+
+message SaveCalibrationImage {
+}
+
+message ClearCalibrationImages {
+}
+
+message ComputeCameraCalibration {
+}
+
+///////////////////////////////////////////////////////////////////////////////
+// SDK Specific
+///////////////////////////////////////////////////////////////////////////////
+
+// Upload animations
+enum uint_8 FileType {
+  Animation,
+  FaceImg
+}
+
+// Upload animations
+message TransferFile {
+  uint_8   fileBytes[uint_16],
+  uint_16  filePart,
+  uint_16  numFileParts,
+  string   filename,
+  FileType   fileType
+}
+
+///////////////////////////////////////////////////////////////////////////////
+// Robot settings
+///////////////////////////////////////////////////////////////////////////////
+
+// Enable/disable auto exposure
+// If enableAutoExposure == false then exposure and gain are set to the specified values
+// If enableAutoExposure == true then exposure and gain fields are ignored
+message SetCameraSettings {
+  bool enableAutoExposure,
+  uint_16 exposure_ms,
+  float_32 gain
+}
+
+// Request robot sends back any per-robot settings
+message RequestRobotSettings {
+}
+
+// Request a status history
+message RobotHistoryRequest {
+}
+
+// explicit autounion - this will force the values given, and then add every other messages in this file
+// if you do not want to include messages in this union, use the keyword "structure" instead of "message"
+// DO NOT CHANGE ANY EXPLICITLY DECLARED VALUES - they must be compatible across all versions so we can reliably
+// handshake between and App and SDK version combination
+autounion MessageGameToEngine
+{
+  UiDeviceConnectionWrongVersion     UiDeviceConnectionWrongVersion     = 0x00, // DO NOT CHANGE THIS VALUE
+  MoveHead                           MoveHead                           = 0x03,
+  MoveLift                           MoveLift                           = 0x04,
+  DriveArc                           DriveArc                           = 0x05,
+  RobotHistoryRequest                RobotHistoryRequest                = 0x06,
+  DisplayFaceImageRGBChunk           DisplayFaceImageRGBChunk           = 0x08,
+  AppIntent                          AppIntent                          = 0x09,
+  CancelFaceEnrollment               CancelFaceEnrollment               = 0x0A,
+  RequestEnrolledNames               RequestEnrolledNames               = 0x0B,
+  UpdateEnrolledFaceByID             UpdateEnrolledFaceByID             = 0x0C,
+  EraseEnrolledFaceByID              EraseEnrolledFaceByID              = 0x0D,
+  EraseAllEnrolledFaces              EraseAllEnrolledFaces              = 0x0E,
+  SetFaceToEnroll                    SetFaceToEnroll                    = 0x0F,
+  EnableVisionMode                   EnableVisionMode                   = 0x10,
+  RequestAvailableAnimations         RequestAvailableAnimations         = 0x11,
+  GotoPose                           GotoPose                           = 0x12,
+  DriveStraight                      DriveStraight                      = 0x13,
+  TurnInPlace                        TurnInPlace                        = 0x14,
+  SetHeadAngle                       SetHeadAngle                       = 0x15,
+  SetLiftHeight                      SetLiftHeight                      = 0x16,
+  AlignWithObject                    AlignWithObject                    = 0x18,
+  SetLiftAngle                       SetLiftAngle                       = 0x19,
+  DeleteCustomMarkerObjects          DeleteCustomMarkerObjects          = 0x1A,
+  DeleteFixedCustomObjects           DeleteFixedCustomObjects           = 0x1B,
+  UndefineAllCustomMarkerObjects     UndefineAllCustomMarkerObjects     = 0x1C,
+  CreateFixedCustomObject            CreateFixedCustomObject            = 0x1D,
+  DefineCustomBox                    DefineCustomBox                    = 0x1E,
+  DefineCustomCube                   DefineCustomCube                   = 0x1F,
+  DefineCustomWall                   DefineCustomWall                   = 0x20,
+  SetMemoryMapBroadcastFrequency_sec SetMemoryMapBroadcastFrequency_sec = 0x21,
+}
+
+
+} // namespace U2G
+} // namespace Vector
+} // namespace Anki

@@ -1,0 +1,22 @@
+// UiMessageDefinitions message definition file
+//  for the C-Like Abstract Data language
+// Author: Kevin M. Karol
+// Copyright: Anki Inc (c) 2016
+
+namespace Anki {
+namespace Vector {
+
+enum int_8 OffTreadsState {
+  OnTreads,
+  InAir,
+  OnBack, 
+  OnLeftSide, 
+  OnRightSide, 
+  OnFace,
+  Falling
+}
+
+
+
+} // namespace Vector
+} // namespace Anki

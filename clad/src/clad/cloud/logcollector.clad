@@ -1,0 +1,34 @@
+namespace Anki {
+namespace Vector {
+namespace LogCollector {
+
+
+enum uint_8 LogCollectorError {
+    ErrorConnecting, // could not connect to storage backend
+}
+
+structure UploadResponse {
+    string[uint_16] logUrl
+}
+
+structure UploadRequest {
+    string[uint_16] logFileName
+}
+
+union LogCollectorRequest {
+    UploadRequest upload
+}
+
+// cannot use ErrorResponse as it clashes with docs.clad
+structure LogCollectorErrorResponse {
+    LogCollectorError err
+}
+
+union LogCollectorResponse {
+    UploadResponse upload,
+    LogCollectorErrorResponse err
+}
+
+}
+}
+}

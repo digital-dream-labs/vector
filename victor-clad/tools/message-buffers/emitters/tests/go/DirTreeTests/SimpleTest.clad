@@ -1,0 +1,144 @@
+// Copyright 2015-2016 Anki Inc.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+// A sample .adef file
+// ( by Mark Pauley for Anki, Inc 01/26/2015)
+
+#include "Foo/Foo.clad"
+#include "Bar/Bar.clad"
+#include "ExplicitUnion/ExplicitUnion.clad"
+#include "ExplicitAutoUnion/ExplicitAutoUnion.clad"
+#include "TestEnum/TestEnum.clad"
+
+namespace Baz {
+  message Dog {
+    AnkiTypes::AnkiEnum a,
+    int_8 b
+  }
+  message Poodle {
+    AnkiTypes::AnkiEnum a,
+    AnkiTypes::AnkiEnum b
+  }
+} // namespace Baz
+
+enum uint_32 LEDColor {
+  CurrentColor = 0xffffffff,
+  Color1 = 0x7,
+}
+
+message SoManyStrings {
+  string   varStringBuff[uint_16],
+  string   fixedStringBuff[3],
+  string[uint_16] anotherVarStringBuff[uint_8],
+  string[uint_8] anotherFixedStringBuff[2]
+}
+
+message od432 {
+  Foo aFoo,
+  int_8 otherByte,
+  LEDColor color,
+}
+
+message od433 {
+  Foo a[uint_16],
+  Foo b[2],
+  int_8 otherByte
+}
+
+message od434 {
+  uint_64 vehiclesPlayed[uint_64]
+}
+
+namespace Cat {
+  union MyMessage {
+    Foo myFoo,
+    Bar myBar,
+    Baz::Dog myDog,
+    SoManyStrings mySoManyStrings,
+    od432 myOD432
+  }
+} // namespace Cat
+
+namespace Constructor {
+  structure HasDefaultConstructor {
+    float_32 foo,
+    int_32 bar
+  }
+
+  no_default_constructor structure HasNoDefaultConstructor {
+    float_32 foo,
+    int_32 bar
+  }
+
+  no_default_constructor structure NoDefaultConstructorComplex {
+    HasDefaultConstructor c,
+    string s,
+    uint_8 arr[20]
+  }
+
+  message MessageWithStruct {
+    HasNoDefaultConstructor cNoDefault,
+    int_32 i,
+    float_32 f,
+    HasDefaultConstructor cDefault
+  }
+
+  message OtherMessageWithStruct {
+    NoDefaultConstructorComplex complex,
+    HasDefaultConstructor c
+  }
+
+  no_default_constructor structure NestedNoDefaults {
+    NoDefaultConstructorComplex complex,
+    HasDefaultConstructor hasDefault,
+    uint_8 arr[20],
+    HasNoDefaultConstructor hasNoDefault,
+    string s
+  }
+
+  message SuperComplex {
+    NestedNoDefaults n,
+    HasDefaultConstructor d,
+    NoDefaultConstructorComplex c
+  }
+
+  structure Nest1 {
+    HasNoDefaultConstructor c
+  }
+
+  structure Nest2 {
+    Nest1 c
+  }
+
+  structure Nest3 {
+    Nest2 c
+  }
+}
+
+namespace Arrays {
+  enum no_cpp_class uint_32 ArrSize {
+    sizeTen = 10,
+    sizeTwenty = 20
+  }
+
+  structure s {
+    uint_8 arr8[verbatim ArrSize::sizeTen],
+    uint_16 arr16[verbatim ArrSize::sizeTwenty]
+  }
+
+  message m {
+    uint_8 arr8[verbatim ArrSize::sizeTen],
+    uint_16 arr16[verbatim ArrSize::sizeTwenty]
+  }
+}

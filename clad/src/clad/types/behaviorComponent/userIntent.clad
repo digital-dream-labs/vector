@@ -1,0 +1,200 @@
+// File: userIntent.clad
+// Author: Brad Neuman
+// Created: 2018-02-04
+// Copyright: Anki, inc. 2018
+
+// for ActiveFeature override in the generic SimpleVoiceResponse struct
+#include "clad/types/behaviorComponent/activeFeatures.clad"
+
+namespace Anki {
+namespace Vector {
+
+enum uint_8 UserIntentSource
+{
+  // should never be used except for debug tools (e.g. webviz intent tab)
+  Unknown = 0,
+
+  Voice,
+  App
+}
+
+structure UserIntent_Void
+{ 
+}
+
+structure UserIntent_MeetVictor
+{
+  string username,
+}
+
+structure UserIntent_TimeInSeconds
+{
+  uint_32 time_s
+}
+
+structure UserIntent_WeatherResponse
+{
+  string  speakableLocationString,
+  string  isForecast,
+
+  string  condition,
+
+  string  temperature,
+  string  temperatureUnit,
+  string  localDateTime,
+
+  string  dayOrNight,
+}
+
+structure UserIntent_TakeAPhoto
+{
+  string  empty_or_selfie,
+}
+
+structure UserIntent_RecordMessage
+{
+  string given_name,
+}
+
+structure UserIntent_PlaybackMessage
+{
+  string given_name,
+}
+
+structure UserIntent_KnowledgeResponse
+{
+  string answer,
+  string query_text
+}
+
+structure UserIntent_GlobalStop
+{
+  string what_to_stop,
+}
+
+// test structs. todo: get rid of these in favor of actual structs once
+// there are legit user intents. tests can use the actual structs
+enum uint_8 UserIntent_Test_Time_Units
+{
+  s=0,
+  m
+}
+structure UserIntent_Test_TimeWithUnits
+{
+  uint_32 time,
+  UserIntent_Test_Time_Units units,
+}
+
+structure UserIntent_Test_Name
+{
+  string name
+}
+
+structure UserIntent_Volume
+{
+  string volume_level
+}
+
+structure UserIntent_EyeColor
+{
+  string eye_color
+}
+
+// This is a container for multiple "simple voice responses" to make it easy to specify, in json, a simple "cloud
+// intent" -> "animation" mapping. Note that these are _not_ intended to be sent directly from cloud with these
+// parameters, cloud shouldn't know about things like emotion events or active features, or specific animation
+// groups
+structure MetaUserIntent_SimpleVoiceResponse
+{
+  string anim_group, // group, not trigger, to avoid needed a clad update if a new group is added
+  string emotion_event, // optional (blank if not needed)
+  ActiveFeature active_feature, // optional (should use 'BasicVoiceCommand' if not otherwise specified)
+
+  // special case logic to disable turning after the wakeword, generally should be left to default to false
+  bool disable_wakeword_turn,
+}
+
+union dupes_allowed UserIntent
+{
+  UserIntent_Void unmatched_intent,
+
+  // PLEASE KEEP ALPHABETIZED 
+  // thank you in advance for caring
+
+  UserIntent_Void             amazon_signin,
+  UserIntent_Void             amazon_signout,
+  UserIntent_Void             blackjack_hit,
+  UserIntent_Void             blackjack_stand,
+  UserIntent_Void             blackjack_playagain,
+  UserIntent_Void             character_age,
+  UserIntent_Void             check_timer,
+  UserIntent_EyeColor         imperative_eyecolor_specific,
+  UserIntent_Void             imperative_eyecolor,
+  UserIntent_Void             explore_start,
+  UserIntent_GlobalStop       global_stop,
+  UserIntent_GlobalStop       global_delete,
+  UserIntent_Void             greeting_goodbye,
+  UserIntent_Void             greeting_goodmorning,
+  UserIntent_Void             greeting_goodnight,
+  UserIntent_Void             imperative_abuse,
+  UserIntent_Void             imperative_affirmative,
+  UserIntent_Void             imperative_apology,
+  UserIntent_Void             imperative_come,
+  UserIntent_Void             imperative_dance,
+  UserIntent_Void             imperative_fetchcube,
+  UserIntent_Void             imperative_findcube,
+  UserIntent_Void             imperative_lookatme,
+  UserIntent_Void             imperative_lookoverthere,
+  UserIntent_Void             imperative_love,
+  UserIntent_Void             imperative_praise,
+  UserIntent_Void             imperative_negative,
+  UserIntent_Void             imperative_scold,
+  UserIntent_Void             imperative_shutup,
+  UserIntent_Void             imperative_quiet,
+  UserIntent_Volume           imperative_volumelevel,
+  UserIntent_Void             imperative_volumeup,
+  UserIntent_Void             imperative_volumedown,
+  UserIntent_Void             movement_backward,
+  UserIntent_Void             movement_turnleft,
+  UserIntent_Void             movement_turnright,
+  UserIntent_Void             movement_turnaround,
+  UserIntent_Void             knowledge_question,
+  UserIntent_KnowledgeResponse knowledge_response,
+  UserIntent_Void             knowledge_unknown,
+  UserIntent_MeetVictor       meet_victor,
+  UserIntent_PlaybackMessage  message_playback,
+  UserIntent_RecordMessage    message_record,
+  UserIntent_Void             names_ask,
+  UserIntent_Void             play_anygame,
+  UserIntent_Void             play_anytrick,
+  UserIntent_Void             play_blackjack,
+  UserIntent_Void             play_fistbump,
+  UserIntent_Void             play_pickupcube,
+  UserIntent_Void             play_popawheelie,
+  UserIntent_Void             play_rollcube,
+  UserIntent_Void             seasonal_happyholidays,
+  UserIntent_Void             seasonal_happynewyear,
+  UserIntent_TimeInSeconds    set_timer,
+  UserIntent_Void             show_clock,
+  UserIntent_Void             silence,
+  UserIntent_Void             status_feeling,
+  UserIntent_Void             system_charger,
+  UserIntent_Void             system_sleep,
+  UserIntent_TakeAPhoto       take_a_photo,
+  UserIntent_WeatherResponse  weather_response,
+
+  // used for validation to know when the above "normal intents" end
+  UserIntent_Void               test_SEPARATOR,
+
+  // simple response from json mapping (below the test seperator because these are a special case mapping)
+  MetaUserIntent_SimpleVoiceResponse simple_voice_response,
+
+  // intents for unit tests
+  UserIntent_Void               test_user_intent_1,
+  UserIntent_Void               test_user_intent_2,
+  UserIntent_Test_Name          test_name,
+  UserIntent_Test_TimeWithUnits test_timeWithUnits,
+}
+
+} // namespace Vector
+} // namespace Anki

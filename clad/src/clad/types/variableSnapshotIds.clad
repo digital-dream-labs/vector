@@ -1,0 +1,28 @@
+// File: variableSnapshotIds
+// Author: Hamzah Khan
+// Created: 2018-06-05
+// Copyright: Anki, inc. 2018
+
+// Note: Snapshots are saved unless the robot software version changes - see VariableSnapshotComponent.h
+//       for more details.
+
+
+namespace Anki {
+namespace Vector {
+
+enum uint_32 VariableSnapshotId {
+
+  // unit test snapshot variables
+  UnitTestInt0,
+  UnitTestBool0,
+
+  // other snapshot variables
+  BehaviorGreetAfterLongTime_LastSeenTimes,
+
+  UserDefinedBehaviorTreeComp_CondToBehaviorMappings,
+  
+  Count
+}
+
+} // namespace Vector
+} // namespace Anki

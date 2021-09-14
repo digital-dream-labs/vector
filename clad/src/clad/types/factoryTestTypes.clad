@@ -1,0 +1,238 @@
+// FactoryTest enumeration file
+//  for the C-Like Abstract Data language
+// Author: Kevin Yoon
+// Copyright: Anki Inc (c) 2016
+
+#include "clad/types/birthCertificate.clad"
+#include "clad/types/proxMessages.clad"
+#include "clad/types/tofTypes.clad"
+
+namespace Anki {
+namespace Vector {
+
+enum uint_8 FactoryTestState {
+  GetPrevTestResults,
+  InitRobot,
+  WaitingForMotorCalibration,
+  ChargerAndIMUCheck,       // Verify that robot is on charger and IMU is not drifting
+  DriveToSlot,              // Drive forward until cliff event. Set robot's pose.
+  GotoCalibrationPose,      // Drive to pose from which calibration images are to be taken
+  TakeCalibrationImages,    // Take and save images of calibration patterns
+  ComputeCameraCalibration, // Compute calibration and check that values are reasonable
+  WaitForCameraCalibration,
+  GotoPickupPose,
+  StartPickup,
+  PickingUpBlock,
+  PlacingBlock,
+  BackAndForth,
+  WaitingForWritesToRobot,
+
+  // NB: IF YOU ADD STATES HERE YOU MAY NEED TO INCREASE THE SIZE OF
+  //     FactoryTestResultEntry.timestamps ARRAY TO BE AT LEAST
+  //     THE NUMBER OF STATES + 1. HOWEVER, THIS BREAKS BACKWARDS COMPATIBILITY!
+
+}
+
+enum uint_8 FactoryTestResultCode {
+  UNKNOWN = 0,
+  SUCCESS,
+  MISMATCHED_CLAD,
+  INIT_LIFT_OR_HEAD_FAILED,
+  CHARGER_UNDETECTED,
+  CHARGER_UNAVAILABLE,
+  CHARGER_UNCONNECTED,
+  IMU_DRIFTING,
+  STILL_ON_CHARGER,
+  GOTO_CALIB_POSE_ACTION_FAILED,
+  CLIFF_UNDETECTED,
+  CLIFF_UNEXPECTED,
+  NOT_IN_CALIBRATION_POSE,
+  CALIBRATION_TIMED_OUT,
+  CALIBRATION_VALUES_OOR,
+  CAMERA_CALIB_WRITE_FAILED,
+  CALIB_IMAGES_WRITE_FAILED,
+  CALIB_POSE_WRITE_FAILED,
+  TOO_MANY_CALIB_IMAGES,
+  CALIB_POSE_GET_FAILED,
+
+  READ_TOOL_CODE_FAILED,
+  TOOL_CODE_POSITIONS_OOR,
+  TOOL_CODE_WRITE_FAILED,
+  GOTO_PRE_PICKUP_POSE_ACTION_FAILED,
+  NOT_IN_PRE_PICKUP_POSE,
+  CUBE_NOT_FOUND,
+  CUBE_NOT_WHERE_EXPECTED,
+  PICKUP_FAILED,
+  PLACEMENT_FAILED,
+  UNEXPECTED_OBSERVED_OBJECT,
+  GOTO_PRE_MOUNT_CHARGER_POSE_ACTION_FAILED,
+  CHARGER_NOT_FOUND,
+  CHARGER_DOCK_FAILED,
+  QUEUE_ACTION_FAILED,
+  MOTOR_CALIB_UNEXPECTED,
+  TEST_RESULT_WRITE_FAILED,
+  TEST_TIMED_OUT,
+  TEST_CANCELLED,
+  ROBOT_PICKUP,
+  TOOL_CODE_IMAGES_WRITE_FAILED,
+
+  NOISY_TOUCH_SENSOR,
+
+  CUBE_POSE_WRITE_FAILED,
+  LIFT_MOTOR_CALIB_UNEXPECTED,
+  HEAD_MOTOR_CALIB_UNEXPECTED,
+
+  BACKPACK_ELECTRICAL_ERROR,
+
+  ROBOT_FAILED_PREPLAYPEN_TESTS,
+  ROBOT_NOT_TESTED,
+  MOTORS_UNCALIBRATED,
+  BIRTH_CERTIFICATE_WRITE_FAILED,
+  NVSTORAGE_WRITE_FAILED,
+  NVSTORAGE_SEND_FAILED,
+  TOO_MANY_TOOL_CODE_IMAGES,
+
+  RAMPOST_ERROR,
+
+  IMU_INFO_WRITE_FAILED,
+  NO_ACTIVE_OBJECTS_DISCOVERED,
+
+  UNEXPECTED_TOUCH_DETECTED,
+
+  COMPUTE_CAM_POSE_FAILED,
+  CAM_POSE_OOR,
+  PLAY_SOUND_FAILED,
+  PREV_TEST_RESULTS_READ_FAILED,
+
+  START_TOF_FAILED,
+
+  CLIFF_VALUE_TOO_HIGH,
+  CLIFF_VALUE_TOO_LOW,
+  BACKUP_NOT_STRAIGHT,
+  BATTERY_TOO_LOW,
+  NO_IMU_DATA,
+  BACK_AND_FORTH_NOT_STRAIGHT,
+
+  CALIBRATE_TOF_FAILED,
+  STOP_TOF_FAILED,
+
+  NVSTORAGE_ERASE_FAILED,
+
+  SETUP_TOF_FAILED,
+
+  NO_WIFI_APS_DISCOVERED,
+  UNKNOWN_BODY_COLOR,
+
+  // Victor specific error codes
+  WRITE_TO_LOG_FAILED,
+  BEHAVIOR_NOT_RUNNABLE,
+  NOT_SEEING_CALIB_TARGET_TIMEOUT,
+  UNEXPECTED_ON_CHARGER,
+  HEAD_MOTOR_DISABLED,
+  LIFT_MOTOR_DISABLED,
+  MOTOR_DISABLED,
+  UNEXPECTED_MOVEMENT_DETECTED,
+  ACTION_FAILED,
+  FRONT_CLIFFS_NOT_DETECTED,
+  BACK_CLIFFS_NOT_DETECTED,
+  FRONT_CLIFFS_NOT_UNDETECTED,
+  BACK_CLIFFS_NOT_UNDETECTED,
+  CUBE_HEIGHT_TOO_LOW,
+  CUBE_HEIGHT_TOO_HIGH,
+  DISTORTION_VALUES_OOR,
+  DISTANCE_MARKER_NOT_FOUND,
+  DISTANCE_MARKER_OOR,
+  MIC_FR_NOT_WORKING, // Relative to robot
+  MIC_FL_NOT_WORKING,
+  MIC_BR_NOT_WORKING,
+  MIC_BL_NOT_WORKING,
+  SPEAKER_NOT_WORKING,
+  NO_FFT_RESULT,
+  TOUCH_VALUES_OOR,
+  DISTANCE_SENSOR_OOR,
+  CERT_CHECK_FAILED,
+
+  // ==== NO MORE SPACE !!!! =================================
+  // ==== New result codes should replace unused ones ========
+  // ==== Never delete codes, even if they are deprecated! ===
+  // ==== NB: Factory expects codes to be 0-99 so if you exceed 100 errors codes let them know! ===
+}
+
+message FactoryTestResultEntry {
+  uint_64 utcTime,
+  uint_32 engineSHA1,
+  uint_32 timestamps[18],
+  int_32 stationID,
+  FactoryTestResultCode result,
+}
+
+structure CalibMetaInfo {
+  uint_8 dotsFoundMask    // bit mask for which calibration images had dots found
+}
+
+structure IMUTempDuration {
+  float_32 tempStart_c = 0.0,
+  float_32 tempEnd_c   = 0.0,
+  uint_32  duration_ms = 0
+}
+
+structure IMUInfo {
+  float_32 driftRate_degPerSec,
+  IMUTempDuration tempDuration
+}
+
+structure CliffSensorValue {
+  uint_16 val
+}
+
+structure CliffSensorValues {
+  uint_16 FR,
+  uint_16 FL,
+  uint_16 BR,
+  uint_16 BL
+}
+
+structure PoseData {
+  float_32 angleX_rad,
+  float_32 angleY_rad,
+  float_32 angleZ_rad,
+  float_32 transX_mm,
+  float_32 transY_mm,
+  float_32 transZ_mm,
+}
+
+structure DistanceSensorData {
+  float_32 proxDistanceToTarget_mm,
+  float_32 visualDistanceToTarget_mm,
+  float_32 visualAngleAwayFromTarget_rad
+}
+
+structure RangeSensorData {
+  RangeDataRaw rangeData,
+  float_32     visualDistanceToTarget_mm,
+  float_32     visualAngleAwayFromTarget_rad,
+  float_32     headAngle_rad
+}
+
+structure TouchSensorValues {
+  uint_16 data[uint_16]
+}
+
+structure TouchSensorFilt {
+  float_32 min,
+  float_32 max,
+  float_32 stddev
+}
+
+// Bit masks to enable/disable various playpen checks
+// via a word in the emr
+enum no_cpp_class uint_32 PlaypenTestMask {
+  BackpackElectricalError      = 0x00000001,
+  UnexpectedTouchDetectedError = 0x00000002,
+  NoisyTouchSensorError        = 0x00000004,
+  CubeRadioError               = 0x00000008,
+  WifiScanError                = 0x00000010,
+}
+
+} // namespace Vector
+} // namespace Anki

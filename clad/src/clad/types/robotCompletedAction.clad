@@ -1,0 +1,20 @@
+#include "clad/types/actionTypes.clad"
+#include "clad/types/actionResults.clad"
+
+namespace Anki {
+namespace Vector {
+namespace ExternalInterface {
+
+// RobotCompletedAction
+// TODO: Add action type, more informative result codes...
+message RobotCompletedAction {
+    uint_32 idTag,                          // The identifier of the specific action that completed
+    RobotActionType  actionType,            // see actionTypes.clad
+    ActionResult  result,                   //  "
+    ActionResult  subActionResults[uint_8], // vector of all results from this action's subActions
+    ActionCompletedUnion completionInfo     //  see actionTypes.clad
+}
+
+}
+}
+}

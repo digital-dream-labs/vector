@@ -1,0 +1,19 @@
+// Onboarding stages
+// Author: ross
+// Copyright: Anki Inc (c) 2018
+
+namespace Anki {
+namespace Vector {
+
+enum uint_8 OnboardingStages
+{
+  NotStarted = 0, 
+  TimedOut,
+  MaintainNumbering, // Replace this later if so desired, it is kept here to maintain enum values for back compat
+  Complete,
+  // if you manually set your state to this, it will start awake with eyes on but motionless
+  DevDoNothing,
+}
+
+}
+}

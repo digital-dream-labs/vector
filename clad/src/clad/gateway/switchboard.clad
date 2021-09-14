@@ -1,0 +1,60 @@
+
+#include "clad/cloud/token.clad"
+
+namespace Anki {
+namespace Switchboard {
+
+message SwitchboardError {
+    
+}
+
+message ExternalConnectionRequest{
+}
+
+message ExternalConnectionResponse{
+  bool              isConnected,
+  string[uint_16]   connectionId,
+}
+
+message ClientGuidRefreshRequest{
+}
+
+message ClientGuidRefreshResponse{
+}
+
+message SdkProxyRequest {
+  string            clientGuid,
+  string            messageId,
+  string            path,
+  string[uint_16]   json,
+}
+
+message SdkProxyResponse {
+  string            messageId,
+  uint_16           statusCode,
+  string            contentType,
+  string[uint_16]   content,
+}
+
+union SwitchboardRequest {
+  SwitchboardError            SwitchboardError            = 0x01,
+  Anki::Vector::AuthRequest   AuthRequest                 = 0x02,
+  Anki::Vector::JwtRequest    JwtRequest                  = 0x03,
+  ExternalConnectionRequest   ExternalConnectionRequest   = 0x04,
+  ExternalConnectionResponse  ExternalConnectionResponse  = 0x05,
+  ClientGuidRefreshResponse   ClientGuidRefreshResponse   = 0x06,
+  SdkProxyResponse            SdkProxyResponse             = 0x07,
+}
+
+union SwitchboardResponse {
+  SwitchboardError            SwitchboardError            = 0x01,
+  Anki::Vector::AuthResponse  AuthResponse                = 0x02,
+  Anki::Vector::JwtResponse   JwtResponse                 = 0x03,
+  ExternalConnectionRequest   ExternalConnectionRequest   = 0x04,
+  ExternalConnectionResponse  ExternalConnectionResponse  = 0x05,
+  ClientGuidRefreshRequest    ClientGuidRefreshRequest    = 0x06,
+  SdkProxyRequest             SdkProxyRequest            = 0x07,
+}
+
+} // namespace Switchboard
+} // namespace Anki

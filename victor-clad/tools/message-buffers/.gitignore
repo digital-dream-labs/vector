@@ -1,0 +1,55 @@
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Compiled Python files
+__pycache__
+*.pyc
+
+# Generated lex/yacc tables
+*lextab.py
+*yacctab.py
+
+# virtualenv environment
+.env
+
+# Fortran module files
+*.mod
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+
+# Executables
+*.exe
+*.out
+*.app
+
+# Debug Symbols
+*.dSYM
+*.mdb
+
+# Vagrant
+.vagrant
+
+# Idea IDE
+.idea
+
+emitters/tests/cladUnitTests/cladUnitTests.xcodeproj/project.xcworkspace/xcuserdata
+emitters/tests/cladUnitTests/cladUnitTests.xcodeproj/xcuserdata/
+emitters/tests/cladUnitTests/cladUnitTests.xcodeproj/project.xcworkspace/xcshareddata/cladUnitTests.xccheckout
+emitters/tests/cladUnitTests/cladUnitTests.xcodeproj/project.xcworkspace/xcshareddata/cladUnitTests.xcscmblueprint
+emitters/tests/cpp/_build
