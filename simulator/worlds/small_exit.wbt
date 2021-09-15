@@ -1,0 +1,103 @@
+#VRML_SIM R2018a utf8
+CozmoWorldInfo {
+}
+Viewpoint {
+  orientation -0.034727116226131685 0.03497350688406108 0.9987847021329708 4.704193469083139
+  position -0.8261263376391337 0.6522008915390567 2.8114085473365487
+}
+Background {
+  skyColor [
+    0.4 0.7 1
+  ]
+}
+DirectionalLight {
+  ambientIntensity 0.5
+  direction 2 -2 -1
+  intensity 0.5
+}
+DirectionalLight {
+  ambientIntensity 0.5
+  direction -2 -2 -1
+  intensity 0.5
+}
+DirectionalLight {
+  ambientIntensity 0.5
+  direction 0 2 -1
+  intensity 0.5
+}
+CozmoMat {
+  xSize 2
+  ySize 2
+}
+SolidBox {
+  translation -0.5098814460359047 0.6443746787801536 0.05000000000000178
+  name "box(1)"
+  size 0.02 0.3 0.1
+}
+SolidBox {
+  translation 0.0018062177 0.9913746 0.05
+  rotation 0 0 1 1.5707963
+  size 0.02 2 0.1
+}
+SolidBox {
+  translation 0.0068620532 -0.9909073 0.05
+  rotation 0 0 1 1.5707963
+  size 0.02 2 0.1
+}
+SolidBox {
+  translation 0.98904403 0.00067622369 0.05
+  size 0.02 2 0.1
+}
+SolidBox {
+  translation -0.98874982 0.0029188722 0.05
+  size 0.02 2 0.1
+}
+SolidBox {
+  translation -0.7486309424160704 0.48720994174848936 0.050000000000001335
+  rotation -1.2246468e-16 -1.2246468e-16 -1 1.5707963
+  size 0.02 0.5 0.1
+}
+SolidBox {
+  translation -0.6000484636885826 0.7994292120620221 0.04999999999995382
+  rotation 1.2246467765117804e-16 1.2246467999999994e-16 1 4.712388988
+  name "box(2)"
+  size 0.02 0.2 0.1
+}
+SolidBox {
+  translation -0.8868324265609036 0.7980232673677445 0.04999999999994893
+  rotation 1.2246467765117804e-16 1.2246467999999994e-16 1 4.712388988
+  name "box(3)"
+  size 0.02 0.2 0.1
+}
+LightCube {
+  translation -0.8291275415595678 0.0033661851165827095 0.022
+  rotation 0 0 1 0.523599
+  colorizeStderrOutput TRUE
+}
+LightCube {
+  translation 0.30768196 -0.18417264 0.0219929
+  rotation 1.3953699998618023e-5 -1.8370399998180594e-6 0.9999999999009599 0.261799
+  colorizeStderrOutput TRUE
+  objectType "Block_LIGHTCUBE3"
+}
+LightCube {
+  translation -0.918565331989722 -0.18928809381307615 0.0219929
+  rotation 0 0 -1 5.447791839
+  colorizeStderrOutput TRUE
+  objectType "Block_LIGHTCUBE2"
+}
+CozmoBot2 {
+  translation -0.725378183085043 0.658757983134909 3.8635761235755947e-14
+  rotation 0 0 1 6.283185307179586
+  filterLogs TRUE
+  colorizeStderrOutput TRUE
+}
+WebotsKeyboardController {
+  colorizeStderrOutput TRUE
+  translation -0.7414157213364725 0.12722172447134605 0.08
+  rotation 0 0 1 1.5707963
+}
+CozmoVizDisplay {
+  streamResolution "NHD"
+  colorizeStderrOutput TRUE
+}

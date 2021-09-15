@@ -1,0 +1,117 @@
+#VRML_SIM V7.3.0 utf8
+
+PROTO CustomBox [
+
+  field SFString name "CustomBox000"
+  field SFVec3f translation 0 0 0.022
+  field SFRotation rotation 0 0 1 0
+  field SFFloat mass 0.085
+  field SFColor blockColor 1 0 0
+  field SFBool  useWhiteMarkerBackgrounds TRUE
+  field SFFloat width 0.044    # Length of one edge in meters
+  field SFFloat height 0.044    # Length of one edge in meters
+  field SFFloat depth 0.044    # Length of one edge in meters
+  
+  field SFFloat markerWidth 0.025
+  field SFFloat markerHeight 0.025
+
+  # Image paths relative to textures/  
+  field SFString markerImg_front ""
+  field SFString markerImg_back  ""
+  field SFString markerImg_left  ""
+  field SFString markerImg_right ""
+  field SFString markerImg_top   ""
+  field SFString markerImg_bottom ""
+]
+{
+Supervisor {
+
+  %{
+    # Set some dimensions
+    hWidth = fields.width.value/2
+    hDepth = fields.depth.value/2
+    hHeight = fields.height.value/2
+  }%
+
+  name IS name
+  translation IS translation
+  rotation IS rotation
+  contactMaterial "cmat_block"
+  children [
+		
+		# Front Face
+		VisionMarker {
+			rotation 0 0 1 -1.5708
+			translation %{=-hDepth}% 0 0
+			image IS markerImg_front
+			markerWidth IS markerWidth
+      markerHeight IS markerHeight
+		}
+		
+		# Back Face
+		VisionMarker {
+			rotation 0 0 1 1.5708
+			translation %{=hDepth}% 0 0
+			image IS markerImg_back
+			markerWidth IS markerWidth
+      markerHeight IS markerHeight
+		}
+		
+		# Bottom Face
+    VisionMarker {
+      # Rotate around X to get on top, followed by around Z to orient correctly
+			rotation 0.57735027 -0.57735027 -0.57735027 2.09439510
+      translation 0 0 %{=-hHeight}%
+      image IS markerImg_bottom
+      markerWidth IS markerWidth
+      markerHeight IS markerHeight
+    }
+		
+		# Top Face
+		VisionMarker {
+			# Rotate around X to get on top, followed by around Z to orient correctly
+			rotation -0.57735027 0.57735027 -0.57735027 2.09439510
+			translation 0 0 %{=hHeight}%
+			image IS markerImg_top
+			markerWidth IS markerWidth
+      markerHeight IS markerHeight
+		}
+						
+		# Left Face
+		VisionMarker {
+			rotation 0 0 1 3.1415
+			translation 0 %{=hWidth}% 0
+			image IS markerImg_left
+			markerWidth IS markerWidth
+      markerHeight IS markerHeight
+		}
+		
+		# Right Face
+		VisionMarker {
+			rotation 0 0 1 0
+			translation 0 %{=-hWidth}% 0
+			image IS markerImg_right
+			markerWidth IS markerWidth
+      markerHeight IS markerHeight
+		}
+
+    DEF CustomBoxShape Shape {
+      appearance Appearance {
+        material Material {
+          diffuseColor IS blockColor
+        }
+      }
+      geometry Box {
+        size %{=fields.depth.value}% %{=fields.width.value}% %{=fields.height.value}%
+      }
+    }
+  ] # Block Children
+  
+  boundingObject USE CustomBoxShape
+  physics DEF CustomBoxPhysics Physics {
+    mass IS mass
+  }
+} # "Robot" (the actual block)
+
+  
+} # PROTO

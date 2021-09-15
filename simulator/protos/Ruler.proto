@@ -1,0 +1,36 @@
+#VRML_SIM V7.3.0 utf8
+
+PROTO Ruler [
+  field SFString name "Ruler"
+  field SFVec3f translation 0 0 0
+  field SFRotation rotation 0 1 0 -1.570796
+]
+{
+Solid {
+  name IS name
+  #model IS type
+  translation IS translation
+  rotation IS rotation
+  children [
+	Transform {
+	  translation 0.07165 0 0
+	  children [
+            Shape {
+	  
+              appearance Appearance {
+                texture ImageTexture {
+                  url "textures/ruler.jpg"
+                }
+              }
+              geometry Box {
+                size 0.1433 0.0001 0.02
+              }
+            }
+	  ]
+	}
+  ] # Ruler Children
+  
+} # Solid
+
+  
+} # PROTO

@@ -1,0 +1,82 @@
+#VRML_SIM R2018a utf8
+CozmoWorldInfo {
+}
+Viewpoint {
+  orientation 0.2919456083220074 0.5995380602252521 0.7451992190836189 2.445400324020498
+  position 1.634237662788023 1.4077729202933509 0.47282956518318536
+}
+Background {
+  skyColor [
+    0.4 0.7 1
+  ]
+}
+DirectionalLight {
+  ambientIntensity 0.5
+  direction 2 -2 -1
+  intensity 0.5
+}
+DirectionalLight {
+  ambientIntensity 0.5
+  direction -2 -2 -1
+  intensity 0.5
+}
+DirectionalLight {
+  ambientIntensity 0.5
+  direction 0 2 -1
+  intensity 0.5
+}
+CozmoMat {
+}
+VictorCharger {
+  translation -0.076696196 0.00014978189 2.4646951e-14
+  rotation 0 0 1 4.7124
+}
+Face {
+  translation 0.4213941499999999 -0.001768074157703489 0.23999999999999988
+  rotation 0 0 -1 4.712389
+  image "face02.png"
+}
+Face {
+  translation 0.36357493093074505 -0.18861363710812293 -0.19000000000000009
+  rotation 0 0 -1 4.9741884
+}
+LightCube {
+  translation -0.16670112332050732 0.39993937499002796 0.022
+  rotation 0 0 1 0.523599
+  colorizeStderrOutput TRUE
+}
+LightCube {
+  translation -0.03625813104925274 0.4232582126658917 0.021993254888264677
+  rotation 1.3953699998618023e-5 -1.8370399998180594e-6 0.9999999999009599 0.261799
+  colorizeStderrOutput TRUE
+  objectType "Block_LIGHTCUBE3"
+}
+LightCube {
+  translation 0.23893187620521894 -0.12326441496564057 0.0219929
+  rotation 0 0 -1 6.23319
+  colorizeStderrOutput TRUE
+  objectType "Block_LIGHTCUBE2"
+}
+CozmoBot2 {
+  translation 0 0 0.005
+  rotation 0 1 0 0.1222
+  filterLogs TRUE
+  colorizeStderrOutput TRUE
+}
+WebotsKeyboardController {
+  intent "{\"intent\": \"intent_play_specific\", \"params\": {\"entity_behavior\": \"fist_bump\"}}"
+  emotionVal 0.1
+  consoleVarName "DevDispatchAfterShake"
+  consoleVarValue "1"
+  colorizeStderrOutput TRUE
+  translation -0.24686749 0.2921897 0.08
+  rotation 0 0 1 6.0213859
+}
+CozmoVizDisplay {
+  streamResolution "NHD"
+  colorizeStderrOutput TRUE
+}
+SolidBox {
+  translation 0.0014556051 0.31224103000000003 0.11000000000000111
+  size 0.5 0.02 0.2
+}

@@ -1,0 +1,40 @@
+#VRML_SIM V8.2.1 utf8
+CozmoWorldInfo {
+  basicTimeStep 60
+}
+Viewpoint {
+  fieldOfView 0.8
+  orientation 0.996297 -0.0598501 -0.0617206 1.54371
+  position -0.211964 -1.50915 0.137761
+}
+Background {
+  skyColor [
+    0.4 0.7 1
+  ]
+}
+DirectionalLight {
+  ambientIntensity 0.75
+}
+CozmoMat {
+}
+DEF CozmoViz_1 CozmoBot {
+  hidden rotation_8 0 -1 0 0.104756
+  hidden rotation_24 0 1 0 0.00633511
+  translation 0.983856 -0.848441 0
+  rotation 0 0 -1 0.824274
+  name "CozmoBot_1"
+  headAngle 0.104756
+  liftAngle -0.00633511
+  vizMode TRUE
+}
+DEF WorldComms BlockWorldComms {
+  filterLogs TRUE
+  sleepUntilEndOfTic TRUE
+}
+CozmoVizDisplay {
+}
+WebotsKeyboardController {
+  animationToSendName "ID_offCharger_thrustFwd"
+  forcedRobotIsSimulated FALSE
+  forcedRobotIP "172.31.1.1"
+}

@@ -1,0 +1,61 @@
+#VRML_SIM V7.3.0 utf8
+PROTO WireframeCharger [
+  field SFVec3f translation 0 0 0
+  field SFRotation rotation 0 0 1 0
+
+  field SFFloat platformLength 0.5
+  field SFFloat slopeLength 0.5
+  field SFFloat width 1.0
+  field SFFloat height 1.0
+
+  field SFColor color 0 0 0
+]
+{
+Transform {
+  translation IS translation
+  rotation IS rotation
+  
+  children [
+    Shape {
+      geometry IndexedLineSet {
+        coord Coordinate {
+          point [
+            # Top vertices
+            %{= fields.platformLength.value + fields.slopeLength.value}% %{= fields.width.value / 2.0}% %{= fields.height.value}%,
+            %{= fields.platformLength.value + fields.slopeLength.value}% %{=-fields.width.value / 2.0}% %{= fields.height.value}%,
+            %{= fields.slopeLength.value}% %{=-fields.width.value / 2.0}% %{= fields.height.value}%,
+            %{= fields.slopeLength.value}% %{= fields.width.value / 2.0}% %{= fields.height.value}%,
+            
+            # Bottom vertices
+            %{= fields.platformLength.value + fields.slopeLength.value}% %{= fields.width.value / 2.0}% 0,
+            %{= fields.platformLength.value + fields.slopeLength.value}% %{=-fields.width.value / 2.0}% 0,
+            0 %{=-fields.width.value / 2.0}% 0,
+            0 %{= fields.width.value / 2.0}% 0,
+            
+            # Vertical/sloped edges
+            %{= fields.platformLength.value + fields.slopeLength.value}% %{= fields.width.value / 2.0}% %{= fields.height.value}%,
+            %{= fields.platformLength.value + fields.slopeLength.value}% %{= fields.width.value / 2.0}% 0,
+            
+            %{= fields.platformLength.value + fields.slopeLength.value}% %{=-fields.width.value / 2.0}% %{= fields.height.value}%,
+            %{= fields.platformLength.value + fields.slopeLength.value}% %{=-fields.width.value / 2.0}% 0,
+            
+            %{= fields.slopeLength.value}% %{= fields.width.value / 2.0}% %{= fields.height.value}%,
+            0 %{= fields.width.value / 2.0}% 0,
+            
+            %{= fields.slopeLength.value}% %{=-fields.width.value / 2.0}% %{= fields.height.value}%,
+            0 %{=-fields.width.value / 2.0}% 0,
+          ]
+        }
+        coordIndex [0 1 2 3 0 -1 4 5 6 7 4 -1 8 9 -1 10 11 -1 12 13 -1 14 15 -1]
+      }
+      appearance Appearance {
+        material Material {
+          ambientIntensity 1.0
+          diffuseColor IS color
+          emissiveColor IS color
+        }
+      }
+    }
+  ]
+} 
+}

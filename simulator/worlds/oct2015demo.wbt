@@ -1,0 +1,82 @@
+#VRML_SIM V8.2.1 utf8
+CozmoWorldInfo {
+}
+Viewpoint {
+  orientation -0.713231 -0.372321 -0.593868 4.84096
+  position 1.53003 -1.13764 0.967183
+}
+Background {
+  skyColor [
+    0.4 0.7 1
+  ]
+}
+DirectionalLight {
+  ambientIntensity 0.5
+  direction 2 -2 -1
+  intensity 0.5
+}
+DirectionalLight {
+  ambientIntensity 0.5
+  direction -2 -2 -1
+  intensity 0.5
+}
+DirectionalLight {
+  ambientIntensity 0.5
+  direction 0 2 -1
+  intensity 0.5
+}
+CozmoMat {
+  showMarkers FALSE
+}
+Face {
+  translation -0.004046 -0.474987 0.12
+}
+Face {
+  translation -0.0193327 0.560133 0.12
+  image "cat01.png"
+}
+Face {
+  translation -0.444046 0.005013 0.11
+  rotation 0 0 1 4.71239
+  image "face02.png"
+}
+Face {
+  translation 0.475954 0.00501299 0.13
+  rotation 0 0 1 4.71239
+  image "face03.png"
+}
+LightCube {
+  translation -0.0159113 0.173878 0.052
+  rotation 0 0 1 0.23
+  objectType "Block_LIGHTCUBE2"
+  filterLogs TRUE
+}
+LightCube {
+  translation -0.154 0.014 0.022
+  rotation 0 0 1 0.23
+  objectType "Block_LIGHTCUBE3"
+  filterLogs TRUE
+}
+LightCube {
+  translation 0.154 0.014 0.022
+  rotation 0 0 1 0.23
+  filterLogs TRUE
+}
+BlockWorldComms {
+  filterLogs TRUE
+}
+DEF Cozmo_1 CozmoBot {
+  name "CozmoBot_1"
+  filterLogs TRUE
+}
+WebotsKeyboardController {
+  filterLogs TRUE
+}
+SolidBox {
+  translation -0.0197776 0.177565 0.02
+  size 0.05 0.05 0.001
+  contactMaterial "soft_collision"
+}
+CozmoVizDisplay {
+  filterLogs TRUE
+}

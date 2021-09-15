@@ -1,0 +1,47 @@
+PROTO CozmoFaceDisplay [
+  field SFVec3f    translation  0 0 0
+  field SFRotation rotation     0 0 1 0
+]
+{
+  Transform {
+    translation IS translation
+    rotation IS rotation
+
+    children [
+      Shape {
+        appearance Appearance {
+          material DEF DarkGray Material {
+            diffuseColor 0.5 0.5 0.5
+          }
+        }
+        geometry DEF FACE_PLATE Box {
+          size  0.01 0.032 0.025 
+        }
+      }
+    
+      Transform {
+        translation 0.00451 0 0
+        rotation 1 0 0 1.5708
+        children [
+          Display {
+            name           "face_display"
+            width          184
+            height         96
+            children [
+              Shape {
+                appearance Appearance {
+                  texture ImageTexture {
+                  }
+                }
+                geometry Box {
+                  # https://ankiinc.atlassian.net/wiki/display/COZMO/V2+Face
+                  size 0.001 0.0121 0.0232
+                }
+              }
+            ]
+          } # Display
+        ]      
+      } # Transform
+    ]
+  } # Transform
+} # PROTO definition

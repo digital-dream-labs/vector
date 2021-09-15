@@ -1,0 +1,42 @@
+#VRML_SIM V7.3.0 utf8
+PROTO HumanHead [
+  field SFVec3f translation 0 0 0
+  field SFRotation rotation 0 0 1 0
+
+  field SFColor color 0 0 0
+  
+  field SFFloat bottomRadius 0.08
+  field SFFloat height 0.08
+]
+{
+Transform {
+  translation IS translation
+  rotation IS rotation
+  
+  children [
+    Shape {
+      geometry Cone {
+        bottomRadius IS bottomRadius
+        height IS height
+      }
+      appearance Appearance {
+        material Material {
+          diffuseColor IS color
+          transparency IS transparency
+        }
+      }
+    }
+    Shape {
+      geometry Cylinder {
+        radius %{=fields.bottomRadius.value / 2.0}%
+        height IS height
+      }
+      appearance Appearance {
+        material Material {
+          diffuseColor IS color
+        }
+      }
+    }
+  ]
+} 
+}

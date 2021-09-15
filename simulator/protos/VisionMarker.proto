@@ -1,0 +1,87 @@
+#VRML_SIM V7.3.0 utf8
+
+PROTO VisionMarker [
+  field SFVec3f    translation  0 0 0
+  field SFRotation rotation     0 0 1 0
+  
+  field SFFloat    markerWidth  0.025
+  field SFFloat    markerHeight -1     # -1 means same as markerWidth
+  field SFFloat    markerThickness 0.0001
+  field SFFloat    padding      0.002
+  
+  #field SFBool     isDockable   FALSE
+  field SFString   connectorName ""
+  field SFRotation connectorRotation 0 0 1 0
+
+  field SFBool     useWhiteBackground FALSE
+  field SFColor    backgroundColor 1 1 1
+
+  field SFString   image              ""  # Image path relative to textures/
+]
+{
+  %{
+    if fields.markerHeight.value < 0 then
+      fields.markerHeight.value = fields.markerWidth.value
+    end
+    imageURL = "textures/" .. fields.image.value
+    if fields.useWhiteBackground.value then 
+      whiteFaceWidth  = fields.markerWidth.value+2*fields.padding.value
+      whiteFaceHeight = fields.markerHeight.value+2*fields.padding.value 
+    end 
+  }%  
+ 
+  Group {
+    
+    children [
+      Transform {
+        rotation IS rotation
+        translation IS translation
+        children [
+          Shape {
+            appearance Appearance {
+              texture ImageTexture {
+                url [ "%{=imageURL}%" ]
+              }
+            }
+            geometry DEF MARKER_BOX Box {
+              size %{= fields.markerWidth.value }% %{=fields.markerThickness.value}% %{= fields.markerHeight.value }%
+            }
+          }
+          %{ if fields.useWhiteBackground.value then }%
+          DEF FACE_SHAPE Shape {
+            appearance Appearance {
+              material Material {
+                diffuseColor IS backgroundColor
+                ambientIntensity 1
+              }
+            }
+            geometry Box {
+              size %{=whiteFaceWidth}% %{=fields.markerThickness.value/2}% %{=whiteFaceHeight}%
+            }
+          }
+          %{ end }%        
+        ] # Transform children
+      } # Transform 
+      
+      %{ if fields.connectorName.value ~= "" then }%
+      #Transform {
+        
+       # children [
+          Connector {
+            rotation IS connectorRotation
+            translation IS translation
+            #name "%{=fields.translation.value.x}%  %{=fields.translation.value.y}% %{=fields.translation.value.z}%"
+            name IS connectorName
+            model "magnetic"
+            type "passive"
+            autoLock TRUE
+          }
+        #] # Transform children
+      #} # Transform
+      %{ end }%
+      
+    ] # Group children
+    
+  } # Group  
+      
+} # PROTO

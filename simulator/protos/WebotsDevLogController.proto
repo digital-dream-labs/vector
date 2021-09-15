@@ -1,0 +1,43 @@
+PROTO WebotsDevLogController [
+  field SFString name "WebotsDevLogController"
+  field SFString logsDirectory ""
+  field SFBool   saveImages TRUE # If there are ImageChunk Viz messages, enable saving them
+
+  field SFFloat pixelSize 1.0
+
+  field SFInt32 jumpToMS 0
+]
+{
+Supervisor {
+  name IS name
+  controller "webotsCtrlDevLog"
+
+  # Workaround for suppressing Webots errors due to fields not being used
+  # directly in the proto.
+  %{ dummy = fields.logsDirectory.value }%
+
+  children [
+    DEF PLAYBACK Display {
+        name "playback_display"
+        height 24
+        width 400
+
+        children [
+        DEF SHAPE Shape {
+          appearance Appearance {
+            material Material {
+              diffuseColor 1 1 1
+              specularColor 0 0 0
+              transparency 0.6
+            }
+          }
+          geometry Plane {
+	          size 1 1
+          }
+        }
+      ]
+     }
+  ]
+  
+} # Supervisor definition
+} # PROTO definition

@@ -1,0 +1,49 @@
+#VRML_SIM V8.2.1 utf8
+CozmoWorldInfo {
+}
+Viewpoint {
+  fieldOfView 0.8
+  orientation 0.992672 0.0397281 0.114121 0.67458
+  position 0.148978 -1.11845 1.50382
+}
+Background {
+  skyColor [
+    0.4 0.7 1
+  ]
+}
+DirectionalLight {
+  ambientIntensity 0.75
+}
+CozmoMat {
+  showMarkers FALSE
+  xSize 0.1
+  ySize 0.1
+}
+DEF CozmoViz_1 CozmoBot {
+  translation 0 0.2 0
+  name "CozmoBot_1"
+  filterLogs TRUE
+  vizMode TRUE
+}
+DEF WorldComms BlockWorldComms {
+  filterLogs TRUE
+}
+CozmoVizDisplay {
+  behaviorSelectionViz TRUE
+  filterLogs TRUE
+}
+WebotsKeyboardController {
+  robotVolume 0.1
+  behaviorName ""
+  unlockName "KnockOverThreeCubeStack"
+  activeObjectFactoryIDs [
+    "5E13F40B"
+    "9B0DF40B"
+    "DE0DF40B"
+    "0"
+    "0"
+  ]
+  filterLogs TRUE
+  forcedRobotIP "172.31.1.1"
+  forcedRobotIsSimulated FALSE
+}

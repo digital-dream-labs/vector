@@ -1,0 +1,89 @@
+#VRML_SIM V8.2.1 utf8
+CozmoWorldInfo {
+}
+Viewpoint {
+  orientation 0.789128 -0.420219 -0.447988 1.7174
+  position -0.906259 -0.71308 0.157077
+}
+Background {
+  skyColor [
+    0.4 0.7 1
+  ]
+}
+DirectionalLight {
+  ambientIntensity 0.5
+  direction 2 -2 -1
+  intensity 0.5
+}
+DirectionalLight {
+  ambientIntensity 0.5
+  direction -2 -2 -1
+  intensity 0.5
+}
+DirectionalLight {
+  ambientIntensity 0.5
+  direction 0 2 -1
+  intensity 0.5
+}
+CozmoMat {
+  showMarkers FALSE
+}
+LightCube {
+  translation 0.342 0.1 0.06
+}
+LightCube {
+  translation 0.412 0 0.065
+  rotation 0 1 0 3.14159
+  objectType "Block_LIGHTCUBE2"
+}
+LightCube {
+  translation 0.332 -0.1 0.065
+  objectType "Block_LIGHTCUBE3"
+}
+SolidBox {
+  translation -0.126 -1.04083e-17 0.04
+  size 0.2 0.5 0.001
+  contactMaterial "soft_collision"
+}
+SolidBox {
+  translation -0.436 -0.5 0.04
+  size 0.2 0.5 0.001
+  contactMaterial "soft_collision"
+}
+SolidBox {
+  translation 0.024 0.35 0.04
+  rotation 0 0 1 4.71239
+  size 0.2 0.5 0.001
+  contactMaterial "soft_collision"
+}
+SolidBox {
+  translation -0.086 -0.35 0.04
+  rotation 0 0 1 4.71239
+  size 0.2 0.5 0.001
+  contactMaterial "soft_collision"
+}
+SolidBox {
+  translation 0.654 0.02 0.04
+  rotation 0 0 1 4.71239
+  size 1 1 0.001
+  contactMaterial "soft_collision"
+}
+BlockWorldComms {
+}
+CozmoBot {
+  translation -0.12 0 0.05
+  name "CozmoBot_1"
+}
+BuildServerTestController {
+  controllerArgs "CST_BehaviorTracker"
+}
+CozmoVizDisplay {
+}
+Face {
+  translation -0.703191 -0.0528783 0.27
+  rotation 0 0 -1 4.71239
+}
+Face {
+  translation 0.240702 0.898311 0.29
+  rotation 0 0 1 2.87979
+}

@@ -1,0 +1,84 @@
+#VRML_SIM V8.5 utf8
+CozmoWorldInfo {
+}
+Viewpoint {
+  orientation -0.16124153 0.66936187 0.72522814 3.5175766
+  position -0.60081169 0.94689903 0.25891837
+}
+Background {
+  skyColor [
+    0.4 0.7 1
+  ]
+}
+DirectionalLight {
+  ambientIntensity 0.5
+  direction 2 -2 -1
+  intensity 0.5
+}
+DirectionalLight {
+  ambientIntensity 0.5
+  direction -2 -2 -1
+  intensity 0.5
+}
+DirectionalLight {
+  ambientIntensity 0.5
+  direction 0 2 -1
+  intensity 0.5
+}
+FactoryTestFixtureFloor {
+  xSize 0.5
+  ySize 0.2
+  slotCenterX -0.08
+}
+DEF Cozmo_1 CozmoBot2 {
+  translation -0.15969854 0 0.00029056594
+  name "CozmoBot_1"
+  filterLogs TRUE
+}
+WebotsKeyboardController {
+  robotVolume 0
+  behaviorName "lookAround"
+  userName "Billy"
+  filterLogs TRUE
+  translation -0.38 0 0.08
+  autoConnect FALSE
+}
+CozmoVizDisplay {
+  filterLogs TRUE
+  streamResolution "NHD"
+}
+Transform {
+  translation 0.005 0 0.057
+  rotation 0 1 0 -0.1309
+  children [
+    Transform {
+      rotation 0 0 1 0.78539816
+      children [
+        CalibrationMarkerStructure_InvertedBox {
+          translation -0.03 0 0.03
+          rotation 0 0 1 1.5707963
+          numCubes 4
+          listOfMarkers "\"lightCubes/lightCubeJ_bottom.png\", \"lightCubes/lightCubeJ_front.png\", \"lightCubes/lightCubeJ_left.png\", \"\", \"lightCubes/lightCubeI_left.png\", \"lightCubes/lightCubeI_right.png\", \"lightCubes/lightCubeI_top.png\", \"lightCubes/lightCubeJ_back.png\",\"symbols/arrow.png\",\"lightCubes/lightCubeI_back.png\",\"lightCubes/lightCubeI_bottom.png\",\"lightCubes/lightCubeI_front.png\",\"symbols/stopWithHand.png\",\"symbols/stopWithHand.png\",\"symbols/stopWithHand.png\",\"symbols/stopWithHand.png\",\"symbols/stopWithHand.png\",\"symbols/stopWithHand.png\",\"symbols/stopWithHand.png\",\"symbols/stopWithHand.png\",\"symbols/stopWithHand.png\",\"symbols/stopWithHand.png\",\"symbols/stopWithHand.png\",\"symbols/stopWithHand.png\",\"symbols/stopWithHand.png\","
+        }
+        CalibrationMarkerStructure_InvertedBox {
+          translation -0.03 0.03 0.12
+          rotation 0 1 0 -1.5707963
+          numCubes 4
+          listOfMarkers "\"customSDK/SDK_5Hexagons.png\", \"customSDK/SDK_4Triangles.png\", \"customSDK/SDK_5Triangles.png\", \"symbols/bullseye2.png\", \"customSDK/SDK_4Hexagons.png\", \"customSDK/SDK_4Circles.png, \"customSDK/SDK_4Diamonds.png\", \"symbols/stopWithHand.png\", \"customSDK/SDK_3Triangles.png\", \"customSDK/SDK_3Hexagons.png\",\"symbols/stopWithHand.png\",\"symbols/stopWithHand.png\",\"customSDK/SDK_3Diamonds.png\",\"symbols/stopWithHand.png\",\"symbols/stopWithHand.png\",\"symbols/stopWithHand.png\",\"symbols/stopWithHand.png\",\"symbols/stopWithHand.png\",\"symbols/stopWithHand.png\",\"symbols/stopWithHand.png\",\"symbols/stopWithHand.png\",\"symbols/stopWithHand.png\",\"symbols/stopWithHand.png\",\"symbols/stopWithHand.png\",\"symbols/stopWithHand.png\",\"symbols/stopWithHand.png\",\"symbols/stopWithHand.png\","
+        }
+        CalibrationMarkerStructure_InvertedBox {
+          translation 0 0.03 0.03
+          numCubes 4
+          listOfMarkers "\"lightCubes/lightCubeK_top.png\", \"lightCubes/lightCubeK_right.png\", \"lightCubes/lightCubeK_left.png\", \"\", \"lightCubes/lightCubeK_bottom.png\", \"lightCubes/lightCubeK_back.png\", \"lightCubes/lightCubeJ_top.png\", \"customSDK/SDK_3Circles.png\", \"customSDK/SDK_2Triangles.png\", \"customSDK/SDK_2Hexagons.png\",\"customSDK/SDK_2Diamonds.png\",\"customSDK/SDK_2Circles.png\",\"symbols/stopWithHand.png\",\"symbols/stopWithHand.png\",\"symbols/stopWithHand.png\",\"symbols/stopWithHand.png\",\"symbols/stopWithHand.png\",\"symbols/stopWithHand.png\",\"symbols/stopWithHand.png\",\"symbols/stopWithHand.png\",\"symbols/stopWithHand.png\",\"symbols/stopWithHand.png\",\"symbols/stopWithHand.png\",\"symbols/stopWithHand.png\",\"symbols/stopWithHand.png\",\"symbols/stopWithHand.png\","
+        }
+      ]
+      rotationStep 0.01
+    }
+  ]
+}
+LightCube {
+  translation 0.15 0 0.022
+}
+CozmoChargerSimple {
+  translation -0.23 0 0
+}

@@ -1,0 +1,26 @@
+#VRML_SIM V7.3.0 utf8
+
+PROTO TargetCube [
+  field SFString   name         "TargetCube"
+  field SFVec3f    translation  0 0 0
+  field SFRotation rotation     0 0 1 0
+  field SFBool     useInverted  FALSE
+]
+{
+  Block1x1 {
+    name IS name
+    translation IS translation
+    rotation IS rotation
+    blockColor 0.5 0.5 0.5
+
+    %{ if fields.useInverted.value then }% 
+      markerImg "symbols/inverted/bullseye2.png"
+    %{ else }%
+      markerImg  "symbols/bullseye2.png"
+    %{ end }%
+    
+    markerWidth .023
+    
+    active FALSE 
+  }
+}

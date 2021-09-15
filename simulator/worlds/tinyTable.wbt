@@ -1,0 +1,53 @@
+#VRML_SIM R2018a utf8
+CozmoWorldInfo {
+}
+Viewpoint {
+  orientation 0.17293499359834108 0.08730503948911446 0.9810562257429214 0.9504710117243389
+  position 0.18490950146736568 -0.2884578085898222 2.5099278439039674
+}
+Background {
+  skyColor [
+    0.4 0.7 1
+  ]
+}
+DirectionalLight {
+  ambientIntensity 0.5
+  direction 2 -2 -1
+  intensity 0.5
+}
+DirectionalLight {
+  ambientIntensity 0.5
+  direction -2 -2 -1
+  intensity 0.5
+}
+DirectionalLight {
+  ambientIntensity 0.5
+  direction 0 2 -1
+  intensity 0.5
+}
+CozmoMat {
+  xSize 0.05
+  ySize 0.05
+}
+Table {
+  rotation 1 0 0 1.5708
+  size 0.5 0.25 0.5
+}
+CozmoBot2 {
+  translation -0.11876585947401842 -0.16000037207836332 0.26322390110479954
+  rotation 5.271641791508019e-5 -0.999999996302342 6.794332523798435e-5 -0.022062726901654686
+  filterLogs TRUE
+  colorizeStderrOutput TRUE
+}
+WebotsKeyboardController {
+  emotionVal 0.1
+  consoleVarName "DevDispatchAfterShake"
+  consoleVarValue "1"
+  filterLogs TRUE
+  translation 0.5749999999031083 0.3093782216791491 0.3200000000000001
+  rotation 0 0 1 0.5235987739999998
+  randomSeed -1
+}
+CozmoVizDisplay {
+  filterLogs TRUE
+}

@@ -1,0 +1,51 @@
+#VRML_SIM V7.3.0 utf8
+CozmoWorldInfo {
+  info ["For connecting to cozmoEngine+cozmoRobot running on physical robot / Android device"]
+  #basicTimeStep 60
+}
+Viewpoint {
+  fieldOfView 0.8
+  #orientation 0 1 0 0
+  #position 0 0 1.5
+
+  #demo
+  orientation 1 0 0 0.56
+  position 0 -0.55 0.84
+}
+Background {
+  skyColor [
+    0.4 0.7 1
+  ]
+}
+DirectionalLight {
+  ambientIntensity 0.75
+  direction 0 0 -1
+  castShadows FALSE
+}
+CozmoMat {
+}
+
+DEF WhiskeyViz_1 WhiskeyBot {
+  name "WhiskeyBot_1"
+  
+  # Move robot off mat
+  translation 0 1 0
+
+  # Enable vizMode
+  vizMode TRUE
+}
+CozmoVizDisplay {
+  streamResolution "NHD"
+  colorizeStderrOutput TRUE
+}
+WebotsKeyboardController{
+  
+  # To connect to a physical Victor, uncomment and 
+  # update to the IP address of the engine.
+  # engineIP      "192.168.X.X"
+  
+  redirectViz            TRUE
+  #filterLogs             TRUE
+  colorizeStderrOutput   TRUE
+}
+

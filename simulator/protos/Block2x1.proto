@@ -1,0 +1,110 @@
+#VRML_SIM V7.3.0 utf8
+
+PROTO Block2x1 [
+  field SFString name "Block000"
+  field SFVec3f translation 0 0 0.022
+  field SFRotation rotation 0 0 1 0
+  field SFFloat density 250
+  field SFColor blockColor 1 0 0
+
+  field SFString longSideMarker  "textures/code1x1.png"
+  field SFString shortSideMarker "textures/code1x1.png"
+ 
+  # Observation
+  #field SFColor obsColor 1 1 0
+  #field SFFloat obsTransparency 1.0 # initially invisible
+  #field SFVec3f obsTranslation 0 0 0
+  #field SFRotation obsRotation 0 0 1 0 
+]
+{
+Robot {
+  name IS name
+  translation IS translation
+  rotation IS rotation
+  contactMaterial "cmat_block"
+  children [
+
+    Connector {
+      name "connector6"
+      translation 0 -0.022 0
+      rotation 1 0 0 1.57079
+      model "magnetic"
+      type "passive"
+      autoLock TRUE
+    }
+        
+    # Front Face
+		VisionMarker {
+			rotation 0 0 1 -1.5708
+			translation -0.044 0 0
+			image IS shortSideMarker
+			# Small ends not dockable			
+			#connectorRotation 0 1 0 -1.57079
+		}
+		
+		# Back Face
+		VisionMarker {
+			rotation 0 0 1 1.5708
+			translation 0.044 0 0
+			image IS shortSideMarker
+			# Small ends not dockable
+			#connectorRotation 0 1 0 1.57079
+		}
+		
+		# Bottom Face
+		VisionMarker {
+			rotation 1 0 0 1.5708
+			translation 0 0 -0.022
+			image IS longSideMarker
+			connectorName "connectorBottom"
+			connectorRotation 0 1 0 3.14159
+		}
+		
+		# Top Face
+		VisionMarker {
+			rotation 1 0 0 1.5708
+			translation 0 0 0.022
+			image IS longSideMarker
+			connectorName "connectorTop"
+			connectorRotation 0 1 0 0
+		}
+						
+		# Left Face
+		VisionMarker {
+			rotation 0 0 1 3.1415
+			translation 0 0.022 0
+			image IS longSideMarker
+			connectorName "connectorLeft"
+			connectorRotation 1 0 0 -1.57079
+		}
+		
+		# Right Face
+		VisionMarker {
+			rotation 0 0 1 0
+			translation 0 -0.022 0
+			image IS longSideMarker
+			connectorName "connectorRight"
+			connectorRotation 1 0 0 1.57079
+		}
+		
+    DEF Block2x1Shape Shape {
+      appearance Appearance {
+        material Material {
+          diffuseColor IS blockColor
+        }
+      }
+      geometry Box {
+        size 0.088 0.044 0.044
+      }
+    }
+   
+  ] # Block Children
+  
+  boundingObject USE Block2x1Shape
+  physics DEF Block2x1Physics Physics {
+    density IS density
+  }
+} # "Robot" (the actual block)
+
+  
+} # PROTO

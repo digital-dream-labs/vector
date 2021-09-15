@@ -1,0 +1,66 @@
+#VRML_SIM V8.2.1 utf8
+CozmoWorldInfo {
+}
+Viewpoint {
+  orientation -0.990444 0.094859 0.100115 4.75677
+  position -0.0737227 -0.600353 0.0492755
+}
+Background {
+  skyColor [
+    0.4 0.7 1
+  ]
+}
+DirectionalLight {
+  ambientIntensity 0.5
+  direction 2 -2 -1
+  intensity 0.5
+}
+DirectionalLight {
+  ambientIntensity 0.5
+  direction -2 -2 -1
+  intensity 0.5
+}
+DirectionalLight {
+  ambientIntensity 0.5
+  direction 0 2 -1
+  intensity 0.5
+}
+CozmoMat {
+  showMarkers FALSE
+}
+LightCube {
+  translation 0.142 0.4 0.03
+}
+LightCube {
+  translation 0.142 0 0.045
+  objectType "Block_LIGHTCUBE2"
+}
+LightCube {
+  translation 0.142 -0.4 0.065
+  objectType "Block_LIGHTCUBE3"
+}
+SolidBox {
+  translation 0.144 0.4 0.005
+  size 0.05 0.05 0.001
+  contactMaterial "soft_collision"
+}
+SolidBox {
+  translation 0.144 0 0.02
+  size 0.05 0.05 0.001
+  contactMaterial "soft_collision"
+}
+SolidBox {
+  translation 0.144 -0.4 0.04
+  size 0.05 0.05 0.001
+  contactMaterial "soft_collision"
+}
+%COZMOBOT% {
+  name "CozmoBot_1"
+  rotation 0 0 1 3.14159
+}
+BuildServerTestController {
+  controllerArgs "%COZMO_SIM_TEST%"
+# controllerArgs "CST_VariableHeightHigh"
+}
+CozmoVizDisplay {
+}

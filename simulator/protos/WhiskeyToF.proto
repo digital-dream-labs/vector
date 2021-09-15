@@ -1,0 +1,37 @@
+PROTO WhiskeyToF [
+  field SFVec3f    translation 0 0 0
+  field SFRotation rotation 0 0 1 0
+
+  # 12.5 degree rotation
+  field SFVec3f    leftTranslation 0 0.008 0
+  field SFRotation leftRotation 1 0 0 -0.2094395102
+
+  field SFFloat fov 0.3316
+  field SFFloat minRange 0.0011
+  field SFFloat maxRange 1.0
+]
+{
+  Transform {
+    translation IS translation
+    rotation IS rotation
+    
+    children [
+      Transform {
+        rotation IS leftRotation
+        children [
+          RangeFinder {
+            name "leftRangeSensor"
+            translation IS leftTranslation
+            rotation 0 0 1 -1.5708046928
+            fieldOfView IS fov
+            width 4
+            height 4
+            near 0.001
+            minRange IS minRange
+            maxRange IS maxRange
+          }
+        ]
+      }
+    ]
+  }
+} # PROTO definition

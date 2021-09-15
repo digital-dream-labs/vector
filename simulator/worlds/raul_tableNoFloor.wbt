@@ -1,0 +1,74 @@
+#VRML_SIM V8.2.1 utf8
+CozmoWorldInfo {
+}
+Viewpoint {
+  orientation -0.657878 -0.330965 -0.676505 5.00432
+  position 1.06931 -0.714936 1.17287
+}
+Can {
+  translation -0.119022 0.292825 0.312
+  rotation 1 0 0 1.5708
+}
+Background {
+  skyColor [
+    0.4 0.7 1
+  ]
+}
+DirectionalLight {
+  ambientIntensity 0.5
+  direction 2 -2 -1
+  intensity 0.5
+}
+DirectionalLight {
+  ambientIntensity 0.5
+  direction -2 -2 -1
+  intensity 0.5
+}
+DirectionalLight {
+  ambientIntensity 0.5
+  direction 0 2 -1
+  intensity 0.5
+}
+CozmoMat {
+  showMarkers FALSE
+  xSize 0.05
+  ySize 0.05
+}
+LightCube {
+  translation 0.109864 0.168621 0.271993
+  rotation 1.59038e-05 -1.83704e-06 1 0.23
+  objectType "Block_LIGHTCUBE2"
+  filterLogs TRUE
+}
+LightCube {
+  translation 0.01 -0.33 0.272
+  filterLogs TRUE
+}
+LightCube {
+  translation 0.115359 -0.37 0.271993
+  rotation 0 0 1 3.6652
+  objectType "Block_LIGHTCUBE3"
+  filterLogs TRUE
+}
+Table {
+  rotation 1 0 0 1.5708
+  size 0.5 0.25 1.5
+}
+BlockWorldComms {
+  filterLogs TRUE
+}
+DEF Cozmo_1 CozmoBot {
+  translation 0 0 0.25
+  name "CozmoBot_1"
+  filterLogs TRUE
+}
+WebotsKeyboardController {
+  robotVolume 0
+  behaviorName "Hiking_VisitInterestingEdge"
+  filterLogs TRUE
+}
+CozmoVizDisplay {
+  moodViz TRUE
+  behaviorSelectionViz TRUE
+  filterLogs TRUE
+}

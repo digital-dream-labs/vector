@@ -1,0 +1,74 @@
+#VRML_SIM V8.2.1 utf8
+CozmoWorldInfo {
+}
+Viewpoint {
+  orientation 0.276301 -0.238792 -0.930933 1.64126
+  position -0.312421 -0.0120749 0.715145
+}
+Background {
+  skyColor [
+    0.4 0.7 1
+  ]
+}
+DirectionalLight {
+  ambientIntensity 0.5
+  direction 2 -2 -1
+  intensity 0.5
+}
+DirectionalLight {
+  ambientIntensity 0.5
+  direction -2 -2 -1
+  intensity 0.5
+}
+DirectionalLight {
+  ambientIntensity 0.5
+  direction 0 2 -1
+  intensity 0.5
+}
+CozmoMat {
+  showMarkers FALSE
+  xSize 2
+  ySize 1.5
+}
+LightCube {
+  translation 0.09 0.079988 0.0219932
+  rotation 1 -4.71837e-12 9.09476e-07 3.67408e-06
+}
+LightCube {
+  translation 0.278767 -7.03049e-11 0.0219929
+  rotation -1 -1.61852e-12 4.02852e-09 -3.67408e-06
+  objectType "Block_LIGHTCUBE3"
+}
+BlockWorldComms {
+  filterLogs TRUE
+}
+DEF Cozmo_1 CozmoBot {
+  hidden position_0_2 0.00104066
+  hidden linearVelocity_0 -1.18741e-15 -1.20378e-11 -2.06801e-16
+  hidden angularVelocity_0 7.15652e-17 -6.6806e-14 -2.37333e-11
+  hidden translation_8 8.88031e-11 -5.62374e-13 -1.53163e-07
+  hidden rotation_8 -4.05911e-16 1 -5.56683e-15 0.348032
+  hidden linearVelocity_8 -8.43471e-12 -1.23639e-11 -3.4119e-11
+  hidden angularVelocity_8 7.8596e-16 1.02233e-08 -2.36957e-11
+  hidden translation_24 4.55088e-10 -6.24461e-14 -2.86999e-08
+  hidden rotation_24 5.29791e-13 1 2.59327e-12 -0.00103354
+  hidden position_24_0 0.00104225
+  hidden linearVelocity_24 -5.79385e-11 -1.23599e-11 -9.1198e-10
+  hidden angularVelocity_24 3.00935e-15 2.91349e-08 -2.36263e-11
+  hidden translation_25 2.77656e-10 -2.29839e-14 -1.79559e-08
+  hidden rotation_25 -2.02744e-13 1 -6.06557e-15 0.00103435
+  hidden linearVelocity_25 -3.47818e-10 -1.31063e-11 -1.82419e-09
+  hidden angularVelocity_25 -2.76125e-16 5.75568e-14 -2.37332e-11
+  hidden translation_27 -2.65899e-10 -6.24491e-14 -5.31378e-09
+  hidden rotation_27 5.40999e-13 1 2.59535e-12 -0.00103277
+  hidden position_27_0 0.00104147
+  hidden linearVelocity_27 -5.79382e-11 -1.23599e-11 -9.1198e-10
+  hidden angularVelocity_27 3.10059e-15 2.91349e-08 -2.36263e-11
+  translation 1.88086e-08 -5.96718e-08 0.000288921
+  rotation 0.0829403 0.996552 -0.00244647 4.42726e-05
+  name "CozmoBot_1"
+  headAngle -0.347998
+  liftAngle 0.00104144
+}
+CozmoVizDisplay {
+}

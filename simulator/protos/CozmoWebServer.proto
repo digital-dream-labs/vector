@@ -1,0 +1,29 @@
+PROTO CozmoWebServer [
+  field SFString name "CozmoWebServer"
+  field SFInt32 robotID 0
+  
+  field SFBool filterLogs FALSE
+  field SFBool colorizeStderrOutput FALSE
+]
+{
+Supervisor {
+  name IS name
+  controller "webotsCtrlWebServer"
+
+  # append optional command line parameters
+  %{ ctrlArgs="" }%
+  %{ if fields.filterLogs.value then }%
+    %{ ctrlArgs = ctrlArgs .. " --applyLogFilter"}%
+  %{ end }%
+  %{ if fields.colorizeStderrOutput.value then }%
+    %{ ctrlArgs = ctrlArgs .. " --colorizeStderrOutput"}%
+  %{ end }%
+
+  controllerArgs "%{=ctrlArgs}%"
+
+  ## Workaround for suppressing Webots errors due to fields not being used
+  ## directly in the proto.
+  ### %{ dummy = fields.logsDirectory.value }%
+  
+} # Supervisor definition
+} # PROTO definition

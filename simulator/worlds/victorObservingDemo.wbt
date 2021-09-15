@@ -1,0 +1,71 @@
+#VRML_SIM R2018a utf8
+CozmoWorldInfo {
+}
+Viewpoint {
+  orientation 0.354519788155736 0.5630826686340736 0.7464942250881398 2.2628819285799144
+  position 2.7180323062983094 1.3239881445284694 0.9039526442806154
+}
+Background {
+  skyColor [
+    0.4 0.7 1
+  ]
+}
+DirectionalLight {
+  ambientIntensity 0.5
+  direction 2 -2 -1
+  intensity 0.5
+}
+DirectionalLight {
+  ambientIntensity 0.5
+  direction -2 -2 -1
+  intensity 0.5
+}
+DirectionalLight {
+  ambientIntensity 0.5
+  direction 0 2 -1
+  intensity 0.5
+}
+CozmoMat {
+}
+VictorCharger {
+  translation -0.076696196 0.00014978189 2.4646951e-14
+  rotation 0 0 1 4.7124
+}
+Face {
+  translation 0.4213941499999999 -0.001768074157703489 0.23999999999999988
+  rotation 0 0 -1 4.712389
+  image "face02.png"
+}
+Face {
+  translation 0.36357493093074505 -0.18861363710812293 0.29
+  rotation 0 0 -1 4.9741884
+}
+LightCube {
+  translation -0.1067011 0.29601634 0.022
+  rotation 0 0 1 0.523599
+  colorizeStderrOutput TRUE
+}
+CozmoBot2 {
+  translation 0 0 0.005
+  rotation 0 1 0 0.1222
+  filterLogs TRUE
+  colorizeStderrOutput TRUE
+}
+WebotsKeyboardController {
+  behaviorName "ModeSelector"
+  intent "{\"intent\":\"intent_clock_settimer_extend\",\"params\": {\"timer_duration\":\"30\",\"unit\":\"s\"}}"
+  emotionVal 0.1
+  consoleVarName "DevDispatchAfterShake"
+  consoleVarValue "1"
+  colorizeStderrOutput TRUE
+  translation -0.24686749 0.2921897 0.08
+  rotation 0 0 1 6.0213859
+}
+CozmoVizDisplay {
+  streamResolution "NHD"
+  colorizeStderrOutput TRUE
+}
+SolidBox {
+  translation 0.0014556051 0.23224103 1.110223e-15
+  size 0.5 0.02 0.2
+}

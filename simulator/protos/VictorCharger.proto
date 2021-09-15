@@ -1,0 +1,125 @@
+#VRML_SIM V8.5.3 utf8
+# Victor charger
+
+PROTO VictorCharger [
+  field SFString name "VictorCharger"
+
+  # Simulates whether or not the charger is plugged in
+  field SFBool isPluggedIn TRUE
+
+  # Dimensions
+  field SFFloat backThickness  .015
+  field SFFloat backWidth      .070
+  field SFFloat backHeight     .076
+  field SFFloat platformWidth  .0875  # Platform is the flat part that robot sits on when charging
+  field SFFloat platformLength .090
+  field SFFloat platformThickness .001
+
+  field SFFloat platformTiltAngle 0.122 # ~7 degree tilt angle
+
+  field SFFloat dockMarkerWidth  0.046
+  field SFFloat dockMarkerHeight 0.046
+
+  field SFVec3f    translation 0 0 0
+  field SFRotation rotation 0 0 1 0
+  field SFFloat    mass 0.5
+  field SFColor    color .3 .3 .3
+
+]
+{
+Robot {
+  name IS name
+  translation IS translation
+  rotation IS rotation
+
+  contactMaterial "charger"
+
+  children [
+    # Charger vision marker
+    Transform {
+      rotation 0 1 0 3.1415 # 90 deg about z-axis
+      translation 0 %{=fields.backThickness.value}% .0485
+      children [
+        VisionMarker {
+          image "chargerHome.png"
+          markerWidth IS dockMarkerWidth
+          markerHeight IS dockMarkerHeight
+        }
+      ]
+    }
+
+    DEF ChargerGroup Group {
+      children [
+        # Back side
+        # Origin is center of back side of charger
+        # x-axis points to robot right when robot is in charger, y-axis points toward ramp, z-axis points up
+        Transform {
+          translation 0 %{=fields.backThickness.value/2}% %{=fields.backHeight.value/2}%
+          children [
+            Shape {
+              appearance Appearance {
+                material DEF ChargerPlastic Material {
+                  diffuseColor IS color
+                }
+              }
+              geometry Box {
+                size %{=fields.backWidth.value}% %{=fields.backThickness.value}% %{=fields.backHeight.value}%
+              }
+            }
+          ]
+        }
+
+        # Platform        
+        Transform {
+          rotation 1 0 0 %{=-1.0*fields.platformTiltAngle.value}%
+          translation 0 %{=fields.backThickness.value + 0.5*fields.platformLength.value}% %{=fields.platformLength.value*math.sin(fields.platformTiltAngle.value)/2.0}%
+          children [
+            Shape {
+              geometry Box {
+                size %{=fields.platformWidth.value}% %{=fields.platformLength.value}% %{=fields.platformThickness.value}%
+              }
+              appearance Appearance {
+                material IS ChargerPlastic
+                texture ImageTexture {
+                  url [ "textures/chargerStripe.png" ]
+                }
+              }
+            }
+          ]
+        }
+
+      ] # ChargerGroup Children
+    } # ChargerGroup
+
+    # Charger contacts:
+    Transform {
+      translation 0 %{=fields.backThickness.value + 0.038}% %{=fields.platformLength.value*math.sin(fields.platformTiltAngle.value)/2.0}%
+      rotation 1 0 0 0
+      children [
+        Connector {
+          name      "ChargeContact"
+          # Optionally simulate the charger being unplugged by making the 'model' field incompatible
+          %{ if fields.isPluggedIn.value then }%
+            model     "ChargeContact"
+          %{ else }%
+            model     "NULL"
+          %{ end }%
+          type      "symmetric"
+          isLocked  FALSE
+          autoLock  FALSE
+          distanceTolerance 0.01
+          axisTolerance     0.2
+          rotationTolerance 1.5708
+          numberOfRotations 4
+          snap      FALSE
+        }
+      ]
+    }
+
+  ] # children
+
+  boundingObject USE ChargerGroup
+
+}
+
+} # PROTO

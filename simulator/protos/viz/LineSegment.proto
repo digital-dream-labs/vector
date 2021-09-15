@@ -1,0 +1,37 @@
+#VRML_SIM V7.3.0 utf8
+PROTO LineSegment [
+  field SFVec3f translation 0 0 0
+  field SFRotation rotation 0 0 1 0
+
+  field SFVec3f origin 0 0 0
+  field SFVec3f dest 0 0 0
+
+  field SFColor color 0 0 0
+]
+{
+Transform {
+  translation IS translation
+  rotation IS rotation
+  
+  children [
+    Shape {
+      geometry IndexedLineSet {
+        coord Coordinate {
+          point [
+            %{= fields.origin.value.x }% %{= fields.origin.value.y }% %{= fields.origin.value.z }%
+            %{= fields.dest.value.x }%   %{= fields.dest.value.y }%   %{= fields.dest.value.z }%
+          ]
+        }
+        coordIndex [0 1 -1]
+      }
+      appearance Appearance {
+        material Material {
+          ambientIntensity 1.0
+          diffuseColor IS color
+          emissiveColor IS color
+        }
+      }
+    }
+  ]
+} 
+}

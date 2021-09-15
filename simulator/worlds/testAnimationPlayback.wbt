@@ -1,0 +1,41 @@
+#VRML_SIM V8.2.1 utf8
+CozmoWorldInfo {
+}
+Viewpoint {
+  orientation -0.136269 0.46186 0.876422 3.64768
+  position -0.796235 1.13976 1.07533
+}
+Background {
+  skyColor [
+    0.4 0.7 1
+  ]
+}
+DirectionalLight {
+  ambientIntensity 0.5
+  direction 2 -2 -1
+  intensity 0.5
+}
+DirectionalLight {
+  ambientIntensity 0.5
+  direction -2 -2 -1
+  intensity 0.5
+}
+DirectionalLight {
+  ambientIntensity 0.5
+  direction 0 2 -1
+  intensity 0.5
+}
+CozmoMat {
+  showMarkers FALSE
+  xSize 100
+  ySize 100
+}
+%COZMOBOT% {
+  name "CozmoBot_1"
+  animationTestName "%ANIMATION_TEST_NAME%"
+}
+BuildServerTestController {
+  controllerArgs "%COZMO_SIM_TEST%"
+}
+CozmoVizDisplay {
+}
