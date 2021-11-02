@@ -1,0 +1,12 @@
+*.a filter=lfs diff=lfs merge=lfs -text
+*.dylib filter=lfs diff=lfs merge=lfs -text
+*.so filter=lfs diff=lfs merge=lfs -text
+vicos/bin/mpg123* filter=lfs diff=lfs merge=lfs -text
+vicos/bin/out123 filter=lfs diff=lfs merge=lfs -text
+vicos/lib/libmpg123.so.0 filter=lfs diff=lfs merge=lfs -text
+vicos/lib/libout123.so.0.2.2 filter=lfs diff=lfs merge=lfs -text
+mac/bin/mpg123* filter=lfs diff=lfs merge=lfs -text
+mac/bin/out123 filter=lfs diff=lfs merge=lfs -text
+mac/lib/libmpg123.0.dylib filter=lfs diff=lfs merge=lfs -text
+mac/lib/libout123.0.dylib filter=lfs diff=lfs merge=lfs -text
+

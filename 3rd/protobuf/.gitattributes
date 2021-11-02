@@ -1,0 +1,6 @@
+*.a filter=lfs diff=lfs merge=lfs -text
+*.dylib filter=lfs diff=lfs merge=lfs -text
+*.so filter=lfs diff=lfs merge=lfs -text
+linux/bin/protoc filter=lfs diff=lfs merge=lfs -text
+mac/bin/protoc filter=lfs diff=lfs merge=lfs -text
+vicos/bin/arm-oe-linux-gnueabi-protoc filter=lfs diff=lfs merge=lfs -text
