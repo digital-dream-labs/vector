@@ -1,0 +1,22 @@
+PROTO CozmoCliffSensor [
+  field SFString   name "cliffSensor"
+  field SFVec3f    translation  0 0 0
+  field SFRotation rotation     0 0 1 0
+]
+{
+  Transform {
+    translation IS translation
+    rotation IS rotation
+
+    children [
+       DistanceSensor {
+        name IS name
+        rotation 0 1 0 1.5708
+        type "infra-red"
+        aperture 0.5
+        lookupTable [0   900 0,
+                     0.2  4 0]
+      }
+    ]
+  } # Transform
+} # PROTO definition

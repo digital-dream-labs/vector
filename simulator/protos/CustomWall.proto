@@ -1,0 +1,64 @@
+#VRML_SIM V7.3.0 utf8
+
+PROTO CustomWall [
+  field SFVec3f translation 0 0 0.020
+  field SFRotation rotation 0 0 1 0
+  field SFFloat mass 0.085
+  field SFColor wallColor .75 .75 .75
+  field SFBool  useWhiteMarkerBackgrounds TRUE
+  field SFString markerImg ""  # Image path relative to textures/
+  field SFFloat width  0.080    # Length of one edge in meters
+  field SFFloat height 0.040
+  field SFFloat thickness 0.010
+  field SFFloat markerWidth 0.025
+	field SFFloat markerHeight 0.025
+]
+{
+Solid {
+
+  name IS name
+  translation IS translation
+  rotation IS rotation
+  contactMaterial "cmat_block"
+  
+  children [
+		
+		# Front Face
+		VisionMarker {
+			rotation 0 0 1 -1.5708
+			translation %{=-fields.thickness.value*0.5}% 0 0
+			image IS markerImg
+			markerWidth IS markerWidth
+			markerHeight IS markerHeight
+		}
+		
+		# Back Face
+		VisionMarker {
+			rotation 0 0 1 1.5708
+			translation %{=fields.thickness.value*0.5}% 0 0
+			image IS markerImg
+			markerWidth IS markerWidth
+			markerHeight IS markerHeight
+		}
+		
+    DEF WallShape Shape {
+      appearance Appearance {
+        material Material {
+          diffuseColor IS wallColor
+        }
+      }
+      geometry Box {
+        size %{=fields.thickness.value}% %{=fields.width.value}% %{=fields.height.value}%
+      }
+    }
+
+  ] # Block Children
+  
+  boundingObject USE WallShape
+  physics DEF WallPhysics Physics {
+    mass IS mass
+  }
+} # "Solid" (the actual block)
+
+  
+} # PROTO

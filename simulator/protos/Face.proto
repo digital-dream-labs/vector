@@ -1,0 +1,53 @@
+#VRML_SIM V7.3.0 utf8
+
+PROTO Face [
+  field SFString name "Face000"
+  
+  field SFVec3f       translation  0 0 0
+  field SFRotation    rotation     0 0 1 0
+  
+  field SFFloat height .270
+  field SFString image "face01.png"
+
+]
+{
+Solid {
+
+  %{ imageURL = "textures/faces/" .. fields.image.value }% 
+
+  name IS name
+
+  translation IS translation
+  rotation IS rotation
+  
+  children [
+    
+    DEF FaceShape Shape {
+      appearance Appearance {
+        texture ImageTexture {
+          url [ "%{= imageURL }%" ]
+        }
+      }
+      geometry Cylinder {
+        radius %{=fields.height.value/2}%
+        side FALSE
+        height .001
+        top FALSE
+        subdivision 16
+      }
+    }
+    
+    Transform {
+      rotation 0 0 1 3.14159
+      translation 0 .001 0
+      children [
+        USE FaceShape
+      ]
+    }
+   
+  ] # Solid Children
+  
+} # Parent Solid (the actual Face)
+
+  
+} # PROTO

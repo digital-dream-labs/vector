@@ -1,0 +1,110 @@
+#VRML_SIM V8.0.5 utf8
+CozmoWorldInfo {
+}
+Viewpoint {
+  orientation -0.136269 0.46186 0.876422 3.64768
+  position -0.796235 1.13976 1.07533
+}
+Background {
+  skyColor [
+    0.4 0.7 1
+  ]
+}
+DirectionalLight {
+  ambientIntensity 0.5
+  direction 2 -2 -1
+  intensity 0.5
+}
+DirectionalLight {
+  ambientIntensity 0.5
+  direction -2 -2 -1
+  intensity 0.5
+}
+DirectionalLight {
+  ambientIntensity 0.5
+  direction 0 2 -1
+  intensity 0.5
+}
+CozmoMat {
+  showMarkers FALSE
+}
+Block1x1 {
+  translation 0.0210391 0.217741 0.022
+  blockColor 0.296223 0.860273 0.323583
+  markerImg "symbols/squarePlusCorners.png"
+}
+FlagCube {
+  translation 0.0274715 0.221123 0.072
+  rotation 0 0 1 2.87979
+  swapCheckers TRUE
+}
+Block1x1 {
+  translation 0.0334384 -0.287731 0.022
+  rotation 0 0 1 2.87979
+  blockColor 0.828885 0.858824 0.17882
+  markerImg "symbols/star5.png"
+}
+Block1x1 {
+  translation 0.0796732 -0.2981 0.022
+  rotation 0 0 1 2.87979
+  blockColor 0.828885 0.858824 0.17882
+  markerImg "symbols/star5.png"
+}
+Block1x1 {
+  translation 0.025002 0.21571 0.122
+  blockColor 0.296223 0.860273 0.323583
+  markerImg "symbols/squarePlusCorners.png"
+}
+FlagCube {
+  name "Flag"
+  translation 0.15 0.02 0.0219929
+  rotation 1 1.28832e-12 -1.28131e-11 3.67408e-06
+}
+TargetCube {
+  name "Target"
+  translation 0.22 -8.81876e-08 0.0219929
+  rotation 0 0 1 0.05
+}
+DEF AngryFaceBlockOnPlatform Block1x1 {
+  name "AngryFace_01"
+  translation 0.283197 -0.249331 0.0259552
+  rotation 0 1 0 1.57
+  blockColor 0.5 0.5 0.85
+  markerImg "symbols/angryFace.png"
+}
+DEF ArrowBlock Block1x1 {
+  translation 0.281946 -0.247778 0.072
+  rotation 0 1 0 -1.57
+  markerImg "symbols/arrow.png"
+}
+LightCube {
+  translation -0.100 0.120 0.022
+  rotation 0 0 1 0.23
+  objectType "Block_LIGHTCUBE1"
+}
+LightCube {
+  translation -0.120 0.070 0.022
+  rotation 0 0 1 0.23
+  objectType "Block_LIGHTCUBE2"
+}
+LightCube {
+  translation -0.154 0.014 0.022
+  rotation 0 0 1 0.23
+  objectType "Block_LIGHTCUBE3"
+}
+#Block2x1 {
+#  translation -0.172268 -0.170815 0.0219949
+#  rotation 0.0839046 -1.83002e-06 0.996474 4.37836e-05
+#  longSideMarker "symbols/bangBangBang.png"
+#  shortSideMarker "symbols/inverted/bangBangBang.png"
+#}
+BlockWorldComms {
+  filterLogs TRUE
+}
+DEF Cozmo_1 CozmoBot {
+  name "CozmoBot_1"
+}
+WebotsKeyboardController {
+}
+CozmoVizDisplay {
+}

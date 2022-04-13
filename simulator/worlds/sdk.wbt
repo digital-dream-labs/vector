@@ -1,0 +1,128 @@
+#VRML_SIM V8.5 utf8
+CozmoWorldInfo {
+}
+Viewpoint {
+  orientation 0.080452617 0.28350632 0.95558963 2.6119948
+  position 0.91173774 1.6762404 2.8290839
+}
+Background {
+  skyColor [
+    0.4 0.7 1
+  ]
+}
+DirectionalLight {
+  ambientIntensity 0.5
+  direction 2 -2 -1
+  intensity 0.5
+}
+DirectionalLight {
+  ambientIntensity 0.5
+  direction -2 -2 -1
+  intensity 0.5
+}
+DirectionalLight {
+  ambientIntensity 0.5
+  direction 0 2 -1
+  intensity 0.5
+}
+CozmoMat {
+  showMarkers FALSE
+}
+Face {
+  translation 0.867836 -0.459603 0.52
+  rotation 0 0 1 4.45059
+}
+Face {
+  translation -0.0139948 0.608829 0.01
+  rotation -0.47690496 0.62151495 0.62151495 4.0316
+}
+Face {
+  translation 0.922606 -0.303165 0.45
+  rotation 0 0 1 4.71239
+  image "face02.png"
+}
+Face {
+  translation 0.92260571 -0.023165 0.45
+  rotation 0 0 1 4.71239
+  image "cat06.png"
+}
+Face {
+  translation 0.845522 0.29878 0.45
+  rotation 0 0 1 4.97419
+  image "face03.png"
+}
+LightCube {
+  translation 0.19270728 -0.057075224 0.021963309
+  rotation -0.12844803 0.98336223 0.12845165 1.5875728
+  filterLogs TRUE
+}
+LightCube {
+  translation 0.15528543 -0.0003854169 0.021963518
+  rotation 1.5926822e-05 -1.8396531e-06 1 0.22999398
+  objectType "Block_LIGHTCUBE3"
+  filterLogs TRUE
+}
+LightCube {
+  translation 0.1264189 0.060270379 0.02196374
+  rotation 1.4504099e-05 -1.8396531e-06 1 0.2523262
+  objectType "Block_LIGHTCUBE2"
+  filterLogs TRUE
+}
+DEF CustomCube1 Block1x1 {
+  translation 0.38 -0.12 0.022
+  markerImg "customSDK/SDK_2Diamonds.png"
+  width 0.044
+  cornerWidth 0
+  markerWidth 0.03
+}
+DEF CustomCube2 Block1x1 {
+  translation 0.38 -0.23 0.044
+  markerImg "customSDK/SDK_3Diamonds.png"
+  width 0.088
+  cornerWidth 0
+  markerWidth 0.05
+}
+DEF CustomBox1 CustomBox {
+  translation 0.3 0.2 0.05
+  width 0.14
+  height 0.1
+  depth 0.06
+  markerWidth 0.03
+  markerHeight 0.05
+  markerImg_front "customSDK/SDK_2Hexagons.png"
+  markerImg_back "customSDK/SDK_3Circles.png"
+  markerImg_left "customSDK/SDK_2Triangles.png"
+  markerImg_right "customSDK/SDK_3Triangles.png"
+  markerImg_top "customSDK/SDK_4Circles.png"
+  markerImg_bottom "customSDK/SDK_5Circles.png"
+}
+DEF CustomWall1 CustomWall {
+  translation 0.35 0.01 0.06
+  rotation 0 0 1 0.2
+  markerImg "customSDK/SDK_2Circles.png"
+  width 0.15
+  height 0.12
+  markerWidth 0.05
+  markerHeight 0.03
+}
+SolidBox {
+  translation -0.1710205 0.357748 6.66134e-16
+  size 0.3 0.05 0.2
+}
+
+DEF Cozmo_2 CozmoBot2 {
+  translation 0 0 0
+  rotation 0 1 0 0
+  name "CozmoBot_1"
+  headAngle 0
+  liftAngle 0
+}
+WebotsKeyboardController {
+  startFreeplayModeImmediately TRUE
+  robotVolume 0
+  userName "Billy"
+  filterLogs TRUE
+  autoConnect TRUE
+}
+CozmoVizDisplay {
+}

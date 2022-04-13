@@ -1,0 +1,49 @@
+#VRML_SIM V7.3.0 utf8
+PROTO CircularArc [
+  field SFVec3f translation 0 0 0
+  field SFRotation rotation 0 0 1 0
+
+  # The number of lines used to represent the arc (if it were a full circle)
+  field SFInt32 subdivision 30
+
+  field SFFloat xOffset 0.0
+  field SFFloat yOffset 0.0
+  field SFFloat zOffset 0.0
+  
+  field SFFloat radius     0.0
+  field SFFloat startAngle 0.0
+  field SFFloat sweepAngle 1.0
+
+  field SFColor color 0 0 0
+]
+{
+Transform {
+  translation IS translation
+  rotation IS rotation
+  
+  children [
+    Shape {
+      geometry IndexedLineSet {
+        coord Coordinate {
+          point [
+            %{ nLines = math.floor(math.abs(fields.sweepAngle.value) * fields.subdivision.value / (2 * math.pi)) }%
+            %{ for i=0, nLines do }%
+              %{ th = fields.startAngle.value + fields.sweepAngle.value * i / nLines }%
+              %{= fields.xOffset.value + fields.radius.value * math.cos(th) }% %{= fields.yOffset.value + fields.radius.value * math.sin(th) }% %{= fields.zOffset.value }%
+            %{ end }%
+          ]
+        }
+        
+        coordIndex [%{ for i=0, nLines do }% %{=i}% %{ end }% -1]
+      }
+      appearance Appearance {
+        material Material {
+          ambientIntensity 1.0
+          diffuseColor IS color
+          emissiveColor IS color
+        }
+      }
+    }
+  ]
+} 
+}

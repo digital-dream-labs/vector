@@ -1,0 +1,35 @@
+#VRML_SIM V7.3.0 utf8
+PROTO PoseMarker [
+  field SFVec3f translation 0 0 0
+  field SFRotation rotation 0 0 1 0
+
+  field SFColor color 0 0 0
+  
+  field SFFloat zOffset 0
+]
+{
+Transform {
+  translation IS translation
+  rotation IS rotation
+  
+  children [
+    Transform {
+      translation 0 0 %{=fields.zOffset.value}%
+      rotation 0 0 1 -1.570796
+      children [
+        Shape {
+          geometry Cone {
+            bottomRadius 0.010
+            height 0.030
+          }
+          appearance Appearance {
+            material Material {
+              diffuseColor IS color
+            }
+          }
+        }
+      ]
+    }
+  ]
+} 
+}

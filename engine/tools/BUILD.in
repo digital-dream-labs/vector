@@ -1,0 +1,5 @@
+cxx_project(
+  name = 'vic-engine',
+  srcs = cxx_src_glob(['engined']),
+  headers = cxx_header_glob(['engined'])
+)

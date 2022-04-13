@@ -1,0 +1,275 @@
+#VRML_SIM V7.3.0 utf8
+
+PROTO CozmoMatHuge [
+  field SFColor Color 1.0000 1.0000 1.0000
+]
+{
+Solid {
+  rotation 0 1 0 0
+  translation 0 0 -0.0025
+  children [
+    Shape {
+      appearance Appearance {
+         material Material {
+		   diffuseColor IS Color
+         }
+      }
+      geometry Box {
+        size 100 100 0.005
+      }
+    }
+    Solid {
+	    translation -0.2000 -0.2000 0.0025
+	    rotation 0 0 1 0.000000
+	    children [
+		  Shape {
+		    appearance Appearance {
+			  texture ImageTexture { url ["CozmoEngineProtos-DO_NOT_MODIFY/textures/mat/ankiMat1.png"] }
+			  material Material { diffuseColor 1 1 1 }
+		    }
+		    geometry Box {
+            size 0.030000 0.030000 0.00001
+  		}
+		  }
+	    ]
+    }
+    Solid {
+	    translation -0.0667 -0.2000 0.0025
+	    rotation 0 0 1 0.000000
+	    children [
+		  Shape {
+		    appearance Appearance {
+			  texture ImageTexture { url ["CozmoEngineProtos-DO_NOT_MODIFY/textures/mat/ankiMat2.png"] }
+			  material Material { diffuseColor 1 1 1 }
+		    }
+		    geometry Box {
+            size 0.030000 0.030000 0.00001
+  		}
+		  }
+	    ]
+    }
+    Solid {
+	    translation 0.0667 -0.2000 0.0025
+	    rotation 0 0 1 0.000000
+	    children [
+		  Shape {
+		    appearance Appearance {
+			  texture ImageTexture { url ["CozmoEngineProtos-DO_NOT_MODIFY/textures/mat/ankiMat3.png"] }
+			  material Material { diffuseColor 1 1 1 }
+		    }
+		    geometry Box {
+            size 0.030000 0.030000 0.00001
+  		}
+		  }
+	    ]
+    }
+    Solid {
+	    translation 0.2000 -0.2000 0.0025
+	    rotation 0 0 1 0.000000
+	    children [
+		  Shape {
+		    appearance Appearance {
+			  texture ImageTexture { url ["CozmoEngineProtos-DO_NOT_MODIFY/textures/mat/ankiMat4.png"] }
+			  material Material { diffuseColor 1 1 1 }
+		    }
+		    geometry Box {
+            size 0.030000 0.030000 0.00001
+  		}
+		  }
+	    ]
+    }
+    Solid {
+	    translation -0.2000 -0.0667 0.0025
+	    rotation 0 0 1 0.000000
+	    children [
+		  Shape {
+		    appearance Appearance {
+			  texture ImageTexture { url ["CozmoEngineProtos-DO_NOT_MODIFY/textures/mat/ankiMat5.png"] }
+			  material Material { diffuseColor 1 1 1 }
+		    }
+		    geometry Box {
+            size 0.030000 0.030000 0.00001
+  		}
+		  }
+	    ]
+    }
+    Solid {
+	    translation -0.0667 -0.0667 0.0025
+	    rotation 0 0 1 0.000000
+	    children [
+		  Shape {
+		    appearance Appearance {
+			  texture ImageTexture { url ["CozmoEngineProtos-DO_NOT_MODIFY/textures/mat/ankiMat6.png"] }
+			  material Material { diffuseColor 1 1 1 }
+		    }
+		    geometry Box {
+            size 0.030000 0.030000 0.00001
+  		}
+		  }
+	    ]
+    }
+    Solid {
+	    translation 0.0667 -0.0667 0.0025
+	    rotation 0 0 1 0.000000
+	    children [
+		  Shape {
+		    appearance Appearance {
+			  texture ImageTexture { url ["CozmoEngineProtos-DO_NOT_MODIFY/textures/mat/ankiMat7.png"] }
+			  material Material { diffuseColor 1 1 1 }
+		    }
+		    geometry Box {
+            size 0.030000 0.030000 0.00001
+  		}
+		  }
+	    ]
+    }
+    Solid {
+	    translation 0.2000 -0.0667 0.0025
+	    rotation 0 0 1 0.000000
+	    children [
+		  Shape {
+		    appearance Appearance {
+			  texture ImageTexture { url ["CozmoEngineProtos-DO_NOT_MODIFY/textures/mat/ankiMat8.png"] }
+			  material Material { diffuseColor 1 1 1 }
+		    }
+		    geometry Box {
+            size 0.030000 0.030000 0.00001
+  		}
+		  }
+	    ]
+    }
+    Solid {
+	    translation -0.2000 0.0667 0.0025
+	    rotation 0 0 1 0.000000
+	    children [
+		  Shape {
+		    appearance Appearance {
+			  texture ImageTexture { url ["CozmoEngineProtos-DO_NOT_MODIFY/textures/mat/ankiMat9.png"] }
+			  material Material { diffuseColor 1 1 1 }
+		    }
+		    geometry Box {
+            size 0.030000 0.030000 0.00001
+  		}
+		  }
+	    ]
+    }
+    Solid {
+	    translation -0.0667 0.0667 0.0025
+	    rotation 0 0 1 0.000000
+	    children [
+		  Shape {
+		    appearance Appearance {
+			  texture ImageTexture { url ["CozmoEngineProtos-DO_NOT_MODIFY/textures/mat/ankiMat10.png"] }
+			  material Material { diffuseColor 1 1 1 }
+		    }
+		    geometry Box {
+            size 0.030000 0.030000 0.00001
+  		}
+		  }
+	    ]
+    }
+    Solid {
+	    translation 0.0667 0.0667 0.0025
+	    rotation 0 0 1 0.000000
+	    children [
+		  Shape {
+		    appearance Appearance {
+			  texture ImageTexture { url ["CozmoEngineProtos-DO_NOT_MODIFY/textures/mat/ankiMat11.png"] }
+			  material Material { diffuseColor 1 1 1 }
+		    }
+		    geometry Box {
+            size 0.030000 0.030000 0.00001
+  		}
+		  }
+	    ]
+    }
+    Solid {
+	    translation 0.2000 0.0667 0.0025
+	    rotation 0 0 1 0.000000
+	    children [
+		  Shape {
+		    appearance Appearance {
+			  texture ImageTexture { url ["CozmoEngineProtos-DO_NOT_MODIFY/textures/mat/ankiMat12.png"] }
+			  material Material { diffuseColor 1 1 1 }
+		    }
+		    geometry Box {
+            size 0.030000 0.030000 0.00001
+  		}
+		  }
+	    ]
+    }
+    Solid {
+	    translation -0.2000 0.2000 0.0025
+	    rotation 0 0 1 0.000000
+	    children [
+		  Shape {
+		    appearance Appearance {
+			  texture ImageTexture { url ["CozmoEngineProtos-DO_NOT_MODIFY/textures/mat/ankiMat13.png"] }
+			  material Material { diffuseColor 1 1 1 }
+		    }
+		    geometry Box {
+            size 0.030000 0.030000 0.00001
+  		}
+		  }
+	    ]
+    }
+    Solid {
+	    translation -0.0667 0.2000 0.0025
+	    rotation 0 0 1 0.000000
+	    children [
+		  Shape {
+		    appearance Appearance {
+			  texture ImageTexture { url ["CozmoEngineProtos-DO_NOT_MODIFY/textures/mat/ankiMat14.png"] }
+			  material Material { diffuseColor 1 1 1 }
+		    }
+		    geometry Box {
+            size 0.030000 0.030000 0.00001
+  		}
+		  }
+	    ]
+    }
+    Solid {
+	    translation 0.0667 0.2000 0.0025
+	    rotation 0 0 1 0.000000
+	    children [
+		  Shape {
+		    appearance Appearance {
+			  texture ImageTexture { url ["CozmoEngineProtos-DO_NOT_MODIFY/textures/mat/ankiMat15.png"] }
+			  material Material { diffuseColor 1 1 1 }
+		    }
+		    geometry Box {
+            size 0.030000 0.030000 0.00001
+  		}
+		  }
+	    ]
+    }
+    Solid {
+	    translation 0.2000 0.2000 0.0025
+	    rotation 0 0 1 0.000000
+	    children [
+		  Shape {
+		    appearance Appearance {
+			  texture ImageTexture { url ["CozmoEngineProtos-DO_NOT_MODIFY/textures/mat/ankiMat16.png"] }
+			  material Material { diffuseColor 1 1 1 }
+		    }
+		    geometry Box {
+            size 0.030000 0.030000 0.00001
+  		}
+		  }
+	    ]
+    }
+
+  ] # Solid children
+
+  contactMaterial "cmat_floor"
+  boundingObject Transform {
+    rotation 1 0 0 1.5708
+    translation 0.5 0.5 0.0025
+    children [
+      Plane {
+      }
+    ]
+  }
+} # Solid
+
+} # Proto

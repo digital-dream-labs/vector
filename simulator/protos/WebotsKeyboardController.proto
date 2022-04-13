@@ -1,0 +1,282 @@
+PROTO WebotsKeyboardController [
+  field SFString name "WebotsKeyboardController"
+
+  # Volume
+  field SFFloat robotVolume 1.0
+
+  # Animation to send
+  field SFString animationToSendName "anim_neutral_eyes_01"
+  field SFInt32  animationNumLoops 1
+  field SFString idleAnimationName ""
+  field SFFloat  faceHue 0.566  # should be 0-1 
+  
+  # Should we enter 'freeplay' mode immediately upon startup?
+  # Note: This is for simulated robots only
+  field SFBool startFreeplayModeImmediately FALSE
+  
+  # Behavior to send
+  #  Use default "Wait" to put robot into standby
+  field SFString behaviorName "Wait"
+  field SFInt32  numBehaviorRuns 1
+
+  # Fake intent (user/cloud/etc) commands
+  # Send a fake intent to respond to. 
+  field SFString intent ""
+
+  field SFString emotionName "Stimulated"
+  field SFFloat emotionVal 1.0
+  field SFString emotionEvent "LookAtFaceVerified"
+
+  # Name to assign to current faceID
+  field SFString userName ""
+  
+  # ID to Store Enrollment as (0 just uses the ID of the face being enrolled)
+  field SFInt32 enrollToID 0
+
+  # ID to turn towards by pressing alt+f. If 0, turn towards the last face pose
+  field SFInt32 faceIDToTurnTowards 0
+
+  # whether or not to save the face to nvStorage
+  field SFBool saveFaceToRobot FALSE
+  
+  # String to say when using SayText
+  field SFString sayString "Hello"
+  
+  # Console name/value pair
+  field SFString consoleVarName ""
+  field SFString consoleVarValue ""
+
+  field SFBool filterLogs FALSE
+  field SFBool colorizeStderrOutput FALSE
+  
+  field SFVec3f translation 0 0 0.08
+  field SFRotation rotation 0 0 1 0
+
+  # Whether or not do deep roll as the rolling action
+  field SFBool  doDeepRoll FALSE
+
+  # Deep roll action params
+  # Can get rid of these once the maneuver is solid
+  field SFFloat rollLiftHeight_mm    35
+  field SFFloat rollDriveSpeed_mmps  50
+  field SFFloat rollDriveAccel_mmps2 40
+  field SFInt32 rollDriveDuration_ms 1500
+  field SFFloat rollBackupDist_mm    100
+
+  field SFColor poseMarkerDiffuseColor 0.1 0.8 0.1
+
+  # Slow speed in mm/s (hold shift)
+  field SFFloat driveSpeedSlow 20
+
+  # Normal speed in mm/s 
+  field SFFloat driveSpeedNormal 60 
+
+  # Turbo speed in mm/s (hold alt)
+  field SFFloat driveSpeedTurbo 150
+
+  # Drive acceleration
+  # 0 == instantaneous acceleration
+  field SFFloat driveAccel 0
+
+  # Whether or not to use DriveArc msg instead of
+  # DriveWheels msg to send arrow-key driving commands
+  field SFBool useDriveArc FALSE
+
+  # Point turn angle (deg) and speed (deg/s)
+  field SFFloat pointTurnAngle_deg        45
+  field SFFloat pointTurnSpeed_degPerSec  250
+  field SFFloat pointTurnAccel_degPerSec2 10000 
+  
+  # Path speeds
+  field SFFloat pathSpeed_mmps  100
+  field SFFloat pathAccel_mmps2 200
+  field SFFloat pathDecel_mmps2 500
+  field SFFloat pathPointTurnSpeed_radPerSec 2.0
+  field SFFloat pathPointTurnAccel_radPerSec2 10
+  field SFFloat pathPointTurnDecel_radPerSec2 10
+  field SFFloat pathReverseSpeed_mmps 80
+
+  # Docking speed/accel
+  field SFFloat dockSpeed_mmps  60
+  field SFFloat dockAccel_mmps2 200
+  field SFFloat dockDecel_mmps2 500
+
+  # Value between 0 and 1 which determines how much the robot turns with 
+  # the left/right arrow keys when going forward or backward.
+  # At 1, it will turn one wheel at driveSpeed and the other not at all.
+  # At 0, it won't turn at all.
+  field SFFloat steeringCurvature 1.0
+
+  # Whether or not to use the specified approachAngle
+  field SFBool useApproachAngle FALSE
+  field SFFloat approachAngle_deg 0
+
+  # Whether or not to use the exact rotation as specified in exactPlacementRotation
+  field SFBool useExactPlacementRotation FALSE
+  field SFRotation exactPlacementRotation 0 0 1 0
+
+  # Offset at which to place an object on the ground
+  # when performing pickAndPlace on an object with placeObjectOnGroundIfCarrying enabled.
+  # Only works if actually carrying an object!
+  field SFFloat placeOnGroundOffsetX_mm 88
+
+  # The desired distance between robot origin and the marker face on 
+  # AlignWithObject action
+  field SFFloat alignWithObjectDistToMarker_mm 20
+
+  # Hacky way for me to modify values that I want to send to robot via keyboard controller
+  field SFFloat wheelKp 0.0005
+  field SFFloat wheelKi 0.00005
+  field SFFloat wheelMaxErrorSum 5000
+
+  field SFFloat headKp 4
+  field SFFloat headKi 0.02
+  field SFFloat headKd 4000
+  field SFFloat headMaxErrorSum 10
+
+  field SFFloat liftKp 3
+  field SFFloat liftKi 0.1
+  field SFFloat liftKd 3000
+  field SFFloat liftMaxErrorSum 5
+
+  field SFFloat pointTurnKp 450
+  field SFFloat pointTurnKi 20
+  field SFFloat pointTurnKd 4000
+  field SFFloat pointTurnMaxErrorSum 5
+
+  field SFFloat headSpeedDegPerSec 360
+  field SFFloat headAccelDegPerSec2 2500
+
+  # If non-zero, this is how much time it will take for the head to move
+  # to a commanded angle (via keys '4', '5', and '6')
+  field SFFloat headDurationSec 0
+
+  field SFFloat liftSpeedDegPerSec 120
+  field SFFloat liftAccelDegPerSec2 600
+  field SFFloat liftTargetAngleDeg 0
+
+  # If non-zero, this is how much time it will take for the lift to move
+  # to a commanded height (via keys '1', '2', and '3')
+  field SFFloat liftDurationSec 0
+
+  field SFFloat steerK1 0.1
+  field SFFloat steerK2 12
+  field SFFloat steerDistOffsetCap_mm 20
+  field SFFloat steerAngOffsetCap_rad 0.5
+
+  # Camera display params
+  # Note that camera display is OFF by default.
+  # Width and height must be > 0 to enable.
+  field SFInt32 uiCamDisplayWidth  0
+  field SFInt32 uiCamDisplayHeight 0
+
+  # Vision system params
+  field SFInt32 camera_autoexposureOn 1
+  field SFFloat camera_exposureTime 0.2
+  field SFInt32 camera_integerCountsIncrement 3
+  field SFFloat camera_minExposureTime 0.02
+  field SFFloat camera_maxExposureTime 0.98
+  field SFInt32 camera_highValue 250  
+  field SFFloat camera_percentileToMakeHigh 0.97
+  field SFInt32 camera_limitFramerate 1
+
+  # Test mode params
+  field SFInt32 driveTest_flags 1
+  field SFInt32 driveTest_wheel_power 20
+  field SFInt32 liftTest_flags 0  
+  field SFInt32 liftTest_nodCycleTimeMS 2000  
+  field SFInt32 liftTest_powerPercent 0             # 0-100: If 0 then cycles through increasing power levels
+  field SFInt32 headTest_flags 0
+  field SFInt32 headTest_nodCycleTimeMS 2000  
+  field SFInt32 headTest_powerPercent 0             # 0-100: If 0 then cycles through increasing power levels
+
+  field SFString drivingStartAnim ""
+  field SFString drivingLoopAnim ""
+  field SFString drivingEndAnim ""
+
+  field SFBool  enableAutoExposure TRUE
+  field SFFloat exposure_ms 16.8
+  field SFFloat gain 1.0
+
+  # Redirect viz to this host upon connect
+  field SFBool  redirectViz TRUE
+  
+  # Cozmo engine location
+  field SFString engineIP "127.0.0.1"
+
+  # Cozmo engine locale
+  field SFString locale "en-US"
+
+  # if false, wait until the user pressed Shift+Enter to connect and start the engine
+  # (this gives another thing, e.g. Unity, a chance to connect first)
+  field SFBool autoConnect TRUE
+  
+  # Engine's RNG seed
+  field SFInt32  randomSeed 0
+]
+{
+Supervisor {
+
+  translation IS translation
+  rotation IS rotation
+  
+  children [
+    
+    Transform {
+      translation -0.015 0 0
+      rotation 0 0 1 -1.5707963
+      children [
+        Shape {
+          appearance Appearance {
+            material Material {
+              diffuseColor IS poseMarkerDiffuseColor
+            }
+          }
+          geometry Cone {
+            bottomRadius 0.01
+            height 0.03
+          }
+        }
+      ]
+    }
+      
+    %{ if fields.uiCamDisplayWidth.value > 0 and fields.uiCamDisplayHeight.value > 0 then }%
+    DEF CAM_DISPLAY_PLANE Display {
+      children [
+        DEF SHAPE Shape {
+          appearance Appearance {
+            material Material {
+              diffuseColor 1 1 1
+              specularColor 0 0 0
+              transparency 0.6
+            }
+          }
+          geometry Plane {
+	    # Make display plane have no dims in 3D view so as to be invisible
+	    size 0 0
+          }
+        }
+      ]
+      name "uiCamDisplay"
+
+      width  IS uiCamDisplayWidth
+      height IS uiCamDisplayHeight
+    }
+    %{ end }%
+  ]
+  name IS name
+  controller "webotsCtrlKeyboard"
+
+  # append optional command line parameters
+  %{ ctrlArgs="" }%
+  %{ if fields.filterLogs.value then }%
+    %{ ctrlArgs = ctrlArgs .. " --applyLogFilter"}%
+  %{ end }%
+  %{ if fields.colorizeStderrOutput.value then }%
+    %{ ctrlArgs = ctrlArgs .. " --colorizeStderrOutput"}%
+  %{ end }%
+
+  controllerArgs "%{=ctrlArgs}%"
+
+} # Supervisor definition
+} # PROTO definition

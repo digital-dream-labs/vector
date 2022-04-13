@@ -1,0 +1,146 @@
+#VRML_SIM V7.3.0 utf8
+
+PROTO CozmoVizDisplay 
+[ 
+  field SFVec3f translation 0 0 0
+  field SFRotation rotation 0 0 1 0
+
+  # Resolution of incoming camera images.
+  # Set this to match IMG_STREAM_RES in cozmoConfig.h
+  field SFString streamResolution "QVGA"
+
+  field SFBool filterLogs FALSE
+  field SFBool colorizeStderrOutput FALSE
+  field SFInt32 numBehaviorStackLines 18
+  field SFInt32 numVisionModeLines 32
+
+  field SFInt32 numDebugImageDisplays 0 # Vision debug displays in addition to the camera
+  
+  field SFInt32 navMapSize 1500        # Size of the nav map display in pixels. 1 pixel = 1 mm.
+  field SFFloat navMapTransparency 0.0 # The overall transparency of the nav map display
+  
+  field SFFloat drawObjectsRate_sec 0.25 # How often to update rendering of objects in the 3D view. 0.0 means as fast as possible.
+]
+{
+Supervisor {
+  
+  translation IS translation
+  rotation IS rotation
+  
+  children [
+    Display {
+      name "nav_map"
+    
+      translation 0 0 0.002
+      rotation 1 0 0 1.5708
+      width %{= fields.navMapSize.value}%
+      height %{= fields.navMapSize.value}%
+      
+      children [
+        Shape {
+          appearance Appearance {
+            texture ImageTexture {
+              filtering 0
+            }
+            material Material {
+              transparency IS navMapTransparency
+            }
+          }
+          geometry Plane {
+            size %{= fields.navMapSize.value  / 1000 }% %{= fields.navMapSize.value  / 1000 }%
+          }
+          castShadows FALSE
+          isPickable FALSE
+        }
+      ]
+      
+    }
+  
+    Display {
+      # Hide display plane far away
+      translation 1000 0.1 0
+
+      name "cozmo_docking_display"
+      width 200
+      height 240
+    }
+
+
+    Display {
+      # Hide display plane far away
+      translation 1000 0.1 0
+      
+      name "cozmo_viz_display"
+      width 400
+      height 320
+    }
+
+    # Create camera display, plus N debug displays (0 == camera display, by convention)
+    %{ for iDisplay=0,fields.numDebugImageDisplays.value do }%
+      Display {
+        # Hide display plane far away
+        translation 1000 0.1 0
+
+        name "%{= 'cozmo_debug_image_display' .. tostring(iDisplay) }%"
+
+        %{ if fields.streamResolution.value == "VGA" then }%
+        width 640
+        height 480
+        %{ elseif fields.streamResolution.value == "QVGA" then }%
+        width 320
+        height 240
+        %{ elseif fields.streamResolution.value == "QQVGA" then }%
+        width 160
+        height 120
+        %{ elseif fields.streamResolution.value == "QQQVGA" then }%
+        width 80
+        height 60
+        %{ elseif fields.streamResolution.value == "CVGA" then }%
+        width 400
+        height 296
+        %{ elseif fields.streamResolution.value == "HD" then }%
+        width 1280
+        height 720
+        %{ elseif fields.streamResolution.value == "NHD" then }%
+        width 640
+        height 360
+        %{ end }%
+      }
+    %{ end }%  # for iDisplay loop
+    Display {
+      # Hide display plane far away
+      translation 1000 0.1 0
+
+      name "victor_behavior_stack_display"
+      width 220
+      # assumes size 8 font
+      height %{= fields.numBehaviorStackLines.value * 10 + 16 }%
+    }
+    # Define VisionModeDebug display 
+    Display {
+      #Hide display plane far away
+      translation 1000 0.1 0
+
+      name "victor_vision_mode_display"
+      width 240
+      #assumes size 8 font
+      height %{= fields.numVisionModeLines.value * 10 + 16 }%
+    }
+  ]
+
+  controller "webotsCtrlViz"
+
+  # append optional command line parameters
+  %{ ctrlArgs="" }%
+  %{ if fields.filterLogs.value then }%
+    %{ ctrlArgs = ctrlArgs .. " --applyLogFilter"}%
+  %{ end }%
+  %{ if fields.colorizeStderrOutput.value then }%
+    %{ ctrlArgs = ctrlArgs .. " --colorizeStderrOutput"}%
+  %{ end }%
+
+  controllerArgs "%{=ctrlArgs}%"
+
+} # Supervisor
+
+} # PROTO

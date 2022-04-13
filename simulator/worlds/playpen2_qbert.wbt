@@ -1,0 +1,120 @@
+#VRML_SIM R2018a utf8
+CozmoWorldInfo {
+}
+Viewpoint {
+  orientation -0.03071362816012874 0.5124485954950799 0.8581684624946091 3.2646525642525495
+  position -0.007745254017099024 1.3786671981757321 0.9294647170812337
+}
+VictorCharger {
+  platformTiltAngle 0
+  translation -0.19 0 0
+  rotation 0 0 0.9999999999999999 4.712388966
+}
+Background {
+  skyColor [
+    0.4 0.7 1
+  ]
+}
+DirectionalLight {
+  ambientIntensity 0.5
+  direction 2 -2 -1
+  intensity 0.5
+}
+DirectionalLight {
+  ambientIntensity 0.5
+  direction -2 -2 -1
+  intensity 0.5
+}
+DirectionalLight {
+  ambientIntensity 0.5
+  direction 0 2 -1
+  intensity 0.5
+}
+FactoryTestFixtureFloor {
+  xSize 0.8
+  ySize 0.4
+  wallHeight 0
+}
+WhiskeyBot {
+  translation -0.11428466 0 0.00029056594
+  filterLogs TRUE
+  colorizeStderrOutput TRUE
+}
+WebotsKeyboardController {
+  robotVolume 0
+  behaviorName "lookAround"
+  userName "Billy"
+  filterLogs TRUE
+  translation -0.38 0 0.08
+}
+CozmoVizDisplay {
+  streamResolution "NHD"
+  filterLogs TRUE
+}
+Transform {
+  translation 0.05 0 -0.01
+  rotation 0 0 1 0
+  children [
+    Transform {
+      translation 0.048875267 0.071 -0.10667824
+      rotation 0 -1 0 0.99483767
+      children [
+        Transform {
+          translation 0.1 -0.1244 0.208
+          rotation 0 0 1 0.78540031
+          children [
+            CalibrationMarkerStructure_Qbert {
+              translation 0 -0.02 0.03
+              numCubes 6
+              listOfMarkers "\"\", \"customSDK/SDK_3Circles.png\", \"\", \"customSDK/SDK_5Circles.png\", \"customSDK/SDK_2Diamonds.png\", \"customSDK/SDK_3Diamonds.png\", \"customSDK/SDK_4Diamonds.png\", \"customSDK/SDK_5Diamonds.png\", \"customSDK/SDK_2Hexagons.png\", \"\", \"symbols/arrow.png\",\"\","
+            }
+            CalibrationMarkerStructure_Qbert {
+              translation 0 -0.04 0.05
+              numCubes 7
+              listOfMarkers "\"\", \"customSDK/SDK_5Hexagons.png\", \"\", \"customSDK/SDK_3Triangles.png\", \"customSDK/SDK_4Triangles.png\", \"customSDK/SDK_5Triangles.png\", \"symbols/bullseye2.png\", \"symbols/star5.png, \"lightCubes/lightCubeK_top.png\", \"lightCubes/lightCubeJ_front.png, \"customSDK/SDK_2Circles.png\", \"\",\"customSDK/SDK_4Hexagons.png\",\"\","
+            }
+            CalibrationMarkerStructure_Qbert {
+              translation 0 -0.06 0.07
+              numCubes 8
+              listOfMarkers "\"\", \"customSDK/SDK_2Triangles.png\", \"\", \"lightCubes/lightCubeJ_bottom.png\", \"\", \"lightCubes/lightCubeI_top.png\", \"lightCubes/lightCubeI_back.png\", \"lightCubes/lightCubeI_bottom.png\", \"lightCubes/lightCubeI_front.png\", \"lightCubes/lightCubeI_left.png\", \"lightCubes/lightCubeI_right.png\", \"customSDK/SDK_3Hexagons.png\", \"lightCubes/lightCubeJ_back.png\", \"\",\"customSDK/SDK_4Circles.png\",\"\","
+            }
+            CalibrationMarkerStructure_Qbert {
+              listOfMarkers "\"\", \"lightCubes/lightCubeJ_left.png\", \"lightCubes/lightCubeJ_right.png\", \"lightCubes/lightCubeJ_top.png\", \"lightCubes/lightCubeK_back.png\", \"lightCubes/lightCubeK_bottom.png\", \"lightCubes/lightCubeK_front.png\", \"lightCubes/lightCubeK_left.png\", \"lightCubes/lightCubeK_right.png\", \"\","
+            }
+          ]
+          rotationStep 0.01
+        }
+      ]
+    }
+  ]
+}
+LightCube {
+  translation 0.312 0 0.022
+}
+Block1x1_NotActive {
+  translation 0.165 -0.114 0.025
+  rotation 0 0 -1 1.5707963
+  blockColor 1 1 1
+  width 0.03
+  markerImg_front "lightCubes/lightCubeK_bottom.png"
+}
+CustomWall {
+  translation 0.39373625 0.00071928314 0.02
+  rotation 0 0 1 6.2831853
+  width 0.2
+}
+CustomWall {
+  translation 0.073008662 0.105 0.02
+  rotation 0 0 -1 1.5707963
+  width 0.1
+}
+CustomWall {
+  translation 0.14300866599999998 -0.10499999812435722 0.13999999999999999
+  rotation 0 0 -1 1.5707963
+  width 0.4
+  height 0.2749
+}
+Ruler {
+  translation -0.01119277 0.056189919 0.010000093
+  rotation 1.2062520020241202e-7 0.7071067711865424 0.7071067911865424 3.1415929
+}

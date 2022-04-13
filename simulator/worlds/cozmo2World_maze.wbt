@@ -1,0 +1,145 @@
+#VRML_SIM V8.5 utf8
+CozmoWorldInfo {
+}
+Viewpoint {
+  orientation 0.01489485 -0.014996013 0.99977661 4.7051859
+  position 0.17007277 0.13546113 5.4598802
+}
+Background {
+  skyColor [
+    0.4 0.7 1
+  ]
+}
+DirectionalLight {
+  ambientIntensity 0.5
+  direction 2 -2 -1
+  intensity 0.5
+}
+DirectionalLight {
+  ambientIntensity 0.5
+  direction -2 -2 -1
+  intensity 0.5
+}
+DirectionalLight {
+  ambientIntensity 0.5
+  direction 0 2 -1
+  intensity 0.5
+}
+CozmoMat {
+  showMarkers FALSE
+  xSize 2
+  ySize 2
+}
+SolidBox {
+  translation -0.48605021 0.53376044 0.05
+  size 0.02 0.5 0.1
+}
+SolidBox {
+  translation 0.0048845214 0.53412682 0.05
+  size 0.02 0.5 0.1
+}
+SolidBox {
+  translation -0.48834902 0.033980056 0.05
+  size 0.02 0.5 0.1
+}
+SolidBox {
+  translation 0.24019058 0.26729289 0.05
+  size 0.02 0.5 0.1
+}
+SolidBox {
+  translation 0.48923685 0.52224016 0.05
+  size 0.02 0.5 0.1
+}
+SolidBox {
+  translation 0.71817571 0.52660604 0.05
+  size 0.02 0.5 0.1
+}
+SolidBox {
+  translation 0.0018062177 0.9913746 0.05
+  rotation 0 0 1 1.5707963
+  size 0.02 2 0.1
+}
+SolidBox {
+  translation -0.11612253 -0.61670591 0.05
+  rotation 0 0 1 1.5707963
+  size 0.02 1.75 0.1
+}
+SolidBox {
+  translation 0.0068620532 -0.9909073 0.05
+  rotation 0 0 1 1.5707963
+  size 0.02 2 0.1
+}
+SolidBox {
+  translation 0.98904403 0.00067622369 0.05
+  size 0.02 2 0.1
+}
+SolidBox {
+  translation -0.98874982 0.0029188722 0.05
+  size 0.02 2 0.1
+}
+SolidBox {
+  translation -0.34934075 -0.23082181 0.05
+  rotation -1.2246468e-16 -1.2246468e-16 -1 1.5707963
+  size 0.02 0.75 0.1
+}
+SolidBox {
+  translation 0.60996679 0.01881173 0.05
+  rotation -1.2246468e-16 -1.2246468e-16 -1 1.5707963
+  size 0.02 0.75 0.1
+}
+SolidBox {
+  translation -0.74070516 0.5340405 0.05
+  rotation -1.2246468e-16 -1.2246468e-16 -1 1.5707963
+  size 0.02 0.5 0.1
+}
+SolidBox {
+  translation 0.24743031 0.77218553 0.05
+  rotation -1.2246468e-16 -1.2246468e-16 -1 1.5707963
+  size 0.02 0.5 0.1
+}
+SolidBox {
+  translation -0.24387117 0.29076459 0.05
+  rotation -1.2246468e-16 -1.2246468e-16 -1 1.5707963
+  size 0.02 0.5 0.1
+}
+SolidBox {
+  translation -0.35413552 0.77491768 0.05
+  rotation -1.2246468e-16 -1.2246468e-16 -1 1.5707963
+  size 0.02 0.25 0.1
+}
+SolidBox {
+  translation 0.83949202 0.77298908 0.05
+  rotation -1.2246468e-16 -1.2246468e-16 -1 1.5707963
+  size 0.02 0.25 0.1
+}
+LightCube {
+  translation -0.54820241 0.58985791 0.022
+  rotation 0 0 1 0.523599
+  colorizeStderrOutput TRUE
+}
+LightCube {
+  translation 0.30768196 -0.18417264 0.0219929
+  rotation 1.39537e-05 -1.83704e-06 1 0.261799
+  objectType "Block_LIGHTCUBE3"
+  colorizeStderrOutput TRUE
+}
+LightCube {
+  translation -0.30623531 0.42059343 0.0219929
+  rotation 0 0 -1 6.23319
+  objectType "Block_LIGHTCUBE2"
+  colorizeStderrOutput TRUE
+}
+CozmoBot2 {
+  translation -0.78730284 0.77366239 -3.5527137e-15
+  filterLogs TRUE
+  colorizeStderrOutput TRUE
+}
+WebotsKeyboardController {
+  translation -0.78288058 0.37264738 0.08
+  rotation 0 0 1 1.5707963
+  colorizeStderrOutput TRUE
+}
+CozmoVizDisplay {
+  streamResolution "NHD"
+  colorizeStderrOutput TRUE
+}

@@ -1,0 +1,50 @@
+#VRML_SIM V8.2.1 utf8
+CozmoWorldInfo {
+}
+Viewpoint {
+  orientation -0.461477 0.27907 0.842116 5.03763
+  position -0.8962 -0.426008 1.32598
+}
+Background {
+  skyColor [
+    0.4 0.7 1
+  ]
+}
+DirectionalLight {
+  ambientIntensity 0.5
+  direction 2 -2 -1
+  intensity 0.5
+}
+DirectionalLight {
+  ambientIntensity 0.5
+  direction -2 -2 -1
+  intensity 0.5
+}
+DirectionalLight {
+  ambientIntensity 0.5
+  direction 0 2 -1
+  intensity 0.5
+}
+CozmoMat {
+  showMarkers FALSE
+}
+LightCube {
+  translation 0.15 0 0.022
+}
+LightCube {
+  translation -0.15 -0.15 0.022
+  objectType "Block_LIGHTCUBE2"
+}
+LightCube {
+  translation -0.3 0 0.022
+  objectType "Block_LIGHTCUBE3"
+}
+%COZMOBOT% {
+  name "CozmoBot_1"
+}
+BuildServerTestController {
+  controllerArgs "%COZMO_SIM_TEST%"
+#  controllerArgs "CST_RobotKidnappingComplex"
+}
+CozmoVizDisplay {
+}

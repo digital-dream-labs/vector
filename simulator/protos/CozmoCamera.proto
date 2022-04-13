@@ -1,0 +1,24 @@
+PROTO CozmoCamera [
+  field SFString name "HeadCamera"
+  
+  field SFVec3f    translation 0 0 0
+  field SFRotation rotation 0 0 1 0
+
+  field SFInt32  cameraWidth  640
+  field SFInt32  cameraHeight 360
+  # field SFFloat  fieldOfView  2.09 # 120 degrees
+  field SFFloat  fieldOfView  1.6445 # 94 degrees
+]
+{
+  Camera {
+    name IS name
+    # Note: 8.8mm to lens face, 5.8mm to PCB mount, optical center = ?
+    translation IS translation
+    rotation    IS rotation
+    width       IS cameraWidth
+    height      IS cameraHeight
+    fieldOfView IS fieldOfView
+    near 0.005
+    antiAliasing TRUE
+  }    
+} # PROTO definition

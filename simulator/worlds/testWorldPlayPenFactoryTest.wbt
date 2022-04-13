@@ -1,0 +1,60 @@
+#VRML_SIM V8.2.1 utf8
+CozmoWorldInfo {
+}
+Viewpoint {
+  orientation -0.897673 0.17161 0.405874 5.40284
+  position -0.271161 -0.558512 0.61512
+}
+Background {
+  skyColor [
+    0.4 0.7 1
+  ]
+}
+DirectionalLight {
+  ambientIntensity 0.5
+  direction 2 -2 -1
+  intensity 0.5
+}
+DirectionalLight {
+  ambientIntensity 0.5
+  direction -2 -2 -1
+  intensity 0.5
+}
+DirectionalLight {
+  ambientIntensity 0.5
+  direction 0 2 -1
+  intensity 0.5
+}
+FactoryTestFixtureFloor {
+  slotCenterX 0.05
+}
+CalibrationFixture {
+}
+CozmoCharger {
+  translation -0.27 0.20 0
+}
+CozmoChargerSimple {
+  translation -0.2 0 0
+}
+Ruler {
+  translation 0.522149 -0.062404 -4.44089e-16
+  rotation 0 1 0 0
+}
+LightCube {
+  # translation 0 0.25 0.0219952   # Should be here
+  translation -0.05 0.25 0.0219952
+}
+%COZMOBOT% CozmoBot {
+  translation -0.13 0 0.001
+  name "CozmoBot_1"
+  #vizMode TRUE
+}
+BuildServerTestController {
+  controllerArgs "%COZMO_SIM_TEST%"
+}
+#WebotsKeyboardController {
+#  behaviorName "FactoryTest"
+#  #forceAddRobot TRUE
+#}
+CozmoVizDisplay {
+}

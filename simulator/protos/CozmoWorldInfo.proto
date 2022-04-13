@@ -1,0 +1,139 @@
+#VRML_SIM V8.0.5 utf8
+PROTO CozmoWorldInfo [
+  field SFString title ""
+  field MFString info [ "Cozmo generic world. All rights reserved. Copyright (c) Anki, Inc."
+					    "Author: Hanns Tappeiner <hanns@anki.com>"
+					    "Author: Andrew Stein <andrew@anki.com>"
+					    "Date: 02 Aug 2013"
+					  ]
+
+  field SFFloat basicTimeStep 5
+]
+{
+WorldInfo {
+  title IS title
+  info IS info
+  gravity 0 0 -9.81
+  physics "cozmo_physics"
+  basicTimeStep IS basicTimeStep
+  contactProperties [
+    DEF FLOOR_FRONTWHEEL ContactProperties {
+      material1 "cmat_floor"
+      material2 "highfriction"
+      coulombFriction [
+        20
+      ]
+      bounce 0
+    }
+    DEF RAMP_FRONTWHEEL ContactProperties {
+      material1 "cmat_ramp"
+      material2 "highfriction"
+      coulombFriction [
+        20
+      ]
+      bounce 0
+    }
+    DEF BLOCK_FRONTWHEEL ContactProperties {
+      material1 "cmat_block"
+      material2 "highfriction"
+      coulombFriction [
+        20
+      ]
+      bounce 0
+    }
+    DEF BLOCK_REARWHEEL ContactProperties {
+      material1 "cmat_block"
+      material2 "nofriction"
+      coulombFriction [
+        0.0001
+      ]
+      bounce 0
+    }
+    DEF FLOOR_REARWHEEL ContactProperties {
+      material1 "cmat_floor"
+      material2 "nofriction"
+      coulombFriction [
+        0.0001
+      ]
+      bounce 0
+    }
+    DEF RAMP_REARWHEEL ContactProperties {
+      material1 "cmat_ramp"
+      material2 "nofriction"
+      coulombFriction [
+        5
+      ]
+      bounce 0
+    }
+    DEF FLOOR_BLOCK ContactProperties {
+      material1 "cmat_floor"
+      material2 "cmat_block"
+      coulombFriction [
+        3
+      ]
+      bounce 0
+      softCFM 0.007
+    }
+    DEF BLOCK_BLOCK ContactProperties {
+      material1 "cmat_block"
+      material2 "cmat_block"
+      coulombFriction [
+        10
+      ]
+      bounce 0
+      softCFM 0.007
+    }
+    DEF RAMP_BLOCK ContactProperties {
+      material1 "cmat_ramp"
+      material2 "cmat_block"
+      coulombFriction [
+        10
+      ]
+      bounce 0
+    }
+    DEF RAMP_RAMP ContactProperties {
+      material1 "cmat_ramp"
+      material2 "cmat_ramp"
+      coulombFriction [
+        5000
+      ]
+      bounce 0
+    }
+    DEF FLOOR_RAMP ContactProperties {
+      material1 "cmat_ramp"
+      material2 "cmat_floor"
+      coulombFriction [
+        5000
+      ]
+      bounce 0
+    }
+    DEF LIFT_BLOCK ContactProperties {
+      material1 "cmat_lift"
+      material2 "cmat_block"
+      coulombFriction [
+        1
+      ]
+      bounce 0
+      softCFM 0.05
+    }
+    DEF LIFT_SOLIDBOX ContactProperties {
+      material1 "cmat_block"
+      material2 "soft_collision"
+      coulombFriction [
+        1
+      ]
+      bounce 0
+      softCFM 0.1
+    }
+    DEF CHARGER_TRACK ContactProperties {
+      material1 "charger"
+      material2 "highfriction"
+      coulombFriction [
+        .5
+      ]
+      bounce 0
+    }
+  ]
+} 
+
+}

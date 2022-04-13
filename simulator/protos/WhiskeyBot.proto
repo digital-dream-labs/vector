@@ -1,0 +1,1182 @@
+#VRML_SIM V7.3.0 utf8
+PROTO WhiskeyBot [
+  field SFString name "WhiskeyBot"
+  field SFInt32 robotID 0
+  field SFBool isWhiskey TRUE
+
+  field SFVec3f translation 0 0 0
+  field SFRotation rotation 0 0 1 0
+
+  field SFFloat headAngle          0
+  field SFFloat headAngle_lowLimit -0.383972 # 22 degrees down
+  field SFFloat headAngle_highLimit 0.785398 # 45 degrees up
+
+  field SFFloat liftAngle 0
+  field SFFloat liftAngle_lowLimit  -0.01  # Should be 0, but Webots needs it to be less than liftAngle
+  #field SFFloat liftAngle_highLimit 1.047  # 60 degrees up
+  field SFFloat liftAngle_highLimit 1.06
+
+  field SFBool filterLogs FALSE
+  field SFBool colorizeStderrOutput FALSE
+  field SFString controller "webotsCtrlRobot2"
+  field SFString controllerArgs ""
+
+  field SFColor bodyColor 0.92 0.92 0.8
+
+  # Set to TRUE if you just want to use the model for visualization.
+  field SFBool vizMode FALSE
+
+  # Tread wheel parameters
+  field SFFloat frontWheelRadiusM   0.0145
+  field SFFloat rearWheelRadiusM    0.01075
+  field SFFloat rearWheelDistToFrontWheelM 0.048
+
+  # The number of intermediate wheels to simulate in each tread between the two end wheels.
+  field SFInt32 numInterTreadWheels 2
+
+  # Used for animation tests, specify animation to test
+  field SFString animationTestName ""
+
+  # Press backpack button
+  field SFBool backpackButtonPressed FALSE
+
+  # Touch sensor
+  field SFBool touchSensorTouched FALSE
+
+  # Robot battery voltage
+  field SFFloat batteryVolts  4.2
+
+  # Rates at which battery voltage changes while on/off the charger
+  field SFFloat batteryChargeRate_voltsPerMin     0.09
+  field SFFloat batteryDischargeRate_voltsPerMin -0.02
+]
+{
+
+Supervisor {
+  translation IS translation
+  rotation IS rotation
+  name IS name
+
+  %{ if not fields.vizMode.value then }%
+
+    # append optional command line parameters
+    %{
+      if fields.filterLogs.value then end
+      if fields.colorizeStderrOutput.value then end
+      if fields.isWhiskey.value then end
+
+      local package = require('package')
+      -- Directly append our custom module path to the package search paths
+      -- This will allow 'require' to find our module without the search path getting
+      -- mangled where all `.` are replaced with `/`
+      package.path = context.project_path .. "protos/lua/?.lua;" .. package.path
+
+      protoHelper = require("protoHelper")
+      ctrlArgs = protoHelper.setCtrlOptArgs(fields)
+    }%
+
+    controllerArgs "%{=ctrlArgs}%"
+
+    controller IS controller
+  %{ else }%
+    controller ""
+    controllerArgs ""
+  %{ end }%
+
+  %{ if not fields.vizMode.value then }%
+    physics Physics {
+      density 0.1  # This value needs to be small for some reason otherwise it starts doing the slow-mo rocking thing
+      #mass 0.17 # about 6 ounces
+    }
+  %{ end }%
+
+  children [
+    Transform {
+      translation 0 0 0.0142 # wheel radius
+      children [
+
+        %{ if not fields.vizMode.value then }%
+
+        # Are these still needed?
+        GPS {
+          name "gps"
+          translation 0 0 0
+        }
+        Compass {
+          name "compass"
+        }
+
+        # TODO: These cliff sensor positions need to be verified
+        CozmoCliffSensor {
+          name "cliffSensorFL"
+          translation 0 0.015 -0.013
+        }
+        CozmoCliffSensor {
+          name "cliffSensorFR"
+          translation 0 -0.015 -0.013
+        }
+        CozmoCliffSensor {
+          name "cliffSensorBL"
+          translation -0.045 0.015 -0.013
+        }
+        CozmoCliffSensor {
+          name "cliffSensorBR"
+          translation -0.045 -0.015 -0.013
+        }
+
+
+        # if you modify the length, you need to update FORWARD_RANGE_SENSOR_MIN/MAX_DISTANCE_MM
+        DistanceSensor {
+          name "forwardProxSensor"
+          translation 0.01 0 0
+          rotation 0 1 0 -0.10472
+          type "generic"
+          lookupTable [ 0.015    25  .0,
+                        0.400   410  .0,
+                        1.200  1210  .0] # offset for its own translation
+          numberOfRays 1
+          aperture 0.218
+        }
+
+        %{ end }%  # vizMode
+
+        DEF BODY Solid {
+          translation -0.015 0 0
+          name "Body"
+          children [
+            DEF BODY_SHAPE Group {
+              children [
+                Transform {
+                  translation 0.015 0 0
+                  children [
+                    Shape {
+                      appearance DEF MAIN_BODY_APPEARANCE Appearance {
+                        material Material {
+                          diffuseColor IS bodyColor
+                          shininess 0
+                        }
+                      }
+                      geometry Cylinder {
+                        height 0.0322
+                        radius 0.013
+                        subdivision 12
+                      }
+                    }
+                  ]
+                }
+                Transform {
+                  translation -0.015 0 0
+                  children [
+                    Shape {
+                      appearance USE MAIN_BODY_APPEARANCE
+                      geometry Cylinder {
+                        height 0.0322
+                        radius 0.013
+                        subdivision 12
+                      }
+                    }
+                  ]
+                }
+                Shape {
+                  appearance USE MAIN_BODY_APPEARANCE
+                  geometry Box {
+                    size 0.03 0.0322 0.026
+                  }
+                }
+
+              ] # BODY_SHAPE Group children
+            } # BODY_SHAPE Group
+
+            %{ if not fields.vizMode.value then }% # ChargeContacts
+            Transform {
+              translation 0 0 -0.013
+              rotation 0 1 0 3.14159
+              children [
+              Connector {
+                name        "ChargeContact"
+                model       "ChargeContact"
+                type        "symmetric"
+                isLocked    FALSE
+                autoLock    FALSE
+                distanceTolerance 0.01
+                axisTolerance   0.2
+                rotationTolerance   1.5708
+                numberOfRotations   4
+                snap      FALSE
+              }
+              ]
+            }
+            %{ end }% # ChargeContacts
+
+          ] # BODY Solid children
+          %{ if not fields.vizMode.value then }%
+          boundingObject USE BODY_SHAPE
+          physics Physics {
+           density 5000
+          }
+          %{ end }%
+        } # BODY Solid
+
+        DEF HEAD Transform {
+          translation -0.013 0 0.0345
+          children [
+            HingeJoint {
+              jointParameters HingeJointParameters {
+                dampingConstant 2
+                position IS headAngle
+                maxStop IS headAngle_highLimit
+                minStop IS headAngle_lowLimit
+                axis 0 -1 0
+              }
+              %{ if not fields.vizMode.value then }%
+              device [
+                RotationalMotor {
+                  name "HeadMotor"
+                  maxTorque 10
+                }
+                PositionSensor {
+                  name "HeadMotorPosSensor"
+                  resolution 0.001
+                }
+              ]
+              %{ end }%
+              endPoint Solid {
+                children [
+                  DEF EAR_SQUARES Shape {
+                    appearance Appearance {
+                      material DEF OrangePlastic Material {
+                        diffuseColor 0.8 0.404776 0
+                      }
+                    }
+                    geometry Box {
+                      size 0.005 0.0405 0.005
+                    }
+                  }
+                  DEF EARS Shape {
+                    appearance Appearance {
+                      material Material {
+                        diffuseColor 0.5 0.5 0.5
+                      }
+                    }
+                    geometry Cylinder {
+                      height 0.040
+                      radius 0.007
+                      subdivision 12
+                    }
+                  }
+
+                %{ if not fields.vizMode.value then }%
+
+                # Anim process:
+                CozmoAnim {
+                  robotID IS robotID
+                  filterLogs IS filterLogs
+                  colorizeStderrOutput IS colorizeStderrOutput
+                  isWhiskey IS isWhiskey
+                }
+
+                # Web server process:
+                CozmoWebServer {
+                  robotID IS robotID
+                  filterLogs IS filterLogs
+                  colorizeStderrOutput IS colorizeStderrOutput
+                }
+
+                # Engine process:
+                WhiskeyEngine {
+                  robotID IS robotID
+                  filterLogs IS filterLogs
+                  colorizeStderrOutput IS colorizeStderrOutput
+                  isWhiskey IS isWhiskey
+                }
+
+                # This IMU is positioned in the same place as the one in CozmoEngine2.proto
+                # as way to simulate access to the same IMU from both the robot and engine processes
+                # which we might in theory be able to eventually do via AndroidHAL.
+                CozmoIMU {
+                  translation 0.0058 -0.0135 0
+                }
+                %{ end }%  #vizMode
+
+                DEF HEAD_SHAPE Group {
+                  children [
+                    Transform {
+                      translation 0.012 0 0.012
+                      children [
+                        DEF HEAD_CAPSULE_WIDTH Shape {
+                          geometry Capsule {
+                            height 0.03
+                            radius 0.005
+                          }
+                          appearance USE MAIN_BODY_APPEARANCE
+                        }
+                      ]
+                    }
+
+                    Transform {
+                      translation 0.012 0 -0.012
+                      children [
+                        USE HEAD_CAPSULE_WIDTH
+                      ]
+                    }
+
+                    Transform {
+                      translation -0.012 0 0.007
+                      children [
+                        USE HEAD_CAPSULE_WIDTH
+                      ]
+                    }
+
+                    Transform {
+                      translation -0.012 0 -0.007
+                      children [
+                        USE HEAD_CAPSULE_WIDTH
+                      ]
+                    }
+
+                    # Front height capsules
+                    Transform {
+                      translation 0.012 0.015 0
+                      rotation 1 0 0 1.5708
+                      children [
+                        DEF HEAD_CAPSULE_HEIGHT_FRONT Shape {
+                          geometry Capsule {
+                            height 0.024
+                            radius 0.005
+                          }
+                          appearance USE MAIN_BODY_APPEARANCE
+                        }
+                      ]
+                    }
+
+                    Transform {
+                      translation 0.012 -0.015 0
+                      rotation 1 0 0 1.5708
+                      children [
+                        USE HEAD_CAPSULE_HEIGHT_FRONT
+                      ]
+                    }
+
+                    # Rear height capsules
+                    Transform {
+                      translation -0.012 0.015 0
+                      rotation 1 0 0 1.5708
+                      children [
+                        DEF HEAD_CAPSULE_HEIGHT_REAR Shape {
+                          geometry Capsule {
+                            height 0.014
+                            radius 0.005
+                          }
+                          appearance USE MAIN_BODY_APPEARANCE
+                        }
+                      ]
+                    }
+
+                    Transform {
+                      translation -0.012 -0.015 0
+                      rotation 1 0 0 1.5708
+                      children [
+                        USE HEAD_CAPSULE_HEIGHT_REAR
+                      ]
+                    }
+
+                    # Length-wise capsules
+                    Transform {
+                      rotation -0.0944316 -0.0944316 0.991043 1.59
+                      translation 0.0005 0.015 0.009
+                      children [
+                        DEF HEAD_CAPSULE_LENGTH Shape {
+                          geometry Capsule {
+                            height 0.0235
+                            radius 0.005
+                          }
+                          appearance USE MAIN_BODY_APPEARANCE
+                        }
+                      ]
+                    }
+
+                    Transform {
+                      rotation 0.0944316 0.0944316 0.991043 1.59
+                      translation 0.0005 0.015 -0.009
+                      children [
+                        USE HEAD_CAPSULE_LENGTH
+                      ]
+                    }
+
+                    Transform {
+                      rotation -0.0944316 -0.0944316 0.991043 1.59 #1.57979
+                      translation 0.0005 -0.015 0.009
+                      children [
+                        USE HEAD_CAPSULE_LENGTH
+                      ]
+                    }
+
+                    Transform {
+                      rotation 0.0944316 0.0944316 0.991043 1.59
+                      translation 0.0005 -0.015 -0.009
+                      children [
+                        USE HEAD_CAPSULE_LENGTH
+                      ]
+                    }
+
+                  # Head cap (top)
+                  Transform {
+                    translation 0.0003 0 0.01375
+                    rotation 0 -1 0 0.22
+                    children [
+                      Shape {
+                        geometry Box {
+                          size 0.024 0.03 0.001
+                        }
+                        appearance USE MAIN_BODY_APPEARANCE
+                      }
+                    ]
+                  }
+
+                  # Head cap (back)
+                  Transform {
+                    translation -0.0165 0 0
+                    children [
+                      Shape {
+                        geometry Box {
+                          size 0.001 0.03 0.014
+                        }
+                        appearance USE MAIN_BODY_APPEARANCE
+                      }
+                    ]
+                  }
+
+
+                  ]
+                } # End of HEAD_SHAPE
+
+              ]
+              name "head"
+
+              %{ if not fields.vizMode.value then }%
+              boundingObject USE HEAD_SHAPE
+              physics Physics {
+                density 1000
+              }
+              %{ end }%
+              }
+            }
+          ]
+        } # DEF HEAD Transform
+
+        DEF BACKPACK Solid {
+          translation -0.04 0 0.018
+          name "Backpack"
+          children [
+            DEF BACKPACK_GROUP Group {
+              children [
+                Transform {
+                  children [
+                    Shape {
+                      appearance USE MAIN_BODY_APPEARANCE
+                      geometry Box {
+                      size 0.03 0.03905 0.0206
+                      }
+                    }
+                  ]
+                }
+                Transform {
+                  translation 0 0 0.0113
+                  children [
+                  Shape {
+                    appearance USE MAIN_BODY_APPEARANCE
+                    geometry Cylinder {
+                      height 0.039
+                      radius 0.015
+                      subdivision 16
+                    }
+                  }
+                  ]
+                }
+                Transform {
+                  translation 0 0 -0.0113
+                  children [
+                    Shape {
+                      appearance USE MAIN_BODY_APPEARANCE
+                      geometry Cylinder {
+                        height 0.039
+                        radius 0.015
+                        subdivision 16
+                      }
+                    }
+                  ]
+                }
+              ]
+            } # BACKPACK_GROUP
+
+            # Visualization of the Touch Sensor receiver (a small disc on the back)
+            # intersecting this with the hand object will trigger touch measurements
+            #
+            # Transform {
+            #   translation -0.003 0 0.025 # same position as the Receiver position
+            #   rotation 1 0 0 1.5707963
+            #   children [
+            #     Shape {
+            #       geometry Cylinder {
+            #         bottom FALSE
+            #         top TRUE
+            #         side FALSE
+            #         height 0.01   # arbitrarily chosen
+            #         radius 0.005  # half the emitter range (hand)
+            #       }
+            #       appearance Appearance {
+            #         material Material {
+            #           diffuseColor 0.5 0 0.5  # purple
+            #         }
+            #       }
+            #     }
+            #   ]
+            # }
+
+            %{ if not fields.vizMode.value then }% # BackpackLights
+            #Backpack lights (directional)
+            Transform {
+              translation 0.003 0 0.025
+              children [
+                %{
+                  for i=0,3 do
+                    led_name = string.format("backpackLED%d", i)
+                    xpos = -(i)*0.004
+                }%
+                LED {
+                  name "%{=led_name}%"
+                  children [
+                  DEF BACKPACK_HEALTH_LED_SHAPE Group {
+                    children [
+                      Shape {
+                        appearance Appearance {
+                          material Material {
+                                  diffuseColor 0.3 0.3 0.3
+                          }
+                        }
+                        geometry Box {
+                          size 0.003 0.002 0.005
+                        }
+                      }
+                    ]
+                  }
+                  ]
+                  translation %{=xpos}% 0 0
+                  color []
+                  gradual TRUE
+                }
+                %{ end }%   # End light for loop
+              ]
+            } # Backpack lights
+
+          %{ end }% # BackpackLights
+
+
+          ] # BACKPACK Solid children
+
+          %{ if not fields.vizMode.value then }%
+          boundingObject USE BACKPACK_GROUP
+          physics Physics {
+          density 2000
+          }
+          %{ end }%
+        } # BACKPACK Solid
+
+
+
+        Track {
+          translation 0 0.023 0
+          rotation 1 0 0 -1.5707963
+          children [
+
+            DEF FRONT_TRACK_WHEEL TrackWheel {
+              position 0 0
+              radius 0.0145
+              children [
+                DEF TRACK_WHEEL_BIG Transform {
+                  rotation 1 0 0 1.5707963
+                  children [
+                    Shape {
+                      appearance DEF WHEEL_MATERIAL Appearance {
+                        material Material {
+                          diffuseColor 0.7 0.7 0.7
+                        }
+                      }
+                      geometry Cylinder {
+                        height 0.01
+                        radius 0.0145
+                        subdivision 14
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+
+            DEF REAR_TRACK_WHEEL TrackWheel {
+              position -0.048 0.00375
+              radius 0.01075
+              children [
+                DEF TRACK_WHEEL_SMALL Transform {
+                  rotation 1 0 0 1.5707963
+                  children [
+                    Shape {
+                      appearance USE WHEEL_MATERIAL
+                      geometry Cylinder {
+                        height 0.01
+                        radius 0.01075
+                        subdivision 14
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+
+          ]
+          name "left track"
+          contactMaterial "highfriction"
+
+          # The boundingObject is the thing that actually determines the physical shape
+          # of the track
+          %{ if not fields.vizMode.value then }%
+          boundingObject DEF TRACK_BO Group {
+            children [
+
+              # Front wheel
+              Transform {
+                translation 0 0 0
+                rotation 1 0 0 -1.5707963
+                children [
+                  Cylinder {
+                    height 0.01
+                    radius %{=fields.frontWheelRadiusM.value}%
+                    subdivision 14
+                  }
+                ]
+              }
+
+              # Create intermediate wheels
+              %{ totalRadDistM = (fields.frontWheelRadiusM.value - fields.rearWheelRadiusM.value)
+                 distStepM = fields.rearWheelDistToFrontWheelM.value / (fields.numInterTreadWheels.value + 1)
+                 radStepM  = totalRadDistM / (fields.numInterTreadWheels.value + 1)
+                 if fields.numInterTreadWheels.value > 0 then
+                   for iw=1,fields.numInterTreadWheels.value do
+              }%
+
+              Transform {
+                translation %{= iw * distStepM - fields.rearWheelDistToFrontWheelM.value}% %{= totalRadDistM - (iw * radStepM) }% 0
+                rotation 1 0 0 -1.5707963
+                children [
+                  Cylinder {
+                    height 0.01
+                    radius %{= fields.rearWheelRadiusM.value + (iw * radStepM) }%
+                    subdivision 14
+                  }
+                ]
+              }
+
+              %{ end }% # vizMode
+              %{ end }%  # intermediate tread wheels
+
+              # Rear wheel
+              Transform {
+                translation %{=-fields.rearWheelDistToFrontWheelM.value}% 0.00375 0
+                rotation 1 0 0 -1.5707963
+                children [
+                  Cylinder {
+                    height 0.01
+                    radius %{=fields.rearWheelRadiusM.value}%
+                    subdivision 14
+                  }
+                ]
+              }
+            ]
+          }
+          physics Physics {
+          }
+          device [
+            LinearMotor {
+              name "LeftWheelMotor"
+            }
+            PositionSensor {
+              name "LeftWheelMotorPosSensor"
+              resolution 0.001
+            }
+          ]
+          %{ end }%
+
+          # Shape of tread studs
+          animatedGeometry DEF ANIMATED_SHAPE Shape {
+            appearance Appearance {
+              material Material {
+                diffuseColor 0.141176 0.141176 0.141176
+              }
+            }
+            geometry Box {
+              size 0.002 0.001 0.01
+            }
+          }
+          geometriesCount 40
+        }
+
+        Track {
+          translation 0 -0.023 0
+          rotation 1 0 0 -1.5707963
+          children [
+            USE FRONT_TRACK_WHEEL
+            USE REAR_TRACK_WHEEL
+          ]
+          name "right track"
+          contactMaterial "highfriction"
+
+          %{ if not fields.vizMode.value then }%
+          boundingObject USE TRACK_BO
+          physics Physics {
+          }
+
+          device [
+            LinearMotor {
+              name "RightWheelMotor"
+            }
+            PositionSensor {
+              name "RightWheelMotorPosSensor"
+              resolution 0.001
+            }
+          ]
+          %{ end }%
+
+          animatedGeometry USE ANIMATED_SHAPE
+          geometriesCount 40
+        }
+
+
+        DEF LIFT Transform {
+          translation -0.041 0 0.0305
+
+          children [
+            Shape {
+              geometry Cylinder {
+                height 0.048
+                radius 0.0035
+                subdivision 10
+              }
+              appearance USE MAIN_BODY_APPEARANCE
+            }
+
+            DEF SHOULDER HingeJoint {
+              jointParameters HingeJointParameters {
+                axis 0 -1 0
+                dampingConstant 6
+                position IS liftAngle
+                minStop IS liftAngle_lowLimit
+                maxStop IS liftAngle_highLimit
+              }
+              %{ if not fields.vizMode.value then }%
+              device [
+                RotationalMotor {
+                  name "LiftMotor"
+                  maxVelocity 30
+                  maxTorque 30
+                }
+                PositionSensor {
+                  name "LiftMotorPosSensor"
+                  resolution 0.005
+                }
+              ]
+              %{ end }%
+              endPoint Solid {
+              name "LiftAssembly"
+              children [
+
+                #GRIPPER PLATE
+                Transform {
+                  translation 0.065 0 -0.012
+                  children [
+                    HingeJoint {
+                      jointParameters HingeJointParameters {
+                        axis 0 1 0
+                        position IS liftAngle
+                      }
+                      endPoint DEF SmallFingerGripper Solid {
+                        name "GripperPlate"
+                        children [
+
+                          Transform {
+                            translation 0.0035 -0.017 -0.012
+                            children [
+                              DEF GRIPPER_FINGER Group {
+                                children [
+                                  Shape {
+                                    appearance USE MAIN_BODY_APPEARANCE
+                                    geometry IndexedFaceSet {
+                                      coord Coordinate {
+                                        point [
+                                          0 0.00075 0
+                                          0 0.00075 0.0075
+                                          0.0026 0.00075 0.0075
+                                          0.0046 0.00075 0.0108
+                                          0.006 0.00075 0.0108
+                                          0.006 0.00075 0.008
+                                          0.0034 0.00075 0
+                                          0 -0.00075 0
+                                          0 -0.00075 0.008
+                                          0.0026 -0.00075 0.008
+                                          0.0046 -0.00075 0.0108
+                                          0.006 -0.00075 0.0108
+                                          0.006 -0.00075 0.008
+                                          0.0034 -0.00075 0
+                                        ]
+                                      }
+                                      coordIndex [
+                                        0, 1, 6, -1, 1, 2, 6, -1, 2, 5
+                                        6, -1, 2, 3, 4, -1, 2, 4, 5, -1
+                                        13, 8, 7, -1, 13, 9, 8, -1, 13, 12
+                                        9, -1, 11, 10, 9, -1, 12, 11, 9, -1
+                                        1, 8, 2, -1, 2, 8, 9, -1, 3, 10
+                                        4, -1, 4, 10, 11, -1, 2, 9, 3, -1
+                                        3, 9, 10, -1, 4, 11, 12, -1, 4, 12
+                                        5, -1, 5, 12, 13, -1, 5, 13, 6, -1
+                                        13, 7, 0, -1, 6, 13, 0, -1
+                                      ]
+                                    }
+                                  }
+                                ] # GRIPPER_FINGER Group Children
+                              } # GRIPPER_FINGER Group
+                            ] # Transform children
+                          } # Transform
+                          Transform {
+                            translation 0.0035 0.017 -0.012
+                            children [
+                              USE GRIPPER_FINGER
+                            ]
+                          }
+
+                          DEF LIFTER_SHAPE Group {
+                            children [
+                              Transform {
+                                translation 0.0005 -0.0165 -0.01155
+                                children [
+                                  DEF GRIPPER_SIDE Shape {
+                                    geometry Box {
+                                      size 0.007 0.004 0.0289
+                                    }
+                                    appearance USE MAIN_BODY_APPEARANCE
+                                  }
+                                ]
+                              }
+                              Transform {
+                                translation 0.0005 0.0165 -0.01155
+                                children [
+                                  USE GRIPPER_SIDE
+                                ]
+                              }
+                              Transform {
+                                translation 0.0015 0 -0.024
+                                children [
+                                  DEF GRIPPER_BOTTOM Shape {
+                                    geometry Box {
+                                      size 0.005 0.029 0.008
+                                    }
+                                    appearance USE MAIN_BODY_APPEARANCE
+                                  }
+                                ]
+                              }
+
+                              %{ if not fields.vizMode.value then }%
+                              # Tool code dots (varying y in Transform translation moves the dots L/R)
+                              VisionMarker {
+                                rotation 1 0 0 1.5708
+                                translation 0.0015 0.01 -0.01995
+                                markerWidth 0.0025
+                                markerThickness 0.0001
+                                padding 0
+                                useWhiteBackground FALSE
+                                image "toolCodeDot.png"
+                              }
+                              VisionMarker {
+                                rotation 1 0 0 1.5708
+                                translation 0.0015 -0.01 -0.01995
+                                markerWidth 0.0025
+                                markerThickness 0.0001
+                                padding 0
+                                useWhiteBackground FALSE
+                                image "toolCodeDot.png"
+                              }
+                              %{ end }%
+
+
+                            ] # LIFTER_SHAPE Group Children
+
+                          } # LIFTER_SHAPE Group
+
+                          %{ if not fields.vizMode.value then }%
+                          Connector {
+                            name "gripperConnector"
+                            translation 0.0035 0 -0.0145
+                            rotation 0 1 0 1.57
+                            model "magnetic"
+                            distanceTolerance 0.005
+                            type "active"
+                            isLocked FALSE
+                            autoLock TRUE
+                            tensileStrength 1
+                            shearStrength 1
+                          }
+                          %{ end }%
+
+
+                        ] # SmallFingerGripper Children
+
+                        %{ if not fields.vizMode.value then }%
+                        boundingObject Transform {
+                          translation 0.0 0.0 -0.011
+                          children [
+                            Shape {
+                              geometry Box {
+                                #size 0.007 0.036 0.05
+                                size 0.007 0.036 0.028
+                              }
+                            }
+                          ]
+                        }
+                        contactMaterial "cmat_lift"
+                        physics Physics {
+                          density 1000
+                        }
+                        %{ end }%
+                      }  # SmallFingerGripper Solid
+                    } # Hinge Joint
+                  ] # Transform children
+                } # Transform
+
+                DEF LEFT_LIFT_ARM Transform {
+                  translation 0 0.022 0
+                  children [
+                    DEF LIFT_ARM_SHAPE Shape {
+                      geometry IndexedFaceSet {
+                        coord Coordinate {
+                          point [
+                            0 0.00175 -0.0025
+                            0 0.00175 0.0025
+                            0.048 0.00175 0.0025
+                            0.065 0.00175 -0.0108
+                            0.065 0.00175 -0.0158
+                            0.048 0.00175 -0.0025
+                            0 -0.00175 -0.0025
+                            0 -0.00175 0.0025
+                            0.048 -0.00175 0.0025
+                            0.065 -0.00175 -0.0102
+                            0.065 -0.00175 -0.0152
+                            0.048 -0.00175 -0.0025
+                          ]
+                        }
+                        coordIndex [
+                          0, 1, 2, -1, 0, 2, 5, -1, 2, 3
+                          4, -1, 2, 4, 5, -1, 8, 7, 6, -1
+                          11, 8, 6, -1, 10, 9, 8, -1, 11, 10
+                          8, -1, 1, 7, 8, -1, 1, 8, 2, -1
+                          2, 8, 9, -1, 2, 9, 3, -1, 3, 9
+                          10, -1, 3, 10, 4, -1, 0, 6, 7, -1
+                          0, 7, 1, -1, 11, 6, 0, -1, 11, 0
+                          5, -1, 10, 11, 5, -1, 10, 5, 4, -1
+                        ]
+                        creaseAngle 12
+                      }
+                      appearance USE MAIN_BODY_APPEARANCE
+                    } # DEF LIFT_ARM_SHIFT
+
+                    Transform {
+                      translation 0.065 -0.0005 -0.012
+                      children [
+                        Shape {
+                          geometry Cylinder {
+                            height 0.006
+                            radius 0.0025
+                          }
+                          appearance USE MAIN_BODY_APPEARANCE
+                        }
+                      ]
+                    }
+                  ]
+                } # LEFT_LIFT_ARM Transform
+
+                DEF RIGHT_LIFT_ARM Transform {
+                  translation 0 -0.022 0
+                  children [
+                    USE LIFT_ARM_SHAPE
+                    Transform {
+                      translation 0.065 0.0005 -0.012
+                      children [
+                        Shape {
+                          geometry Cylinder {
+                            height 0.006
+                            radius 0.0025
+                          }
+                          appearance USE MAIN_BODY_APPEARANCE
+                        }
+                      ]
+                    }
+                  ]
+                } # RIGHT_LIFT_ARM Transform
+
+              ] # endPoint Solid children
+
+              %{ if not fields.vizMode.value then }%
+              boundingObject Group {
+                children [
+                  # Right arm
+                  Transform {
+                    translation 0 -0.02225 0
+                    children [
+                      USE LIFT_ARM_SHAPE
+                    ]
+                  }
+
+                  # Left arm
+                  Transform {
+                    translation 0 0.02225 0
+                    children [
+                      USE LIFT_ARM_SHAPE
+                    ]
+                  }
+                ]
+              }
+              contactMaterial "noFriction"
+              physics Physics {
+                density 1000
+              }
+              %{ end }%
+
+              } # endPoint Transform
+            } # HingeJoint
+
+            # Lower Set of Arms
+            DEF LOWER_LIFT Transform {
+              translation 0 0 -0.012
+
+              children [
+                Shape {
+                  geometry Cylinder {
+                    height 0.048
+                    radius 0.0045
+                    subdivision 10
+                  }
+                  appearance USE MAIN_BODY_APPEARANCE
+                }
+
+                # Lower set of arms
+                # Note these have no motor and will move with the upper set
+                DEF SHOULDER_LOWER HingeJoint {
+                  jointParameters HingeJointParameters {
+                    axis 0 -1 0
+                    position IS liftAngle
+                  }
+                  endPoint Solid {
+                    children [
+
+                      # Hinge to close mechanical loop back to gripper plate
+                      Transform {
+                        translation 0.065 0 -0.012
+                        children [
+                          HingeJoint {
+                            jointParameters HingeJointParameters {
+                              axis 0 1 0
+                            }
+
+                            endPoint SolidReference {
+                              solidName "GripperPlate"
+                            }
+                          }
+                        ]
+                      }
+
+
+
+                      DEF RIGHT_LIFT_ARM_LOWER Transform {
+                        translation 0 -0.022 0
+                        children [
+                          USE LIFT_ARM_SHAPE
+                          Transform {
+                            translation 0.065 0.0005 -0.012
+                            children [
+                              Shape {
+                                geometry Cylinder {
+                                  height 0.006
+                                  radius 0.0025
+                                }
+                                appearance USE MAIN_BODY_APPEARANCE
+                              }
+                            ]
+                          }
+                        ]
+                      } # RIGHT_LIFT_ARM_LOWER Transform
+
+                      DEF LEFT_LIFT_ARM_LOWER Transform {
+                        translation 0 0.022 0
+                        children [
+                          USE LIFT_ARM_SHAPE
+                          Transform {
+                            translation 0.065 -0.0005 -0.012
+                            children [
+                              Shape {
+                                geometry Cylinder {
+                                  height 0.006
+                                  radius 0.0025
+                                }
+                                appearance USE MAIN_BODY_APPEARANCE
+                              }
+                            ]
+                          }
+                        ]
+                      } # LEFT_LIFT_ARM_LOWER Transform
+                    ] # endPoint Solid Children (lower)
+
+
+                    %{ if not fields.vizMode.value then }%
+                    boundingObject Group {
+                      children [
+                        # Right arm
+                        Transform {
+                          translation 0 -0.02225 0
+                          children [
+                            USE LIFT_ARM_SHAPE
+                          ]
+                        }
+
+                        # Left arm
+                        Transform {
+                          translation 0 0.02225 0
+                          children [
+                            USE LIFT_ARM_SHAPE
+                          ]
+                        }
+                      ]
+                    }
+                    physics Physics {
+                      density 1000
+                    }
+                    %{ end }%
+
+
+                  } # endPoint Solid (lower)
+                } # DEF SHOULDER_LOWER HingeJoint
+              ] # LOWER lift transform children
+            } # LOWER lift Transofrm
+
+          ] # LIFT Transform children
+
+          #physics Physics {
+          #  density 5000
+          #}
+
+        } # Lift Transform
+
+      ] # Wheel RadiusTransform Children
+
+    } # Wheel Radius Transform
+
+  ] # Supervisor children
+} # Supervisor
+
+} # PROTO definition

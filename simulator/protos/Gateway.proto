@@ -1,0 +1,16 @@
+PROTO Gateway [
+  
+  field SFString name "Gateway"  
+
+  field SFString controller "webotsCtrlGateway"
+
+]
+{
+Supervisor {
+  name IS name
+  controller IS controller
+
+  controllerArgs ""
+  
+} # Supervisor definition
+} # PROTO definition

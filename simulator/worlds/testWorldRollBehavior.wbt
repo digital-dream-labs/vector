@@ -1,0 +1,43 @@
+#VRML_SIM V8.2.1 utf8
+CozmoWorldInfo {
+}
+Viewpoint {
+  orientation -0.00434626 0.257081 0.96638 3.17426
+  position 0.0207516 0.797404 1.72806
+}
+Background {
+  skyColor [
+    0.4 0.7 1
+  ]
+}
+DirectionalLight {
+  ambientIntensity 0.5
+  direction 2 -2 -1
+  intensity 0.5
+}
+DirectionalLight {
+  ambientIntensity 0.5
+  direction -2 -2 -1
+  intensity 0.5
+}
+DirectionalLight {
+  ambientIntensity 0.5
+  direction 0 2 -1
+  intensity 0.5
+}
+CozmoMat {
+  showMarkers FALSE
+}
+DEF cube LightCube {
+  translation 0.192532 -0.0292112 0.022
+  rotation 0.250563 0.935113 -0.250563 1.63783
+}
+%COZMOBOT% {
+  name "CozmoBot_1"
+}
+BuildServerTestController {
+  controllerArgs "%COZMO_SIM_TEST%"
+# controllerArgs "CST_RollBlockBehavior"
+}
+CozmoVizDisplay {
+}

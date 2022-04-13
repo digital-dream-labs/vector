@@ -1,0 +1,29 @@
+#VRML_SIM V8.2.1 utf8
+CozmoWorldInfo {
+  basicTimeStep 10
+}
+Viewpoint {
+  fieldOfView 0.8
+  orientation 1 0 0 0.56
+  position 0 -0.55 0.84
+}
+Background {
+  skyColor [
+    0.4 0.7 1
+  ]
+}
+DirectionalLight {
+  ambientIntensity 0.75
+}
+CozmoMat {
+}
+DEF CozmoViz_1 CozmoBot {
+  translation 0 1 0
+  name "CozmoBot_1"
+  vizMode TRUE
+}
+CozmoVizDisplay {
+  blankImageFrequency_ms 65
+}
+WebotsDevLogController {
+}

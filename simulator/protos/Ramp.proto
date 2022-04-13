@@ -1,0 +1,152 @@
+#VRML_SIM V7.3.0 utf8
+
+PROTO Ramp [
+  field SFString name "Ramp000"
+  
+  # Dimensions
+  field SFFloat width .0745
+  field SFFloat platformLength .035
+  field SFFloat rampLength .175
+  field SFFloat height .044
+  field SFFloat trackWidth .025 # side pieces the robot actually drives on
+  field SFFloat frontMarkerDistance .040 # along angled surface of ramp!
+  field SFFloat sideMarkerWidth .025
+  field SFFloat topMarkerWidth  .030
+  field SFFloat sideMarkerHeight .016 # height of vertical markers off ground
+  field SFString type "1" # RampType
+  field SFVec3f translation 0 0 0
+  field SFRotation rotation 0 0 1 0
+  field SFFloat density 250
+  field SFColor color .3 .3 .3
+  field SFBool  useWhiteMarkerBackgrounds TRUE
+
+]
+{
+Robot {
+
+# ramp angle is computed from the position of vertex 18 in RampShape proto
+%{ rampAngle = math.atan(.033/.103) }%
+
+  name IS name
+  model IS type
+  translation IS translation
+  rotation IS rotation
+  contactMaterial "cmat_ramp"
+  
+  children [
+        
+    # Front Face
+    Transform {
+      rotation 0 1 0 %{=-rampAngle-1.5708}% 
+      translation %{=fields.frontMarkerDistance.value*math.cos(rampAngle) - .0001}% 0 %{=fields.frontMarkerDistance.value*math.sin(rampAngle) + .0001}%
+      children [
+        VisionMarker {
+          rotation 0 0 1 -1.5708      
+          image "symbols/rampFront.png"
+          markerWidth IS topMarkerWidth
+        }
+      ]
+    }
+    
+    # Back Face
+    VisionMarker { 
+      rotation 0 0 1 1.5708
+      translation .222 0 %{=fields.sideMarkerHeight.value}%
+      image "symbols/rampBack.png"
+      markerWidth IS sideMarkerWidth
+    }
+          
+    # Left Face
+    VisionMarker {
+      rotation 0 0 1 3.1415
+      translation 0.120 %{=fields.width.value/2}% %{=fields.sideMarkerHeight.value}%
+      image "symbols/rampLeft.png"
+      markerWidth IS sideMarkerWidth
+      connectorName "rightConnector"
+      connectorRotation 1 0 0 -1.57079
+    }
+    
+    # Right Face
+    VisionMarker {
+      rotation 0 0 1 0
+      translation 0.120 %{=-fields.width.value/2}% %{=fields.sideMarkerHeight.value}%
+      image "symbols/rampRight.png"
+      markerWidth IS sideMarkerWidth
+      connectorName "leftConnector"
+      connectorRotation 1 0 0 1.57079
+    }
+    
+    # Top Face
+    Transform {
+      rotation 0 1 0 1.5708
+			translation %{=.222-.025}% 0 %{=fields.height.value}%
+			children [
+        VisionMarker {
+          rotation 0 0 1 1.5708
+          image "symbols/inverted/rampFront.png"
+          markerWidth IS topMarkerWidth
+        }
+      ]
+		}
+      
+    DEF RampGroup Group {
+      children [
+        # Left Side      
+        Transform {
+          translation 0 %{=-fields.width.value/2+fields.trackWidth.value/2}% 0 
+          children [
+            RampShape {
+              width IS trackWidth
+              color IS color
+            }
+          ] 
+        } # Left Side Transform
+    
+        # Right side
+        Transform { 
+          translation 0 %{=fields.width.value/2-fields.trackWidth.value/2}% 0
+          children [
+            RampShape {
+              width IS trackWidth
+              color IS color
+            }
+          ]
+        } # Right Side Transform
+    
+        # Left Guide
+        RampWheelGuide {
+          color IS color
+          outerWidth IS width
+          innerWidth 0.066
+          side "Left"
+        }
+        
+        # Right Guide
+        RampWheelGuide {
+          color IS color
+          outerWidth IS width
+          innerWidth 0.066
+          side "Right"
+        }        
+        
+      ] # RampGroup Children
+    } # RampGroup 
+    
+    # Non-Solid Interior (for appearance but does not collide with robot caster/bottom)
+    RampShape {
+      width %{=fields.width.value - 2*fields.trackWidth.value}%
+      color IS color
+    }
+   
+  ] # Solid Children
+  
+  boundingObject USE RampGroup
+  
+  physics Physics {
+    density IS density
+  }
+  
+} # Parent Solid (the actual ramp)
+
+  
+} # PROTO

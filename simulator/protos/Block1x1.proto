@@ -1,0 +1,274 @@
+#VRML_SIM V7.3.0 utf8
+
+PROTO Block1x1 [
+  field SFBool filterLogs FALSE
+  field SFBool colorizeStderrOutput FALSE
+  field SFString name "Block000"
+  field SFString type "1" # BlockType
+  field SFVec3f translation 0 0 0.022
+  field SFRotation rotation 0 0 1 0
+  field SFFloat mass 0.085
+  field SFColor blockColor 1 0 0
+  field SFString markerImg ""  # Image path relative to textures/
+  field SFBool active FALSE  # Whether or not this block has active lights
+  field SFInt32 activeID 1   # Must be unique in the world among all active blocks
+  field SFFloat width 0.044    # Length of one edge in meters
+  field SFFloat cornerWidth 0.008 # Length of a corner
+  field SFFloat markerWidth 0.025
+  
+  field SFString markerImg_front ""
+  field SFString markerImg_back  ""
+  field SFString markerImg_left  ""
+  field SFString markerImg_right ""
+  field SFString markerImg_top   ""
+  field SFString markerImg_bottom ""
+]
+{
+Supervisor {
+
+  # Set some dimensions
+  %{
+    hWidth = fields.width.value/2
+    ledWidth = 0.007
+    ledHWidth = ledWidth/2
+    ledLength = 0.019
+  }%
+
+  %{ if fields.active.value then }%
+    controller "webotsCtrlLightCube"
+
+    # append optional command line parameters
+    %{ ctrlArgs="" }%
+    %{ if fields.filterLogs.value then }%
+      %{ ctrlArgs = ctrlArgs .. " --applyLogFilter"}%
+    %{ end }%
+    %{ if fields.colorizeStderrOutput.value then }%
+      %{ ctrlArgs = ctrlArgs .. " --colorizeStderrOutput"}%
+    %{ end }%
+
+    controllerArgs "%{=ctrlArgs}%"
+  %{ end }%
+
+  name IS name
+  model IS type
+  translation IS translation
+  rotation IS rotation
+  contactMaterial "cmat_block"
+  children [
+		
+		# Front Face
+		VisionMarker {
+			rotation 0 0 1 -1.5708
+			translation %{=-hWidth}% 0 0
+			%{ if fields.markerImg_front.value ~= "" then }%
+			  image IS markerImg_front
+			%{ else }%
+			  image IS markerImg
+			%{ end }%
+			connectorName "connectorFront"
+			connectorRotation 0 1 0 -1.57079
+			markerWidth IS markerWidth
+		}
+		
+		# Back Face
+		VisionMarker {
+			rotation 0 0 1 1.5708
+			translation %{=hWidth}% 0 0
+			%{ if fields.markerImg_back.value ~= "" then }%
+			  image IS markerImg_back
+			%{ else }%
+			  image IS markerImg
+			%{ end }%
+			connectorName "connectorBack"
+			connectorRotation 0 1 0 1.57079
+			markerWidth IS markerWidth
+		}
+		
+		# Bottom Face
+    VisionMarker {
+      # Rotate around X to get on top, followed by around Z to orient correctly
+			rotation 0.57735027 -0.57735027 -0.57735027 2.09439510
+      translation 0 0 %{=-hWidth}%
+      %{ if fields.markerImg_bottom.value ~= "" then }%
+        image IS markerImg_bottom
+      %{ else }%
+        image IS markerImg
+      %{ end }%
+      connectorName "connectorBottom"
+      connectorRotation 0 1 0 3.14159
+      markerWidth IS markerWidth
+    }
+		
+		# Top Face
+		VisionMarker {
+			# Rotate around X to get on top, followed by around Z to orient correctly
+			rotation -0.57735027 0.57735027 -0.57735027 2.09439510
+			translation 0 0 %{=hWidth}%
+			%{ if fields.markerImg_top.value ~= "" then }%
+			  image IS markerImg_top
+			%{ else }%
+			  image IS markerImg
+			%{ end }%
+			connectorName "connectorTop"
+			connectorRotation 0 1 0 0
+			markerWidth IS markerWidth
+		}
+						
+		# Left Face
+		VisionMarker {
+			rotation 0 0 1 3.1415
+			translation 0 %{=hWidth}% 0
+			%{ if fields.markerImg_left.value ~= "" then }%
+			  image IS markerImg_left
+			%{ else }%
+			  image IS markerImg
+			%{ end }%
+			connectorName "connectorLeft"
+			connectorRotation 1 0 0 -1.57079
+			markerWidth IS markerWidth
+		}
+		
+		# Right Face
+		VisionMarker {
+			rotation 0 0 1 0
+			translation 0 %{=-hWidth}% 0
+			%{ if fields.markerImg_right.value ~= "" then }%
+			  image IS markerImg_right
+			%{ else }%
+			  image IS markerImg
+			%{ end }%
+			connectorName "connectorRight"
+			connectorRotation 1 0 0 1.57079
+			markerWidth IS markerWidth
+		}
+
+    DEF Block1x1Shape Shape {
+      appearance Appearance {
+        material Material {
+          diffuseColor IS blockColor
+        }
+      }
+      geometry Box {
+        size %{=fields.width.value}% %{=fields.width.value}% %{=fields.width.value}%
+      }
+    }
+
+    # Set up array of corner positions and positions of corner wrt block origin
+    %{ 
+      if fields.cornerWidth.value > 0 then
+      
+      idx = {}
+      idx[1] = { -1, -1,  1}
+      idx[2] = { -1,  1,  1}
+      idx[3] = {  1, -1,  1}
+      idx[4] = {  1,  1,  1}
+      idx[5] = { -1, -1, -1}
+      idx[6] = { -1,  1, -1}
+      idx[7] = {  1, -1, -1}
+      idx[8] = {  1,  1, -1}
+
+      for i=1,8 do
+        lx = idx[i][1] * (hWidth - fields.cornerWidth.value/2 + 0.0001)
+        ly = idx[i][2] * (hWidth - fields.cornerWidth.value/2 + 0.0001)
+        lz = idx[i][3] * (hWidth - fields.cornerWidth.value/2 + 0.0001)
+    }%
+    Transform {
+      translation %{=lx}% %{=ly}% %{=lz}%
+      children [
+      Shape {
+        appearance Appearance {
+          material Material {
+            diffuseColor 0 0 0
+          }
+        }
+        geometry Box {
+          size %{=fields.cornerWidth.value}% %{=fields.cornerWidth.value}% %{=fields.cornerWidth.value}%
+        }
+      }
+      ]
+    }
+    %{ 
+      end
+    end
+    }%
+    
+    # Set up array of LED positions and the positions of the LED centers wrt block origin
+    %{ 
+    if fields.active.value then
+      idx = {}
+      idx[1] = { 1, 0, 1}
+      idx[2] = { 0, 1, 1}
+      idx[3] = {-1, 0, 1}
+      idx[4] = { 0,-1, 1}
+
+      for i=1,4 do
+        led_name = string.format("led%d", i-1)
+
+        lx = idx[i][1] * (hWidth - ledWidth/2 + 0.0001)
+        ly = idx[i][2] * (hWidth - ledWidth/2 + 0.0001)
+        lz = idx[i][3] * (hWidth - ledWidth/2 + 0.0001)
+    }%
+    DEF %{=led_name}% LED {
+      name "%{=led_name}%"
+      children [
+        DEF LED_SHAPE Group {
+          children [
+            Shape {
+      	      appearance Appearance {
+                material Material {
+                  diffuseColor 0.3 0.3 0.3
+                }
+              }
+              geometry Box {
+                %{if i%2==0 then }%
+                size %{=ledLength}% %{=ledWidth}% %{=ledWidth}%
+                %{ else }%                
+                size %{=ledWidth}% %{=ledLength}% %{=ledWidth}%
+                %{ end }%                
+              }
+            }
+          ]
+        }
+      ]
+      translation %{=lx}% %{=ly}% %{=lz}%
+      color []
+      gradual TRUE
+    }
+    %{ end }%   # End light for loop
+
+    # Radio receive channel for messages from robot
+    Receiver {
+      name   "receiver"    
+      type   "radio"
+    }
+    
+    # Radio send channel for messages to Robot
+    Emitter {
+      name   "emitter"
+      type   "radio"
+    }
+
+    # Radio send channel for discovery messages to Robot
+    Emitter {
+      name   "discoveryEmitter"
+      type   "radio"
+    }
+ 
+    # Accelerometer
+    Accelerometer {
+      name "accel"
+    }
+
+    %{ end }%   # End of {if fields.active}
+
+  ] # Block Children
+  
+  boundingObject USE Block1x1Shape
+  physics DEF Block1x1Physics Physics {
+    mass IS mass
+    density -1
+  }
+} # "Robot" (the actual block)
+
+  
+} # PROTO

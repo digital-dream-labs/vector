@@ -1,0 +1,41 @@
+#VRML_SIM V7.3.0 utf8
+PROTO WireframeQuad [
+  field SFVec3f translation 0 0 0
+  field SFRotation rotation 0 0 1 0
+
+  field SFVec3f upperLeft  0 0 0
+  field SFVec3f lowerLeft  0 0 0
+  field SFVec3f lowerRight 0 0 0
+  field SFVec3f upperRight 0 0 0
+
+  field SFColor color 0 0 0
+]
+{
+Transform {
+  translation IS translation
+  rotation IS rotation
+  
+  children [
+    Shape {
+      geometry IndexedLineSet {
+        coord Coordinate {
+          point [
+            %{= fields.upperLeft.value.x }%  %{= fields.upperLeft.value.y }%  %{= fields.upperLeft.value.z }%
+            %{= fields.lowerLeft.value.x }%  %{= fields.lowerLeft.value.y }%  %{= fields.lowerLeft.value.z }%
+            %{= fields.lowerRight.value.x }% %{= fields.lowerRight.value.y }% %{= fields.lowerRight.value.z }%
+            %{= fields.upperRight.value.x }% %{= fields.upperRight.value.y }% %{= fields.upperRight.value.z }%
+          ]
+        }
+        coordIndex [0 1 2 3 0 -1]
+      }
+      appearance Appearance {
+        material Material {
+          ambientIntensity 1.0
+          diffuseColor IS color
+          emissiveColor IS color
+        }
+      }
+    }
+  ]
+} 
+}

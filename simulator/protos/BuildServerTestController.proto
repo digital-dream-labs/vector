@@ -1,0 +1,20 @@
+PROTO BuildServerTestController [
+  field SFString name "BuildServerTestController"
+  field SFString controllerArgs ""
+  field SFInt32  randomSeed 1    # 0 means "dynamically/randomly chosen"
+]
+{
+Supervisor {
+
+  # This line does nothing but prevents Webots from complaining that randomSeed does not have a "matching IS field"
+  %{ fields.randomSeed.value = fields.randomSeed.value }%
+ 
+  children [
+
+  ]
+
+  name IS name
+  controller "webotsCtrlBuildServerTest"
+  controllerArgs IS controllerArgs
+} # Supervisor definition
+} # PROTO definition

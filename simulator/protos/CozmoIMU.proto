@@ -1,0 +1,23 @@
+PROTO CozmoIMU [
+  field SFVec3f    translation  0 0 0
+  field SFRotation rotation     0 0 1 0
+]
+{
+  Transform {
+    translation IS translation
+    rotation IS rotation
+
+    children [
+      Gyro {
+        name "gyro"
+        # +/- 500 deg/s range expressed by 16-bits
+        # resolution 0.0002663
+      }
+      Accelerometer {
+        name "accel"
+        # +/-2g (+/- 19.62m/s^2) range expressed by 12-bits
+        # resolution 0.00958
+      }
+    ]
+  } # Transform
+} # PROTO definition

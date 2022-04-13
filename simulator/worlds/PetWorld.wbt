@@ -1,0 +1,75 @@
+#VRML_SIM R2018a utf8
+CozmoWorldInfo {
+}
+Viewpoint {
+  orientation 0.9933498399069184 -0.07194687399325822 -0.08988738999157711 1.3565345
+  position -0.3570546207397364 -1.1707920716922462 0.36807217606583886
+}
+Background {
+  skyColor [
+    0.4 0.7 1
+  ]
+}
+DirectionalLight {
+  ambientIntensity 0.5
+  direction 2 -2 -1
+  intensity 0.5
+}
+DirectionalLight {
+  ambientIntensity 0.5
+  direction -2 -2 -1
+  intensity 0.5
+}
+DirectionalLight {
+  ambientIntensity 0.5
+  direction 0 2 -1
+  intensity 0.5
+}
+CozmoMat {
+  showMarkers FALSE
+  xSize 2
+  ySize 1.5
+}
+LightCube {
+  name "LightCube1"
+  translation 0.2 0.1 0.0219931
+  rotation -1.8370399999938006e-6 -1.8370399999938006e-6 0.9999999999966254 4.71239
+}
+LightCube {
+  name "LightCube2"
+  translation 0.208767 -0.00128903 0.021993
+  rotation -1.8370399999938006e-6 -1.8370399999938006e-6 0.9999999999966254 4.71239
+  objectType "Block_LIGHTCUBE2"
+}
+LightCube {
+  name "LightCube3"
+  translation 0.2 -0.1 0.021993
+  rotation -1.8370399999938006e-6 -1.8370399999938006e-6 0.9999999999966254 4.71239
+  objectType "Block_LIGHTCUBE3"
+}
+DEF Cozmo_1 CozmoBot2 {
+  name "CozmoBot_1"
+  rotation 0 1 0 0
+  filterLogs TRUE
+}
+Face {
+  name "Human"
+  translation -0.01 0.31 0.11
+}
+Face {
+  name "Dog"
+  translation -0.28 0.31 0.11
+  image "dog02.png"
+}
+Face {
+  name "Cat"
+  translation 0.34 0.31 0.11
+  rotation 0 0 1 5.23599
+  image "cat07.png"
+}
+WebotsKeyboardController {
+  filterLogs TRUE
+  translation 0.288125 0.0208444 0.08
+}
+CozmoVizDisplay {
+}

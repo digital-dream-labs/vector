@@ -1,0 +1,150 @@
+cxx_project(
+    name = 'cozmo_physics',
+    srcs = cxx_src_glob(['plugins/physics/cozmo_physics'],
+                        ),
+    platform_srcs = [],
+    headers = cxx_header_glob(['plugins/physics/cozmo_physics'],
+                              ),
+    platform_headers = [
+    ]
+)
+
+cxx_project(
+    name = 'webotsCtrlCommon',
+    srcs = cxx_src_glob(['controllers/shared'],
+                        ),
+    platform_srcs = [],
+    headers = cxx_header_glob(['controllers/shared'],
+                              ),
+    platform_headers = [
+    ]
+)
+
+cxx_project(
+    name = 'webotsCtrlLightCube',
+    srcs = cxx_src_glob(['controllers/webotsCtrlLightCube'],
+                        ),
+    platform_srcs = [],
+    headers = cxx_header_glob(['controllers/webotsCtrlLightCube'],
+                              ),
+    platform_headers = [
+    ]
+)
+
+cxx_project(
+    name = 'webotsCtrlViz',
+    srcs = cxx_src_glob(['controllers/webotsCtrlViz'],
+                        ),
+    platform_srcs = [],
+    headers = cxx_header_glob(['controllers/webotsCtrlViz'],
+                              ),
+    platform_headers = [
+    ]
+)
+
+
+cxx_project(
+    name = 'webotsCtrlRobot2',
+    srcs = cxx_src_glob(['controllers/webotsCtrlRobot2'],
+                        ),
+    platform_srcs = [],
+    headers = cxx_header_glob(['controllers/webotsCtrlRobot2'],
+                              ),
+    platform_headers = [
+    ]
+)
+
+
+cxx_project(
+    name = 'webotsCtrlAnim',
+    srcs = cxx_src_glob(['controllers/webotsCtrlAnim'],
+                        ),
+    platform_srcs = [],
+    headers = cxx_header_glob(['controllers/webotsCtrlAnim'],
+                              ),
+    platform_headers = [
+    ]
+)
+
+
+cxx_project(
+    name = 'webotsCtrlWebServer',
+    srcs = cxx_src_glob(['controllers/webotsCtrlWebServer'],
+                        ),
+    platform_srcs = [],
+    headers = cxx_header_glob(['controllers/webotsCtrlWebServer'],
+                              ),
+    platform_headers = [
+    ]
+)
+
+
+cxx_project(
+    name = 'webotsCtrlGameEngine2',
+    srcs = cxx_src_glob(['controllers/webotsCtrlGameEngine2'],
+                        ),
+    platform_srcs = [],
+    headers = cxx_header_glob(['controllers/webotsCtrlGameEngine2'],
+                              ),
+    platform_headers = [
+    ]
+)
+
+
+cxx_project(
+    name = 'webotsCtrlKeyboard',
+    srcs = cxx_src_glob(['controllers/webotsCtrlKeyboard', 'game'],
+                        ),
+    platform_srcs = [],
+    headers = cxx_header_glob(['controllers/webotsCtrlKeyboard', 'game'],
+                              ),
+    platform_headers = [
+    ]
+)
+
+cxx_project(
+    name = 'webotsCtrlBuildServerTest',
+    srcs = cxx_src_glob(['controllers/webotsCtrlBuildServerTest', 'game'],
+                        ),
+    platform_srcs = [],
+    headers = cxx_header_glob(['controllers/webotsCtrlBuildServerTest', 'game'],
+                              ),
+    platform_headers = [
+    ]
+)
+
+
+cxx_project(
+    name = 'webotsCtrlDevLog',
+    srcs = cxx_src_glob(['controllers/webotsCtrlDevLog'],
+                        ),
+    platform_srcs = [],
+    headers = cxx_header_glob(['controllers/webotsCtrlDevLog'],
+                              ),
+    platform_headers = [
+    ]
+)
+
+cxx_project(
+    name = 'webotsCtrlGateway',
+    srcs = cxx_src_glob(['controllers/webotsCtrlGateway'],
+                        ),
+    platform_srcs = [],
+    headers = cxx_header_glob(['controllers/webotsCtrlGateway'],
+                              ),
+    platform_headers = [
+    ]
+)
+
+# NOTE: uses same "main.cpp" file as vic-neuralnets and thus grabs that from coretech/neuralnets
+cxx_project(
+    name = 'webotsCtrlNeuralNets',
+    srcs = cxx_src_glob(['controllers/webotsCtrlNeuralNets'],
+                        ),
+    platform_srcs = [
+    ],
+    headers = [
+    ],
+    platform_headers = [
+    ]
+)

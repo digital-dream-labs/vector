@@ -1,0 +1,259 @@
+#VRML_SIM V7.3.0 utf8
+
+PROTO Platform [
+  field SFString name "Platform000"
+  field SFFloat length .252 # outside, not driving surface
+  field SFFloat width  .252 #   "
+  field SFFloat height .044
+  field SFFloat grooveWidth .00375
+  field SFFloat grooveDepth .00275
+  field SFFloat wallThickness .003
+  field SFFloat topThickness .006
+  field SFString type "1" # PlatformType
+
+  field SFVec3f translation 0 0 0.022
+  field SFRotation rotation 0 0 1 0
+
+  field SFFloat density 250
+
+  field SFColor platformColor .05 .25 .05
+  field SFFloat topMarkerWidth .030
+  field SFFloat sideMarkerWidth .030
+  field SFBool  useWhiteMarkerBackgrounds TRUE
+  field SFString markerImg ""  # Image path relative to textures/
+]
+{
+Solid {
+
+  # Set markerURL
+  %{
+    markerURL = ""
+    if fields.markerImg ~= "" then
+      markerURL = "textures/" .. fields.markerImg.value
+    end 
+  }%
+
+  name IS name
+  model IS type
+  translation IS translation
+  rotation IS rotation
+  contactMaterial "cmat_block"
+  children [
+        
+    # Front Face
+    VisionMarker {
+      rotation 0 0 1 1.5708
+      translation %{=fields.length.value/2}% 0 0
+      image "symbols/platformNorth.png"
+      markerWidth IS sideMarkerWidth
+    }
+    
+    # Back Face
+    VisionMarker { 
+      rotation 0 0 1 -1.5708
+      translation %{=-fields.length.value/2}% 0 0
+      image "symbols/platformSouth.png"
+      markerWidth IS sideMarkerWidth
+    }
+          
+    # Right Face
+    VisionMarker {
+      rotation 0 0 1 3.1415
+      translation 0 %{=fields.width.value/2}% 0
+      image "symbols/platformEast.png"
+      markerWidth IS sideMarkerWidth
+    }
+    
+    # Left Face
+    VisionMarker {
+      rotation 0 0 1 0
+      translation 0 %{=-fields.width.value/2}% 0
+      image "symbols/platformWest.png"
+      markerWidth IS sideMarkerWidth
+    }
+    
+    # Top Face(s)
+		VisionMarker {
+			rotation 1 0 0 1.5708
+			translation %{=-fields.length.value/4}% %{=-fields.width.value/4}% %{=fields.height.value/2}% 
+			image "letters/inverted/A.png"
+			#image "ankiLogoWithBits/ankiLogoWithBits001.png"
+			markerWidth IS topMarkerWidth
+		}
+		VisionMarker {
+			rotation 1 0 0 1.5708
+			translation %{=-fields.length.value/4}% %{=fields.width.value/4}% %{=fields.height.value/2}% 
+			image "letters/inverted/B.png"
+			#image "ankiLogoWithBits/ankiLogoWithBits010.png"
+			markerWidth IS topMarkerWidth
+		}
+		VisionMarker {
+			rotation 1 0 0 1.5708
+			translation %{=fields.length.value/4}% %{=-fields.width.value/4}% %{=fields.height.value/2}% 
+			image "letters/inverted/C.png"
+			#image "ankiLogoWithBits/ankiLogoWithBits020.png"
+			markerWidth IS topMarkerWidth
+		}
+		VisionMarker {
+			rotation 1 0 0 1.5708
+			translation %{=fields.length.value/4}% %{=fields.width.value/4}% %{=fields.height.value/2}% 
+			image "letters/inverted/D.png"
+			#image "ankiLogoWithBits/ankiLogoWithBits030.png"
+			markerWidth IS topMarkerWidth
+		}
+
+    DEF PlatformShape Group {
+      children [
+        
+        # Front wall
+        Transform {
+          translation 0 %{=fields.width.value/2-fields.wallThickness.value/2}% %{=-(fields.topThickness.value-fields.grooveDepth.value)/2}%
+          children [
+            DEF LONG_WALL Shape {
+              appearance Appearance {
+                material Material {
+                  diffuseColor IS platformColor
+                }
+              }
+              geometry Box {
+                size %{=fields.length.value}% %{=fields.wallThickness.value}% %{=fields.height.value-(fields.topThickness.value-fields.grooveDepth.value)}%
+              }
+            }
+          ]
+        }
+        
+        # Back wall
+        Transform {
+          translation 0 %{=-fields.width.value/2+fields.wallThickness.value/2}% %{=-(fields.topThickness.value-fields.grooveDepth.value)/2}%
+          children [ 
+            USE LONG_WALL
+          ]
+        }
+        
+        # Left wall
+        Transform {
+          translation %{=fields.length.value/2-fields.wallThickness.value/2}% 0 %{=-(fields.topThickness.value-fields.grooveDepth.value)/2}%
+          children [
+            DEF SHORT_WALL Shape {
+              appearance Appearance {
+                material Material {
+                  diffuseColor IS platformColor
+                }
+              }
+              geometry Box {
+                size %{=fields.wallThickness.value}% %{=fields.width.value-2*fields.wallThickness.value}% %{=fields.height.value-(fields.topThickness.value-fields.grooveDepth.value)}%
+              }
+            }
+          ]
+        }  
+        
+        # Right wall
+        Transform {
+          translation %{=-fields.length.value/2+fields.wallThickness.value/2}% 0 %{=-(fields.topThickness.value-fields.grooveDepth.value)/2}%
+          children [
+            USE SHORT_WALL
+          ]
+        }
+        
+        # Inside
+        Transform {
+          translation 0 0 %{=fields.height.value/2-fields.topThickness.value-fields.wallThickness.value/2}%
+          children [
+            Shape {
+              appearance Appearance {
+                material Material {
+                  diffuseColor IS platformColor
+                }
+              }
+              geometry Box {
+                size %{=fields.length.value-2*fields.wallThickness.value}% %{=fields.width.value-2*fields.wallThickness.value}% %{=fields.wallThickness.value}%
+              }
+            }
+          ]
+        }
+              
+        # Top surface
+        Transform {
+          translation 0 0 %{=fields.height.value/2 - fields.topThickness.value/2}%
+          children [
+            Shape {
+              appearance Appearance {
+                material Material {
+                  diffuseColor .9 .9 .8
+                }
+              }
+              geometry Box {
+                size %{=fields.length.value-2*(fields.grooveWidth.value+fields.wallThickness.value)}% %{=fields.width.value-2*(fields.grooveWidth.value+fields.wallThickness.value)}% %{=fields.topThickness.value}%
+              }
+            }
+          ]
+        }
+        
+      ] # PlatformShape Children
+    } # PlatformShape Group
+  
+    # Transform {
+#       translation %{=fields.length.value/2-fields.grooveWidth.value/2}% 0 %{=fields.height.value/2 - fields.grooveDepth.value}%
+#       children [
+#         Connector {
+#           isLocked TRUE
+#           autoLock TRUE
+#           snap     FALSE
+#           tensileStrength 0.1
+#           shearStrength   2
+#         }
+#       ]
+#     }
+#     
+#     Transform {
+#       translation %{=-fields.length.value/2+fields.grooveWidth.value/2}% 0 %{=fields.height.value/2 - fields.grooveDepth.value}%
+#       children [
+#         Connector {
+#           isLocked TRUE
+#           autoLock TRUE
+#           snap     FALSE
+#           tensileStrength 0.1
+#           shearStrength   2
+#         }
+#       ]
+#     }
+#     
+#     Transform {
+#       translation 0 %{=fields.width.value/2-fields.grooveWidth.value/2}% %{=fields.height.value/2 - fields.grooveDepth.value}%
+#       children [
+#         Connector {
+#           isLocked TRUE
+#           autoLock TRUE
+#           snap     FALSE
+#           tensileStrength 0.1
+#           shearStrength   2
+#         }
+#       ]
+#     }
+#     
+#     Transform {
+#       translation 0 %{=-fields.width.value/2+fields.grooveWidth.value/2}% %{=fields.height.value/2 - fields.grooveDepth.value}%
+#       children [
+#         Connector {
+#           isLocked TRUE
+#           autoLock TRUE
+#           snap     FALSE
+#           tensileStrength 0.1
+#           shearStrength   2
+#         }
+#       ]
+#     }  
+
+  ] # Solid Children
+  
+  boundingObject USE PlatformShape
+  
+  physics Physics {
+    density IS density
+  }
+} # Solid (the actual platform)
+
+  
+} # PROTO
+
+

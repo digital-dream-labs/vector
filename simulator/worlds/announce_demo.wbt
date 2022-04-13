@@ -1,0 +1,90 @@
+#VRML_SIM V8.2.1 utf8
+CozmoWorldInfo {
+}
+Viewpoint {
+  orientation -0.0721957 0.349872 0.934012 3.52241
+  position -0.63694 1.45986 2.19399
+}
+Background {
+  skyColor [
+    0.4 0.7 1
+  ]
+}
+DirectionalLight {
+  ambientIntensity 0.5
+  direction 2 -2 -1
+  intensity 0.5
+}
+DirectionalLight {
+  ambientIntensity 0.5
+  direction -2 -2 -1
+  intensity 0.5
+}
+DirectionalLight {
+  ambientIntensity 0.5
+  direction 0 2 -1
+  intensity 0.5
+}
+CozmoMat {
+  showMarkers FALSE
+  xSize 0.35
+}
+Face {
+  translation 0.61089 -0.52028 0.52
+  rotation 0 0 1 4.45059
+}
+Face {
+  translation -0.0139948 0.608829 0.01
+  rotation -0.476905 0.621515 0.621515 4.0316
+}
+Face {
+  translation 0.711708 -0.368442 0.45
+  rotation 0 0 1 4.71239
+  image "face02.png"
+}
+Face {
+  translation 0.6628 0.170429 0.45
+  rotation 0 0 1 4.97419
+  image "face03.png"
+}
+LightCube {
+  translation -0.129737 0.444911 0.022
+  rotation -0.113999 0.986919 0.113999 1.58396
+  filterLogs TRUE
+}
+LightCube {
+  translation -0.0200182 0.441269 0.022
+  rotation 0 0 1 0.23
+  objectType "Block_LIGHTCUBE3"
+  filterLogs TRUE
+}
+LightCube {
+  translation 0.0509967 0.474244 0.062
+  rotation 0 0 1 0.23
+  objectType "Block_LIGHTCUBE2"
+  filterLogs TRUE
+}
+SolidBox {
+  translation -0.0310205 0.357748 6.66134e-16
+  size 0.3 0.05 0.2
+}
+BlockWorldComms {
+  filterLogs TRUE
+}
+DEF Cozmo_1 CozmoBot {
+  name "CozmoBot_1"
+  filterLogs TRUE
+}
+WebotsKeyboardController {
+  robotVolume 0
+  behaviorName "lookAround"
+  behaviorChooserName "Demo"
+  userName "Billy"
+  filterLogs TRUE
+  autoConnect FALSE
+}
+CozmoVizDisplay {
+  moodViz TRUE
+  behaviorSelectionViz TRUE
+  filterLogs TRUE
+}

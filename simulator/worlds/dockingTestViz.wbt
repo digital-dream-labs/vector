@@ -1,0 +1,54 @@
+#VRML_SIM V8.2.1 utf8
+CozmoWorldInfo {
+}
+Viewpoint {
+  orientation -0.185677 0.513598 0.8377 3.72972
+  position -0.395845 0.453223 0.365004
+}
+Background {
+  skyColor [
+    0.4 0.7 1
+  ]
+}
+DirectionalLight {
+  ambientIntensity 0.5
+  direction 2 -2 -1
+  intensity 0.5
+}
+DirectionalLight {
+  ambientIntensity 0.5
+  direction -2 -2 -1
+  intensity 0.5
+}
+DirectionalLight {
+  ambientIntensity 0.5
+  direction 0 2 -1
+  intensity 0.5
+}
+CozmoMat {
+  showMarkers FALSE
+}
+LightCube {
+  translation 0.156 0 0.022
+}
+DEF CozmoViz_1 CozmoBot {
+  name "CozmoBot_1"
+  
+  # Move robot off mat
+  translation 0 1 0
+
+  # Enable vizMode
+  vizMode TRUE
+}
+DEF WorldComms BlockWorldComms {
+  filterLogs TRUE
+}
+CozmoVizDisplay {
+  moodViz TRUE
+  behaviorSelectionViz TRUE
+}
+WebotsKeyboardController{
+  forcedRobotIsSimulated FALSE
+  forcedRobotIP "172.31.1.1"
+  behaviorName "DockingTestSimple"
+}

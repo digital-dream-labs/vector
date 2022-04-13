@@ -1,0 +1,59 @@
+#VRML_SIM V8.5 utf8
+CozmoWorldInfo {
+}
+Viewpoint {
+  orientation 0.12128607 0.40928005 0.90431163 2.6179287
+  position 0.63641246 1.156088 1.2033075
+}
+Background {
+  skyColor [
+    0.4 0.7 1
+  ]
+}
+DirectionalLight {
+  ambientIntensity 0.5
+  direction 2 -2 -1
+  intensity 0.5
+}
+DirectionalLight {
+  ambientIntensity 0.5
+  direction -2 -2 -1
+  intensity 0.5
+}
+DirectionalLight {
+  ambientIntensity 0.5
+  direction 0 2 -1
+  intensity 0.5
+}
+CozmoMat {
+  showMarkers FALSE
+}
+VictorCharger {
+  translation 0.04302629 -0.36471923 0
+  rotation 0 0 1 0
+}
+LightCube {
+  translation -0.04 -0.24 0.022
+}
+LightCube {
+  translation 0.2 -0.075 0.022
+  rotation 1.59007e-05 -1.83671e-06 1 0.5
+  objectType "Block_LIGHTCUBE2"
+}
+LightCube {
+  translation 0.1745429 -0.28561384 0.02199932
+  rotation -1.581768e-05 1.8462998e-06 -1 6.0531813
+  objectType "Block_LIGHTCUBE3"
+}
+%COZMOBOT% {
+  name "CozmoBot_1"
+  
+  # Simulate a low battery condition. This value should be less than
+  # kLowBatteryThresholdVolts in batteryComponent.cpp.
+  batteryVolts 3.5
+}
+BuildServerTestController {
+  controllerArgs "%COZMO_SIM_TEST%"
+}
+CozmoVizDisplay {
+}

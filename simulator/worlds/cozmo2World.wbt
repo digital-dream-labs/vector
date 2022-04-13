@@ -1,0 +1,74 @@
+#VRML_SIM R2018a utf8
+CozmoWorldInfo {
+}
+Viewpoint {
+  orientation -0.23013514393218407 0.46228201236631994 0.8563487353700352 3.947560634368608
+  position -1.8245716775419583 1.2809454025876654 1.5771613409945828
+}
+Background {
+  skyColor [
+    0.4 0.7 1
+  ]
+}
+DirectionalLight {
+  ambientIntensity 0.5
+  direction 2 -2 -1
+  intensity 0.5
+}
+DirectionalLight {
+  ambientIntensity 0.5
+  direction -2 -2 -1
+  intensity 0.5
+}
+DirectionalLight {
+  ambientIntensity 0.5
+  direction 0 2 -1
+  intensity 0.5
+}
+CozmoMat {
+  showMarkers FALSE
+}
+VictorCharger {
+  translation -0.0650650263404583 -0.3833437665763433 1.2212453270876722e-15
+}
+Face {
+  translation 0.34 -0.97 0.27
+}
+LightCube {
+  name "LightCube1"
+  translation 0.0884345 0.0833803 0.022
+  rotation 0 0 1 0.523599
+  objectType "Block_LIGHTCUBE1"
+  filterLogs FALSE
+  colorizeStderrOutput TRUE
+}
+LightCube {
+  name "LightCube2"
+  translation 0.355064 0.0239116 0.0219929
+  rotation 0 0 -1 6.23319
+  objectType "Block_LIGHTCUBE2"
+  filterLogs FALSE
+  colorizeStderrOutput TRUE
+}
+LightCube {
+  name "LightCube3"
+  translation 0.129117 -0.00670031 0.0219929
+  rotation 1.3953699998618023e-5 -1.8370399998180594e-6 0.9999999999009599 0.261799
+  objectType "Block_LIGHTCUBE3"
+  filterLogs FALSE
+  colorizeStderrOutput TRUE
+}
+CozmoBot2 {
+  filterLogs TRUE
+  colorizeStderrOutput TRUE
+}
+WebotsKeyboardController {
+  translation 0.288125 0.0208444 0.08
+  filterLogs FALSE
+  colorizeStderrOutput TRUE
+}
+CozmoVizDisplay {
+  streamResolution "NHD"
+  filterLogs FALSE
+  colorizeStderrOutput TRUE
+}
