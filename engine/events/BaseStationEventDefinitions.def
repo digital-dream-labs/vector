@@ -1,0 +1,140 @@
+//======================================================================================================================
+#ifdef EVENT_INCLUDE_SECTION
+
+// Put your #includes here just like any other header file.  Example ...
+//#include "basestation/vehicle/item/vehicleItem.h"
+
+#include <stdint.h>
+#include "coretech/common/shared/types.h"
+
+#elif defined EVENT_FORWARD_DECLARATION_SECTION
+
+// Add your forward declarations here just like any other header file.
+class Vehicle;
+
+#else
+
+/***********************************************************************************************************************
+ *
+ *  Define your events here.  Declare the name of your event and the data that you want passed along with the event and the macros
+ *  will take care of the rest.  This is the only file you should ever need to edit to add/remove events.
+ *
+ *  Macro Explanations ....
+ *  EVENT_BEGIN( EventName, EventDataParameters, ... ) // EventDataParameters is a comma separated list of the parameters sent to the event when raised
+ *  EVENT_ARG( ArgType, ArgName ) // Member data type/name (ArgName is appended with _) ... must match the names you declared in EventDataParameters
+ *  EVENT_END( EventName ) // Just lets me know you're done adding data members
+ *
+ *  Example Event ...
+ *
+ *  EVENT_BEGIN( ItemUsed, VehicleItem* item, int randomInt )
+ *    EVENT_ARG( VehicleItem*, item )
+ *    EVENT_ARG( int, randomInt )
+ *  EVENT_END( ItemUsed )
+ *
+ *  Usage ...
+ *
+ *  - Each event will have the following functions that you'll want to use ...
+ *    static void RaiseEvent( ... )
+ *    static void Register( IBaseStationEventListener* )
+ *    static void Unregister( IBaseStationEventListener* )
+ *    virtual BaseStationEventType GetEventType() const
+ *
+ *  - Any class that wants to listen for an event must derive from IBaseStationEventListener and implement ...
+ *    virtual void OnEventRaised( const IBaseStationEventInterface* event ) = 0;
+ *    OnEventRaised() is called whenever an event you're registered for is raised.  You can check the event type (if you're listening for multiple events)
+ *    and cast the IBaseStationEventInterface* to the required event in order to access the data.
+ *
+ *  - To register/unregister for an event, simply call the static function (where EventName## is the actual name of the event) ...
+ *    EventName##BaseStationEvent::Register( this ) or EventName##BaseStationEvent::Unregister( this )
+ *
+ *  - There are helper member functions to register/unregister for all events ...
+ *    void RegisterForAllEvents( void ) and void UnregisterForAllEvents( void )
+ *
+ *  - Whenever you want to trigger an event, simply call the static function (where EventName## is the actual name of the event) ...
+ *    EventName##StationEvent::RaiseEvent()
+ *
+ *  - Don't forget to #include "basestation/events/BaseStationEvent.h"
+ *
+ *  That's it ... check out BaseStationEventDefinitions.h if you want to see some pretty hairy macros.
+ *
+ ***********************************************************************************************************************/
+
+// Add events here ...
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+// Fired when the actual race/battle/etc is completed and post game functionality begins.
+// successful: is false if the game ended prematurely (eg. user dc'd or quit)
+EVENT_BEGIN( RobotConnect, RobotID_t robotID, bool successful )
+  EVENT_ARG( RobotID_t, robotID )
+  EVENT_ARG( bool, successful )
+EVENT_END( RobotConnect )
+
+EVENT_BEGIN( RobotAvailable, RobotID_t robotID )
+  EVENT_ARG( RobotID_t, robotID )
+EVENT_END( RobotAvailable )
+
+EVENT_BEGIN( UiDeviceAvailable, u32 deviceID )
+  EVENT_ARG( u32, deviceID )
+EVENT_END( UiDeviceAvailable )
+
+// Tell game host to connect to robot
+EVENT_BEGIN( ConnectToRobot, RobotID_t robotID )
+  EVENT_ARG( RobotID_t, robotID )
+EVENT_END( ConnectToRobot )
+
+// Tell game host to connect to a UI device
+EVENT_BEGIN( ConnectToUiDevice, u32 deviceID )
+  EVENT_ARG( u32, deviceID )
+EVENT_END( ConnectToUiDevice )
+
+//----------------------------------------------------------------------------------------------------------------------
+// Game State Events ...
+
+//----------------------------------------------------------------------------------------------------------------------
+// Robot Events
+
+// TODO: This should not longer be necessary once robot has a speaker
+EVENT_BEGIN( PlaySoundForRobot, RobotID_t robotID, u32 soundID, u8 numLoops, u8 volume )
+  EVENT_ARG(RobotID_t, robotID)
+  EVENT_ARG(u32, soundID)
+  EVENT_ARG(u8, numLoops)
+  EVENT_ARG(u8, volume)
+EVENT_END( PlaySoundForRobot )
+
+EVENT_BEGIN( StopSoundForRobot, RobotID_t robotID )
+  EVENT_ARG(RobotID_t, robotID)
+EVENT_END( StopSoundForRobot )
+
+
+//----------------------------------------------------------------------------------------------------------------------
+// Vision System Events
+EVENT_BEGIN(DeviceDetectedVisionMarker, uint8_t engineID, uint32_t markerType,
+                                        float x_upperLeft,  float y_upperLeft,
+                                        float x_lowerLeft,  float y_lowerLeft,
+                                        float x_upperRight, float y_upperRight,
+                                        float x_lowerRight, float y_lowerRight)
+  EVENT_ARG( uint8_t,  engineID)
+  EVENT_ARG( uint32_t, markerType)
+  EVENT_ARG( float,  x_upperLeft)
+  EVENT_ARG( float,  y_upperLeft)
+  EVENT_ARG( float,  x_lowerLeft)
+  EVENT_ARG( float,  y_lowerLeft)
+  EVENT_ARG( float,  x_upperRight)
+  EVENT_ARG( float,  y_upperRight)
+  EVENT_ARG( float,  x_lowerRight)
+  EVENT_ARG( float,  y_lowerRight)
+EVENT_END(VisionMarkerDetected)
+
+EVENT_BEGIN(RobotObservedObject, uint8_t robotID, uint32_t objectID,
+                                 float x_upperLeft,  float y_upperLeft,
+                                 float width,  float height)
+EVENT_ARG( uint8_t,  robotID)
+EVENT_ARG( uint32_t, objectID)
+EVENT_ARG( float,  x_upperLeft)
+EVENT_ARG( float,  y_upperLeft)
+EVENT_ARG( float,  width)
+EVENT_ARG( float,  height)
+EVENT_END(VisionMarkerDetected)
+
+
+#endif
