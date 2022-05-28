@@ -1,0 +1,5 @@
+cxx_project(
+    name = 'victorCrashReports',
+    srcs = cxx_src_glob(['.']),
+    headers = cxx_header_glob(['.']),
+)

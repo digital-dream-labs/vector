@@ -1,0 +1,9 @@
+cxx_project(
+  name = 'vl53l1',
+  srcs = [],
+  platform_srcs = [
+      ('vicos', glob(['**/*.c'])),
+      ('mac', [])
+  ],
+  headers = cxx_header_glob(['.']),
+)
