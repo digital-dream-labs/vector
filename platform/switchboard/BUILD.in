@@ -1,0 +1,20 @@
+cxx_project(
+  name = 'switchboard',
+  srcs = cxx_src_glob(['switchboardd', 'bleClient', 'anki-wifi', 'signals', 'auto-test'],
+    excludes = ['switchboardd/switchboardMain.cpp']),
+  headers = cxx_header_glob(['switchboardd', 'bleClient', 'anki-wifi', 'signals', 'auto-test'])
+)
+
+cxx_project(
+    name = 'vic-switchboard',
+    srcs = glob(['switchboardd/switchboardMain.cpp']),
+    platform_srcs = [],
+    headers = [],
+    platform_headers = []
+)
+
+cxx_project(
+    name = 'vic-rescue',
+    srcs = cxx_src_glob(['rescue']),
+    headers = cxx_header_glob(['rescue'])
+)

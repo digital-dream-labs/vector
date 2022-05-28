@@ -1,0 +1,14 @@
+cxx_project(
+    name = 'cameraService',
+    srcs = cxx_src_glob(['.'],
+                        excludes = ['*_vicos.*',
+                                    'vicos/**/*',
+                                    '**/test/*',
+                                    '*_mac.*']),
+    platform_srcs = [
+        ('vicos', glob(['vicos/**/*.cpp',
+                          '**/*_vicos.cpp'])),
+        ('mac', glob(['**/*_mac.cpp']))
+    ],
+    headers = cxx_header_glob(['.']),
+)

@@ -1,0 +1,9 @@
+cxx_project(
+  name = 'gpio',
+  srcs = [],
+  platform_srcs = [
+      ('vicos', glob(['**/*.c'])),
+      ('mac', [])
+  ],
+  headers = cxx_header_glob(['.']),
+)

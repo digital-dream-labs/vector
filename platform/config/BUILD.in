@@ -1,0 +1,89 @@
+asset_project(
+    name = 'platform_config_bin',
+    srcs = subdir_glob([
+                ('bin', '**/*'),
+                ],
+                prefix = 'bin'
+            ),
+),
+asset_project(
+    name = 'platform_config_etc',
+    srcs = subdir_glob([
+                ('etc', '**/*'),
+                ('etc', 'config/*')
+                ],
+                prefix = 'etc'
+            ),
+)
+
+asset_project(
+    name = 'platform_config_bin_development',
+    srcs = subdir_glob([
+                ('development/bin', '**/*'),
+                ],
+                prefix = 'bin'
+            ),
+)
+
+asset_project(
+    name = 'platform_config_etc_development',
+    srcs = subdir_glob([
+                ('development/etc', '**/*'),
+                ],
+                prefix = 'etc'
+            ),
+)
+
+asset_project(
+    name = 'platform_config_etc_userdev',
+    srcs = subdir_glob([
+                ('userdev/etc', '**/*'),
+                ],
+                prefix = 'etc'
+            ),
+)
+
+asset_project(
+    name = 'platform_config_etc_beta',
+    srcs = subdir_glob([
+                ('beta/etc', '**/*'),
+                ],
+                prefix = 'etc'
+            ),
+)
+
+asset_project(
+    name = 'platform_config_etc_oskr',
+    srcs = subdir_glob([
+                ('oskr/etc', '**/*'),
+                ],
+                prefix = 'etc'
+            ),
+)
+
+asset_project(
+    name = 'platform_config_etc_shipping',
+    srcs = subdir_glob([
+                ('shipping/etc', '**/*'),
+                ],
+                prefix = 'etc'
+            ),
+)
+
+asset_project(
+    name = 'platform_config_etc_ep',
+    srcs = subdir_glob([
+                ('ep/etc', '**/*'),
+                ],
+                prefix = 'etc'
+            ),
+)
+
+asset_project(
+    name = 'platform_config_etc_epdev',
+    srcs = subdir_glob([
+                ('epdev/etc', '**/*'),
+                ],
+                prefix = 'etc'
+            ),
+)
